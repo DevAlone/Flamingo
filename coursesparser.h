@@ -16,6 +16,9 @@ public:
 
     std::vector<Course> parseDirectory(const QString& path);
 
+private:
+    Course parseCourse(const QString& courseDirPath);
+
 signals:
 
 public slots:

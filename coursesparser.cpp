@@ -1,6 +1,7 @@
 #include "coursesparser.h"
-#include "courseparserexception.h"
-#include "parseerrorexception.h"
+#include "exceptions/coursesparserexception.h"
+#include "exceptions/parseerrorexception.h"
+#include "modulesparser.h"
 
 #include <QDebug>
 #include <iostream>
@@ -17,12 +18,12 @@ std::vector<Course> CoursesParser::parseDirectory(const QString& path)
     QDir baseDir(path);
 
     if (!baseDir.exists())
-        throw CourseParserException(tr("Directory ") + path + tr(" doesn't exist"));
+        throw CoursesParserException(tr("Directory ") + path + tr(" doesn't exist"));
 
-    auto entries = baseDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    auto entries = baseDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
 
     for (auto& entry : entries) {
-        Course course(entry); // TODO: убедиться, что entry не будет абсолютным путём
+        //Course course(entry); // TODO: убедиться, что entry не будет абсолютным путём
 
         QString courseDirPath = baseDir.absoluteFilePath(entry);
 
@@ -31,64 +32,87 @@ std::vector<Course> CoursesParser::parseDirectory(const QString& path)
         if (!fileInfo.isDir())
             continue;
 
-        QDir courseDir(courseDirPath);
-
-        QString infoFilePath = courseDir.absoluteFilePath("info.txt");
-        QFile infoFile(infoFilePath);
-
-        if (!infoFile.exists())
-            throw CourseParserException(
-                QString(tr("info.txt file wasn't found here: "))
-                + courseDir.absolutePath());
-
-        if (!infoFile.open(QIODevice::ReadOnly))
-            throw CourseParserException(
-                QString(tr("info.txt can't be opened: "))
-                + courseDir.absolutePath() + tr(". Maybe you don't have permissions to do that"));
-
-        {
-            QTextStream stream(&infoFile);
-            int stringNumber = 0;
-            while (!stream.atEnd()) {
-                QString line = stream.readLine();
-
-                int indexOfDelemiter = line.indexOf(':');
-                if (indexOfDelemiter < 0)
-                    continue;
-                //                    throw ParseErrorException(
-                //                        tr("Error during parsing file ") + infoFilePath
-                //                        + tr(": ':' wasn't found in string number ")
-                //                        + QString::number(stringNumber) + ": \n" + line);
-
-                QString key = line.left(indexOfDelemiter);
-                QString value = line.mid(indexOfDelemiter + 1);
-                key = key.simplified().toLower();
-                value = value.simplified();
-
-                // TODO: check for empty strings
-
-                std::cout << "key = " << key.toStdString() << "; value = " << value.toStdString() << "; " << std::endl;
-
-                if (key == "author") {
-                    course.setAuthor(value);
-                } else if (key == "level") {
-                    bool isOk;
-                    int level = value.toInt(&isOk);
-                    if (!isOk || level < 1 || level > 10)
-                        throw ParseErrorException(
-                            "Unable to recognize level of course. It have to be number in range from 1 to 10",
-                            stringNumber);
-
-                    course.setLevel(level);
-                }
-
-                stringNumber++;
-            }
-        }
-        infoFile.close();
+        Course course = parseCourse(courseDirPath);
 
         courses.push_back(course);
     }
 
     return courses;
+}
+
+std::pair<QString, QString> getKeyValueFromString(const QString& str, bool* isOk, QChar delimiter = ':')
+{
+    int indexOfDelimiter = str.indexOf(delimiter);
+    if (indexOfDelimiter < 0) {
+        *isOk = false;
+        return std::pair<QString, QString>();
+    }
+    *isOk = true;
+    return std::make_pair(
+        str.left(indexOfDelimiter).simplified().toLower(),
+        str.mid(indexOfDelimiter + 1).simplified());
+}
+
+Course CoursesParser::parseCourse(const QString& courseDirPath)
+{
+    QDir courseDir(courseDirPath);
+
+    Course course(courseDir.path()); // TODO: ?
+
+    QString infoFilePath = courseDir.absoluteFilePath("info.txt");
+    QFile infoFile(infoFilePath);
+
+    if (!infoFile.exists())
+        throw CoursesParserException(
+            QString(tr("info.txt file wasn't found here: "))
+            + courseDir.absolutePath());
+
+    if (!infoFile.open(QIODevice::ReadOnly))
+        throw CoursesParserException(
+            QString(tr("info.txt can't be opened: "))
+            + courseDir.absolutePath() + tr(". Maybe you don't have permissions to do that"));
+
+    // parsing info file
+    {
+        QTextStream stream(&infoFile);
+        int stringNumber = 0;
+        while (!stream.atEnd()) {
+            QString line = stream.readLine();
+            bool isOk;
+            auto keyValue = getKeyValueFromString(line, &isOk, ':');
+
+            if (!isOk)
+                continue;
+
+            auto& key = keyValue.first;
+            auto& value = keyValue.second;
+
+            // TODO: check for empty strings
+
+            std::cout << "key = " << key.toStdString() << "; value = " << value.toStdString() << "; " << std::endl;
+
+            if (key == "author") {
+                course.setAuthor(value);
+            } else if (key == "level") {
+                bool isOk;
+                int level = value.toInt(&isOk);
+                if (!isOk || level < 1 || level > 10)
+                    throw ParseErrorException(
+                        "Unable to recognize level of course. It have to be number in range from 1 to 10",
+                        stringNumber);
+
+                course.setLevel(level);
+            }
+
+            stringNumber++;
+        }
+    }
+    infoFile.close();
+
+    // parsing modules
+    ModulesParser modulesParser;
+    auto modules = modulesParser.parseDirectory(courseDir.absoluteFilePath("modules"));
+    course.addModules(modules);
+
+    return course;
 }

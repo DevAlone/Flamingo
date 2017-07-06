@@ -14,6 +14,8 @@ public:
 
     void addModuleItem(ModuleItem& moduleItem);
 
+    std::vector<ModuleItem>& getModuleItems();
+
 private:
     QString name;
     std::vector<ModuleItem> moduleItems;

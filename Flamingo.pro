@@ -33,9 +33,13 @@ SOURCES += \
     question.cpp \
     submodule.cpp \
     coursesparser.cpp \
-    parserexception.cpp \
-    courseparserexception.cpp \
-    parseerrorexception.cpp
+    exceptions/parserexception.cpp \
+    exceptions/parseerrorexception.cpp \
+    modulesparser.cpp \
+    exceptions/coursesparserexception.cpp \
+    exceptions/modulesparserexception.cpp \
+    lessonsparser.cpp \
+    exceptions/lessonsparserexception.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -46,9 +50,15 @@ HEADERS += \
     question.h \
     submodule.h \
     coursesparser.h \
-    parserexception.h \
-    courseparserexception.h \
-    parseerrorexception.h
+    exceptions/parserexception.h \
+    exceptions/parseerrorexception.h \
+    modulesparser.h \
+    exceptions/coursesparserexception.h \
+    exceptions/modulesparserexception.h \
+    lessonsparser.h \
+    exceptions/lessonsparserexception.h
 
 FORMS += \
         mainwindow.ui
+
+CONFIG += c++14

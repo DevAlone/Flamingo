@@ -4,6 +4,7 @@
 #include <QString>
 
 enum class MODULE_ITEM_TYPE {
+    NONE,
     SUBMODULE,
     LESSON
 };
@@ -16,9 +17,11 @@ public:
     QString getName() const;
     void setName(const QString& value);
 
+    MODULE_ITEM_TYPE getType() const;
+
 protected:
     QString name;
-    MODULE_ITEM_TYPE type;
+    MODULE_ITEM_TYPE type = MODULE_ITEM_TYPE::NONE;
 };
 
 #endif // MODULEITEM_H

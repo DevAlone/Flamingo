@@ -18,3 +18,8 @@ void ModuleItem::setName(const QString& value)
 {
     name = value;
 }
+
+MODULE_ITEM_TYPE ModuleItem::getType() const
+{
+    return type;
+}

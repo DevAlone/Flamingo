@@ -1,4 +1,7 @@
 #include "coursesparser.h"
+#include "lesson.h"
+#include "submodule.h"
+
 #include "mainwindow.h"
 #include <QApplication>
 
@@ -14,7 +17,17 @@ int main(int argc, char* argv[])
 
     CoursesParser parser;
 
-    auto courses = parser.parseDirectory("courses");
+    std::vector<Course> courses = parser.parseDirectory("courses");
+
+    ModuleItem& moduleItem = courses.at(0).getModules().at(0).getModuleItems().at(0);
+
+    if (moduleItem.getType() == MODULE_ITEM_TYPE::LESSON) {
+        Lesson* lesson = dynamic_cast<Lesson*>(&moduleItem);
+
+        // TODO: WTF???
+        qDebug() << "3";
+        qDebug() << lesson->getQuestions().at(0).val;
+    }
 
     return 0;
     QApplication a(argc, argv);

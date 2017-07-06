@@ -20,6 +20,12 @@ void Course::addModule(Module& module)
     modules.push_back(module);
 }
 
+void Course::addModules(std::vector<Module>& modules)
+{
+    for (auto& module : modules)
+        addModule(module);
+}
+
 QString Course::getAuthor() const
 {
     return author;
@@ -38,4 +44,9 @@ unsigned char Course::getLevel() const
 void Course::setLevel(unsigned char value)
 {
     level = value;
+}
+
+std::vector<Module>& Course::getModules()
+{
+    return modules;
 }

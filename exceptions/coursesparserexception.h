@@ -3,9 +3,9 @@
 
 #include "parserexception.h"
 
-class CourseParserException : public ParserException {
+class CoursesParserException : public ParserException {
 public:
-    CourseParserException(const QString& message);
+    CoursesParserException(const QString& message);
 };
 
 #endif // COURSEPARSEREXCEPTION_H

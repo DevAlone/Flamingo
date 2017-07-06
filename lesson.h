@@ -12,6 +12,8 @@ public:
 
     void addQuestion(const Question& question);
 
+    std::vector<Question>& getQuestions();
+
 private:
     std::vector<Question> questions;
 };

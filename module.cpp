@@ -19,3 +19,8 @@ void Module::addModuleItem(ModuleItem& moduleItem)
 {
     moduleItems.push_back(moduleItem);
 }
+
+std::vector<ModuleItem> &Module::getModuleItems()
+{
+    return moduleItems;
+}
