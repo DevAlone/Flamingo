@@ -2,6 +2,7 @@
 #include "exceptions/coursesparserexception.h"
 #include "exceptions/parseerrorexception.h"
 #include "modulesparser.h"
+#include "parser.h"
 
 #include <QDebug>
 #include <iostream>
@@ -40,19 +41,6 @@ std::vector<Course> CoursesParser::parseDirectory(const QString& path)
     return courses;
 }
 
-std::pair<QString, QString> getKeyValueFromString(const QString& str, bool* isOk, QChar delimiter = ':')
-{
-    int indexOfDelimiter = str.indexOf(delimiter);
-    if (indexOfDelimiter < 0) {
-        *isOk = false;
-        return std::pair<QString, QString>();
-    }
-    *isOk = true;
-    return std::make_pair(
-        str.left(indexOfDelimiter).simplified().toLower(),
-        str.mid(indexOfDelimiter + 1).simplified());
-}
-
 Course CoursesParser::parseCourse(const QString& courseDirPath)
 {
     QDir courseDir(courseDirPath);
@@ -79,7 +67,7 @@ Course CoursesParser::parseCourse(const QString& courseDirPath)
         while (!stream.atEnd()) {
             QString line = stream.readLine();
             bool isOk;
-            auto keyValue = getKeyValueFromString(line, &isOk, ':');
+            auto keyValue = Parser::getKeyValueFromString(line, &isOk, ':');
 
             if (!isOk)
                 continue;

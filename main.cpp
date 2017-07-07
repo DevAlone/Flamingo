@@ -5,6 +5,8 @@
 #include "mainwindow.h"
 #include <QApplication>
 
+// TODO: replace exceptions to logging errors in parsers
+
 int main(int argc, char* argv[])
 {
     //    ModuleItem* item = new Lesson("");
@@ -36,14 +38,15 @@ int main(int argc, char* argv[])
 
     if (moduleItem->getType() == MODULE_ITEM_TYPE::LESSON) {
         auto lesson = std::dynamic_pointer_cast<Lesson>(moduleItem);
+        auto submodule = std::dynamic_pointer_cast<Submodule>(moduleItem);
 
         if (!lesson)
             qDebug() << "ахтунг";
 
-        // TODO: WTF???
         qDebug() << "3";
         auto& questions = lesson->getQuestions();
-        qDebug() << questions.at(0).val;
+
+        //qDebug() << questions.at(1)->getNumber();
     }
 
     return 0;

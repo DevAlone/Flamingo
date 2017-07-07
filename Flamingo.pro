@@ -39,7 +39,8 @@ SOURCES += \
     exceptions/coursesparserexception.cpp \
     exceptions/modulesparserexception.cpp \
     lessonsparser.cpp \
-    exceptions/lessonsparserexception.cpp
+    exceptions/lessonsparserexception.cpp \
+    parser.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -56,7 +57,8 @@ HEADERS += \
     exceptions/coursesparserexception.h \
     exceptions/modulesparserexception.h \
     lessonsparser.h \
-    exceptions/lessonsparserexception.h
+    exceptions/lessonsparserexception.h \
+    parser.h
 
 FORMS += \
         mainwindow.ui

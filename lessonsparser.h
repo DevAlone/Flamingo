@@ -13,6 +13,8 @@ public:
     LessonsParser();
 
     static std::shared_ptr<Lesson> parseFile(const QString& path);
+
+private:
 };
 
 #endif // LESSONSPARSER_H

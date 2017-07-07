@@ -3,9 +3,14 @@
 
 class Question {
 public:
-    Question();
+    Question(unsigned number);
 
-    int val = 11;
+    unsigned getNumber() const;
+
+    bool operator<(const Question& other) const;
+
+private:
+    const unsigned number;
 };
 
 #endif // QUESTION_H
