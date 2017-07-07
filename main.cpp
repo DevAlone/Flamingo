@@ -7,6 +7,19 @@
 
 int main(int argc, char* argv[])
 {
+    //    ModuleItem* item = new Lesson("");
+
+    //    Lesson* lesson = dynamic_cast<Lesson*>(item);
+
+    //    std::vector<ModuleItem> moduleItems;
+
+    //    moduleItems.push_back(*item);
+
+    //    ModuleItem* item2 = &moduleItems.at(0);
+    //    Lesson* lesson2 = dynamic_cast<Lesson*>(item2);
+
+    //    return 0;
+
     //    QDir dir("courses");
     //    auto entries = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
@@ -19,14 +32,18 @@ int main(int argc, char* argv[])
 
     std::vector<Course> courses = parser.parseDirectory("courses");
 
-    ModuleItem& moduleItem = courses.at(0).getModules().at(0).getModuleItems().at(0);
+    std::shared_ptr<ModuleItem> moduleItem = courses.at(0).getModules().at(0).getModuleItems().at(0);
 
-    if (moduleItem.getType() == MODULE_ITEM_TYPE::LESSON) {
-        Lesson* lesson = dynamic_cast<Lesson*>(&moduleItem);
+    if (moduleItem->getType() == MODULE_ITEM_TYPE::LESSON) {
+        auto lesson = std::dynamic_pointer_cast<Lesson>(moduleItem);
+
+        if (!lesson)
+            qDebug() << "ахтунг";
 
         // TODO: WTF???
         qDebug() << "3";
-        qDebug() << lesson->getQuestions().at(0).val;
+        auto& questions = lesson->getQuestions();
+        qDebug() << questions.at(0).val;
     }
 
     return 0;

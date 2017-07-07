@@ -6,11 +6,13 @@
 #include <QObject>
 #include <QtCore>
 
+#include <memory>
+
 class LessonsParser {
 public:
     LessonsParser();
 
-    static Lesson parseFile(const QString& path);
+    static std::shared_ptr<Lesson> parseFile(const QString& path);
 };
 
 #endif // LESSONSPARSER_H

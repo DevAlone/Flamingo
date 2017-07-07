@@ -60,7 +60,7 @@ Module ModulesParser::parseModule(const QString& modulePath)
 
         if (fileInfo.isFile()) {
             qDebug() << "file: " << entryPath;
-            Lesson lesson = LessonsParser::parseFile(entryPath);
+            auto lesson = LessonsParser::parseFile(entryPath);
 
             module.addModuleItem(lesson);
         } else if (fileInfo.isDir()) {
@@ -68,7 +68,7 @@ Module ModulesParser::parseModule(const QString& modulePath)
 
             QDir submoduleDir(entryPath);
 
-            Submodule submodule(entryPath); // TODO: ?
+            auto submodule = std::make_shared<Submodule>(entryPath); // TODO: ?
 
             auto submoduleEntries = submoduleDir.entryList(
                 QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,
@@ -81,10 +81,10 @@ Module ModulesParser::parseModule(const QString& modulePath)
 
                 if (!submoduleFileInfo.isFile())
                     continue;
-                Lesson lesson = LessonsParser::parseFile(entryPath);
+                auto lesson = LessonsParser::parseFile(entryPath);
 
                 // TODO: parse lesson
-                submodule.addLesson(lesson);
+                submodule->addLesson(lesson);
             }
             module.addModuleItem(submodule);
         }

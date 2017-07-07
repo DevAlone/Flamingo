@@ -4,16 +4,17 @@
 #include "lesson.h"
 #include "moduleitem.h"
 
+#include <memory>
 #include <vector>
 
 class Submodule : public ModuleItem {
 public:
     Submodule(const QString& name);
 
-    void addLesson(const Lesson& lesson);
+    void addLesson(std::shared_ptr<Lesson> lesson);
 
 private:
-    std::vector<Lesson> lessons;
+    std::vector<std::shared_ptr<Lesson>> lessons;
 };
 
 #endif // SUBMODULE_H

@@ -3,6 +3,7 @@
 
 #include "moduleitem.h"
 
+#include <memory>
 #include <vector>
 
 class Module {
@@ -12,13 +13,13 @@ public:
     QString getName() const;
     void setName(const QString& value);
 
-    void addModuleItem(ModuleItem& moduleItem);
+    void addModuleItem(std::shared_ptr<ModuleItem> moduleItem);
 
-    std::vector<ModuleItem>& getModuleItems();
+    std::vector<std::shared_ptr<ModuleItem>>& getModuleItems();
 
 private:
     QString name;
-    std::vector<ModuleItem> moduleItems;
+    std::vector<std::shared_ptr<ModuleItem>> moduleItems;
 };
 
 #endif // MODULE_H

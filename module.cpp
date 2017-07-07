@@ -15,12 +15,12 @@ void Module::setName(const QString& value)
     name = value;
 }
 
-void Module::addModuleItem(ModuleItem& moduleItem)
+void Module::addModuleItem(std::shared_ptr<ModuleItem> moduleItem)
 {
     moduleItems.push_back(moduleItem);
 }
 
-std::vector<ModuleItem> &Module::getModuleItems()
+std::vector<std::shared_ptr<ModuleItem> >& Module::getModuleItems()
 {
     return moduleItems;
 }

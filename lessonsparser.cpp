@@ -6,9 +6,9 @@ LessonsParser::LessonsParser()
 {
 }
 
-Lesson LessonsParser::parseFile(const QString& path)
+std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
 {
-    Lesson lesson(path); // TODO: ?
+    std::shared_ptr<Lesson> lesson = std::make_shared<Lesson>(path); // TODO: ?
 
     QFile lessonFile(path);
     QString s;
@@ -24,7 +24,7 @@ Lesson LessonsParser::parseFile(const QString& path)
             + QObject::tr(". Maybe you don't have permissions to do that"));
 
     // TODO: parse
-    lesson.addQuestion(Question());
+    lesson->addQuestion(Question());
 
     return lesson;
 }
