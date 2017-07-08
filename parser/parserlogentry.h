@@ -1,13 +1,12 @@
-#ifndef COURSESPARSERLOGENTRY_H
-#define COURSESPARSERLOGENTRY_H
+#ifndef PARSERLOGENTRY_H
+#define PARSERLOGENTRY_H
 
 #include "logentry.h"
-#include "parserlogentry.h"
 
 namespace parser {
-class CoursesParserLogEntry : public ParserLogEntry {
+class ParserLogEntry : public LogEntry {
 public:
-    CoursesParserLogEntry(
+    ParserLogEntry(
         LOG_ENTRY_TYPE type,
         const QString& message,
         const QString& path = "",
@@ -15,7 +14,13 @@ public:
         const QString& line = "");
 
     virtual QString toString() const;
+
+protected:
+    QString path;
+    QString message;
+    long lineNumber;
+    QString line;
 };
 }
 
-#endif // COURSESPARSERLOGENTRY_H
+#endif // PARSERLOGENTRY_H

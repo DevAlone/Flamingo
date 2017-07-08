@@ -1,4 +1,5 @@
 #include "lessonsparser.h"
+#include "lessonsparserlogentry.h"
 #include "parser.h"
 
 #include <exceptions/lessonsparserexception.h>
@@ -13,20 +14,34 @@ LessonsParser::LessonsParser()
 
 std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
 {
+    logEntry<LessonsParserLogEntry>(
+        LOG_ENTRY_TYPE::INFO,
+        QObject::tr("Parsing of lesson file was started"),
+        path);
+
     std::shared_ptr<Lesson> lesson = std::make_shared<Lesson>(path); // TODO: ?
 
     QFile lessonFile(path);
     QString s;
-    if (!lessonFile.exists())
-        throw LessonsParserException(
+    if (!lessonFile.exists()) {
+        logEntry<LessonsParserLogEntry>(
+            LOG_ENTRY_TYPE::ERROR,
             QObject::tr("lesson file wasn't found here: ")
-            + path);
+                + path,
+            path);
+        return lesson;
+    }
 
-    if (!lessonFile.open(QIODevice::ReadOnly))
-        throw LessonsParserException(
-            QObject::tr("lesson file can't be opened: ")
-            + path
-            + QObject::tr(". Maybe you don't have permissions to do that"));
+    if (!lessonFile.open(QIODevice::ReadOnly)) {
+        logEntry<LessonsParserLogEntry>(
+            LOG_ENTRY_TYPE::ERROR,
+            QObject::tr("lesson file can't be opened. "
+                        "Maybe you don't have permissions to do that"),
+            path);
+        return lesson;
+    }
+
+    // TODO: remove all fucking exceptions
 
     // TODO: parse
     {
@@ -42,7 +57,7 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
         int stringNumber = 0;
 
         qDebug() << "parsing of lesson was started";
-        while (!stream.atEnd()) {
+        for (; !stream.atEnd(); stringNumber++) {
             QString line = stream.readLine();
 
             line = line.trimmed();
@@ -72,11 +87,13 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
 
             switch (state) {
             case STATE::DESCRIPTION:
-                if (!isOk)
+                if (!isOk) {
+                    // TODO: make type of log entry with sections like [Description]
                     throw LessonsParserException(
                         QObject::tr("Error during parsing [Description] section "
                                     "Unrecognized string. Expected ':', but is not found in here: ")
                         + line);
+                }
 
                 if (key == "level") {
                     qDebug() << "level of lesson is " << value;
@@ -121,8 +138,6 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
 
                 break;
             }
-
-            stringNumber++;
         }
 
         if (question) {
@@ -135,5 +150,10 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
     //lesson->addQuestion(Question());
 
     return lesson;
+}
+
+void LessonsParser::setLogger(std::shared_ptr<ParserLogger>& logger)
+{
+    this->logger = logger;
 }
 }

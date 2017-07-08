@@ -43,7 +43,10 @@ SOURCES += \
     parser/parser.cpp \
     parser/parserlogger.cpp \
     parser/logentry.cpp \
-    parser/coursesparserlogentry.cpp
+    parser/coursesparserlogentry.cpp \
+    parser/modulesparserlogentry.cpp \
+    parser/parserlogentry.cpp \
+    parser/lessonsparserlogentry.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -65,7 +68,10 @@ HEADERS += \
     parser/parserlogger.h \
     parser/logentry.h \
     parser/include.h \
-    parser/coursesparserlogentry.h
+    parser/coursesparserlogentry.h \
+    parser/modulesparserlogentry.h \
+    parser/parserlogentry.h \
+    parser/lessonsparserlogentry.h
 
 FORMS += \
         mainwindow.ui

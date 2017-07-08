@@ -26,11 +26,11 @@ public slots:
 private:
     Course parseCourse(const QString& courseDirPath);
     std::shared_ptr<ParserLogger> logger;
-    template <typename T>
-    void logEntry(T&& entry)
+    template <typename T, typename... Args>
+    void logEntry(Args... args)
     {
         if (logger)
-            logger->addEntry(std::move(entry));
+            logger->addEntry(std::make_unique<T>(args...));
     }
 };
 }

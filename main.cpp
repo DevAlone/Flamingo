@@ -8,6 +8,7 @@
 
 // TODO: replace exceptions to logging errors in parsers
 
+#include <iostream>
 #include <memory>
 
 using namespace parser;
@@ -61,7 +62,7 @@ int main(int argc, char* argv[])
     auto& logEntries = logger->getEntries();
 
     for (auto& entry : logEntries) {
-        qDebug() << entry->toString();
+        std::clog << entry->toString().toStdString() << std::endl;
     }
 
     return 0;
