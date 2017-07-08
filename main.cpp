@@ -1,4 +1,5 @@
-#include "coursesparser.h"
+#include "parser/include.h"
+
 #include "lesson.h"
 #include "submodule.h"
 
@@ -6,6 +7,10 @@
 #include <QApplication>
 
 // TODO: replace exceptions to logging errors in parsers
+
+#include <memory>
+
+using namespace parser;
 
 int main(int argc, char* argv[])
 {
@@ -31,8 +36,12 @@ int main(int argc, char* argv[])
     //    return 0;
 
     CoursesParser parser;
+    auto logger = std::make_shared<ParserLogger>();
+    parser.setLogger(logger);
 
-    std::vector<Course> courses = parser.parseDirectory("courses");
+    std::vector<Course>
+        courses
+        = parser.parseDirectory("courses");
 
     std::shared_ptr<ModuleItem> moduleItem = courses.at(0).getModules().at(0).getModuleItems().at(0);
 
@@ -47,6 +56,12 @@ int main(int argc, char* argv[])
         auto& questions = lesson->getQuestions();
 
         //qDebug() << questions.at(1)->getNumber();
+    }
+
+    auto& logEntries = logger->getEntries();
+
+    for (auto& entry : logEntries) {
+        qDebug() << entry->toString();
     }
 
     return 0;
