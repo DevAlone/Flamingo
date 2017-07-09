@@ -1,6 +1,12 @@
 #include "parser.h"
 
 namespace parser {
+
+void Parser::setLogger(std::shared_ptr<ParserLogger>& logger)
+{
+    this->logger = logger;
+}
+
 std::pair<QString, QString> getKeyValueFromString(const QString& str, bool* isOk, QChar delimiter)
 {
     int indexOfDelimiter = str.indexOf(delimiter);

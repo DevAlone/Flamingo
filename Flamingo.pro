@@ -41,12 +41,14 @@ SOURCES += \
     parser/lessonsparser.cpp \
     exceptions/lessonsparserexception.cpp \
     parser/parser.cpp \
-    parser/parserlogger.cpp \
-    parser/logentry.cpp \
-    parser/coursesparserlogentry.cpp \
-    parser/modulesparserlogentry.cpp \
-    parser/parserlogentry.cpp \
-    parser/lessonsparserlogentry.cpp
+    parser/logger/parserlogger.cpp \
+    parser/logger/logentry.cpp \
+    parser/logger/coursesparserlogentry.cpp \
+    parser/logger/modulesparserlogentry.cpp \
+    parser/logger/parserlogentry.cpp \
+    parser/logger/lessonsparserlogentry.cpp \
+    parser/questionsparser.cpp \
+    parser/logger/questionsparserlogentry.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -65,14 +67,16 @@ HEADERS += \
     parser/lessonsparser.h \
     exceptions/lessonsparserexception.h \
     parser/parser.h \
-    parser/parserlogger.h \
-    parser/logentry.h \
+    parser/logger/parserlogger.h \
+    parser/logger/logentry.h \
     parser/include.h \
-    parser/coursesparserlogentry.h \
-    parser/modulesparserlogentry.h \
-    parser/parserlogentry.h \
-    parser/lessonsparserlogentry.h \
-    nullable.hpp
+    parser/logger/coursesparserlogentry.h \
+    parser/logger/modulesparserlogentry.h \
+    parser/logger/parserlogentry.h \
+    parser/logger/lessonsparserlogentry.h \
+    nullable.hpp \
+    parser/questionsparser.h \
+    parser/logger/questionsparserlogentry.h
 
 FORMS += \
         mainwindow.ui

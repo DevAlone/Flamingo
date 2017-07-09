@@ -1,5 +1,5 @@
 #include "lessonsparserlogentry.h"
-#include "lessonsparser.h"
+#include "parser/lessonsparser.h"
 
 namespace parser {
 LessonsParserLogEntry::LessonsParserLogEntry(LOG_ENTRY_TYPE type, const QString& message, const QString& path, long lineNumber, const QString& line, LessonsParser::SECTION section)

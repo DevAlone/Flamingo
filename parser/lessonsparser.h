@@ -2,7 +2,8 @@
 #define LESSONSPARSER_H
 
 #include "lesson.h"
-#include "parserlogger.h"
+#include "logger/parserlogger.h"
+#include "parser.h"
 
 #include <QObject>
 #include <QtCore>
@@ -10,11 +11,8 @@
 #include <memory>
 
 namespace parser {
-class LessonsParser {
+class LessonsParser : public Parser {
 public:
-    LessonsParser();
-    void setLogger(std::shared_ptr<ParserLogger>& logger);
-
     std::shared_ptr<Lesson> parseFile(const QString& path);
 
     enum class SECTION {
@@ -24,14 +22,6 @@ public:
     };
 
 private:
-    std::shared_ptr<ParserLogger> logger;
-    template <typename T, typename... Args>
-    void logEntry(Args... args)
-    {
-        if (logger)
-            logger->addEntry(std::make_unique<T>(args...));
-    }
-
     SECTION section = SECTION::DESCRIPTION;
     unsigned long lineNumber = 0;
     QString path;

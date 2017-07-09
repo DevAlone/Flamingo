@@ -2,11 +2,11 @@
 #define INCLUDE_H
 
 #include "coursesparser.h"
-#include "coursesparserlogentry.h"
 #include "lessonsparser.h"
-#include "logentry.h"
+#include "logger/coursesparserlogentry.h"
+#include "logger/logentry.h"
+#include "logger/parserlogger.h"
 #include "modulesparser.h"
 #include "parser.h"
-#include "parserlogger.h"
 
 #endif // INCLUDE_H

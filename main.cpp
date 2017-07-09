@@ -40,9 +40,7 @@ int main(int argc, char* argv[])
     auto logger = std::make_shared<ParserLogger>();
     parser.setLogger(logger);
 
-    std::vector<Course>
-        courses
-        = parser.parseDirectory("courses");
+    std::vector<Course> courses = parser.parseDirectory("courses");
 
     std::shared_ptr<ModuleItem> moduleItem = courses.at(0).getModules().at(0).getModuleItems().at(0);
 

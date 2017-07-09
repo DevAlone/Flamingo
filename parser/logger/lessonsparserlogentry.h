@@ -1,7 +1,7 @@
 #ifndef LESSONSPARSERLOGENTRY_H
 #define LESSONSPARSERLOGENTRY_H
 
-#include "lessonsparser.h"
+#include "parser/lessonsparser.h"
 #include "parserlogentry.h"
 
 namespace parser {

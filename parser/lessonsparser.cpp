@@ -1,6 +1,7 @@
 #include "lessonsparser.h"
-#include "lessonsparserlogentry.h"
+#include "logger/lessonsparserlogentry.h"
 #include "parser.h"
+#include "questionsparser.h"
 
 #include <exceptions/lessonsparserexception.h>
 
@@ -8,14 +9,6 @@
 #include <QtCore>
 
 namespace parser {
-LessonsParser::LessonsParser()
-{
-}
-
-void LessonsParser::setLogger(std::shared_ptr<ParserLogger>& logger)
-{
-    this->logger = logger;
-}
 
 std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
 {
@@ -47,36 +40,19 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
         return lesson;
     }
 
-    // TODO: remove all fucking exceptions
-
-    // TODO: parse
     {
 
         section = SECTION::DESCRIPTION;
 
-        //        std::shared_ptr<Question> question;
-
         QTextStream stream(&lessonFile);
-        lineNumber = 0;
 
-        for (; !stream.atEnd(); lineNumber++) {
+        for (lineNumber = 0; !stream.atEnd(); lineNumber++) {
             QString line = stream.readLine();
             line = line.trimmed();
 
             // if line point to which section is started
             if (isSection(line)) {
                 tryToChangeSection(line);
-
-                //                if (question) {
-                //                    logEntry<LessonsParserLogEntry>(
-                //                        LOG_ENTRY_TYPE::DEBUG,
-                //                        QObject::tr("Adding question"),
-                //                        path,
-                //                        lineNumber,
-                //                        section);
-                //                    lesson->addQuestion(question);
-                //                    question.reset();
-                //                }
                 continue;
             }
 
@@ -89,20 +65,7 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
                 break;
             }
         }
-
-        //        if (question) {
-        //            logEntry<LessonsParserLogEntry>(
-        //                LOG_ENTRY_TYPE::DEBUG,
-        //                QObject::tr("Adding question"),
-        //                path,
-        //                lineNumber,
-        //                section);
-        //            lesson->addQuestion(question);
-        //            question.reset();
-        //        }
     }
-
-    //lesson->addQuestion(Question());
 
     return lesson;
 }
@@ -151,7 +114,9 @@ void LessonsParser::parseQuestionsSection(std::shared_ptr<Lesson>& lesson, QStri
 
     qDebug() << path;
 
-    int questionNumber = 1;
+    unsigned questionNumber = 1;
+    unsigned long questionLineNumber = 0;
+
     QString questionBuffer = "";
 
     bool isFirstLine = true;
@@ -160,7 +125,8 @@ void LessonsParser::parseQuestionsSection(std::shared_ptr<Lesson>& lesson, QStri
             isFirstLine = false;
         else
             line = stream.readLine();
-        // TODO: line = line.trimmed();
+
+        line = line.trimmed();
 
         if (isSection(line)) {
             if (tryToChangeSection(line))
@@ -170,24 +136,26 @@ void LessonsParser::parseQuestionsSection(std::shared_ptr<Lesson>& lesson, QStri
         bool isOk;
         auto keyValue = getKeyValueFromString(line, &isOk, ':');
         auto& key = keyValue.first;
-        // auto& value = keyValue.second;
 
         if (isOk) {
             int number = key.toInt(&isOk);
             if (isOk) {
                 if (questionBuffer != "") {
-                    logEntry<LessonsParserLogEntry>(
-                        LOG_ENTRY_TYPE::DEBUG,
-                        QObject::tr("Start parsing of question number ")
-                            + QString::number(questionNumber)
-                            + QObject::tr(" from buffer"),
-                        path);
-                    // TODO: parse and create question and push to lesson
+                    QuestionsParser questionsParser;
+                    questionsParser.setLogger(logger);
 
-                    questionBuffer
-                        = "";
+                    std::shared_ptr<Question> question = questionsParser.parseString(
+                        questionBuffer,
+                        questionNumber,
+                        questionLineNumber);
+
+                    if (question)
+                        lesson->addQuestion(question);
+
+                    questionBuffer = "";
                 }
                 questionNumber = number;
+                questionLineNumber = lineNumber;
                 continue;
             }
         }
@@ -196,13 +164,18 @@ void LessonsParser::parseQuestionsSection(std::shared_ptr<Lesson>& lesson, QStri
     }
 
     if (questionBuffer != "") {
-        // TODO: parse and create question and push to lesson
-        logEntry<LessonsParserLogEntry>(
-            LOG_ENTRY_TYPE::DEBUG,
-            QObject::tr("Start parsing of question number ")
-                + QString::number(questionNumber)
-                + QObject::tr(" from buffer"),
-            path);
+        QuestionsParser questionsParser;
+        questionsParser.setLogger(logger);
+
+        std::shared_ptr<Question> question = questionsParser.parseString(
+            questionBuffer,
+            questionNumber,
+            questionLineNumber);
+
+        if (question)
+            lesson->addQuestion(question);
+
+        questionBuffer = "";
     }
 }
 

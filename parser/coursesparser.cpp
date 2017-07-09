@@ -1,7 +1,7 @@
 #include "coursesparser.h"
-#include "coursesparserlogentry.h"
 #include "exceptions/coursesparserexception.h"
 #include "exceptions/parseerrorexception.h"
+#include "logger/coursesparserlogentry.h"
 #include "modulesparser.h"
 #include "parser.h"
 
@@ -9,10 +9,6 @@
 #include <iostream>
 
 namespace parser {
-CoursesParser::CoursesParser(QObject* parent)
-    : QObject(parent)
-{
-}
 
 std::vector<Course> CoursesParser::parseDirectory(const QString& path)
 {
@@ -28,7 +24,7 @@ std::vector<Course> CoursesParser::parseDirectory(const QString& path)
     if (!baseDir.exists()) {
         logEntry<CoursesParserLogEntry>(
             LOG_ENTRY_TYPE::ERROR,
-            tr("Directory ") + path + tr(" doesn't exist"),
+            QObject::tr("Directory ") + path + QObject::tr(" doesn't exist"),
             baseDir.absolutePath());
         return courses;
     }
@@ -52,12 +48,6 @@ std::vector<Course> CoursesParser::parseDirectory(const QString& path)
 
     return courses;
 }
-
-void CoursesParser::setLogger(std::shared_ptr<ParserLogger>& logger)
-{
-    this->logger = logger;
-}
-
 Course CoursesParser::parseCourse(const QString& courseDirPath)
 {
     logEntry<CoursesParserLogEntry>(
@@ -75,12 +65,12 @@ Course CoursesParser::parseCourse(const QString& courseDirPath)
     if (!infoFile.exists()) {
         logEntry<CoursesParserLogEntry>(
             LOG_ENTRY_TYPE::WARNING,
-            tr("info.txt file wasn't found here: ")
+            QObject::tr("info.txt file wasn't found here: ")
                 + courseDir.absolutePath());
     } else if (!infoFile.open(QIODevice::ReadOnly)) {
         logEntry<CoursesParserLogEntry>(
             LOG_ENTRY_TYPE::ERROR,
-            tr("info.txt can't be opened. Maybe you don't have permissions to do that"),
+            QObject::tr("info.txt can't be opened. Maybe you don't have permissions to do that"),
             courseDir.absolutePath());
     } else {
         logEntry<CoursesParserLogEntry>(
@@ -115,7 +105,7 @@ Course CoursesParser::parseCourse(const QString& courseDirPath)
                 if (!isOk || level < 1 || level > 10) {
                     logEntry<CoursesParserLogEntry>(
                         LOG_ENTRY_TYPE::ERROR,
-                        tr("Unable to recognize level of course. It have to be number in range from 1 to 10"),
+                        QObject::tr("Unable to recognize level of course. It have to be number in range from 1 to 10"),
                         infoFilePath,
                         lineNumber,
                         line);

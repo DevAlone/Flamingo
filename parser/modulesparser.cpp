@@ -1,15 +1,11 @@
 #include "modulesparser.h"
 #include "lessonsparser.h"
-#include "modulesparserlogentry.h"
+#include "logger/modulesparserlogentry.h"
 #include "submodule.h"
 
 #include <exceptions/modulesparserexception.h>
 
 namespace parser {
-ModulesParser::ModulesParser(QObject* parent)
-    : QObject(parent)
-{
-}
 
 std::vector<Module> ModulesParser::parseDirectory(const QString& path)
 {
@@ -25,7 +21,7 @@ std::vector<Module> ModulesParser::parseDirectory(const QString& path)
     if (!baseDir.exists()) {
         logEntry<ModulesParserLogEntry>(
             LOG_ENTRY_TYPE::ERROR,
-            tr("Directory ") + path + tr(" doesn't exist"),
+            QObject::tr("Directory ") + path + QObject::tr(" doesn't exist"),
             path);
 
         return modules;
@@ -66,7 +62,7 @@ Module ModulesParser::parseModule(const QString& modulePath)
         // it shouldn't happen
         logEntry<ModulesParserLogEntry>(
             LOG_ENTRY_TYPE::ERROR,
-            tr("Directory ") + modulePath + tr(" doesn't exist"));
+            QObject::tr("Directory ") + modulePath + QObject::tr(" doesn't exist"));
         return module;
     }
 
@@ -116,10 +112,5 @@ Module ModulesParser::parseModule(const QString& modulePath)
     }
 
     return module;
-}
-
-void ModulesParser::setLogger(std::shared_ptr<ParserLogger>& logger)
-{
-    this->logger = logger;
 }
 }
