@@ -71,7 +71,8 @@ HEADERS += \
     parser/coursesparserlogentry.h \
     parser/modulesparserlogentry.h \
     parser/parserlogentry.h \
-    parser/lessonsparserlogentry.h
+    parser/lessonsparserlogentry.h \
+    nullable.hpp
 
 FORMS += \
         mainwindow.ui

@@ -24,7 +24,7 @@ std::map<unsigned, std::shared_ptr<Question>>& Lesson::getQuestions()
     return questions;
 }
 
-unsigned char Lesson::getLevel() const
+Nullable<unsigned char> Lesson::getLevel() const
 {
     return level;
 }

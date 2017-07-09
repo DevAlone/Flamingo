@@ -12,8 +12,14 @@ LessonsParser::LessonsParser()
 {
 }
 
+void LessonsParser::setLogger(std::shared_ptr<ParserLogger>& logger)
+{
+    this->logger = logger;
+}
+
 std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
 {
+    this->path = path;
     logEntry<LessonsParserLogEntry>(
         LOG_ENTRY_TYPE::INFO,
         QObject::tr("Parsing of lesson file was started"),
@@ -45,106 +51,55 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
 
     // TODO: parse
     {
-        enum class STATE {
-            DESCRIPTION,
-            QUESTIONS
-        };
 
-        STATE state = STATE::DESCRIPTION;
-        std::shared_ptr<Question> question;
+        section = SECTION::DESCRIPTION;
+
+        //        std::shared_ptr<Question> question;
 
         QTextStream stream(&lessonFile);
-        int stringNumber = 0;
+        lineNumber = 0;
 
-        qDebug() << "parsing of lesson was started";
-        for (; !stream.atEnd(); stringNumber++) {
+        for (; !stream.atEnd(); lineNumber++) {
             QString line = stream.readLine();
-
             line = line.trimmed();
 
-            if (line.startsWith("[") && line.endsWith("]") && line.size() > 2) {
-                QString substr = line.mid(1, line.size() - 2);
-                substr = substr.toLower();
+            // if line point to which section is started
+            if (isSection(line)) {
+                tryToChangeSection(line);
 
-                if (substr == "questions") {
-                    state = STATE::QUESTIONS;
-                    qDebug() << "state changed to [Questions]";
-                }
-
-                if (question) {
-                    qDebug() << "adding question...";
-                    lesson->addQuestion(question);
-                    question.reset();
-                }
+                //                if (question) {
+                //                    logEntry<LessonsParserLogEntry>(
+                //                        LOG_ENTRY_TYPE::DEBUG,
+                //                        QObject::tr("Adding question"),
+                //                        path,
+                //                        lineNumber,
+                //                        section);
+                //                    lesson->addQuestion(question);
+                //                    question.reset();
+                //                }
                 continue;
             }
 
-            bool isOk;
-            auto keyValue = getKeyValueFromString(line, &isOk, ':');
-
-            auto& key = keyValue.first;
-            auto& value = keyValue.second;
-
-            switch (state) {
-            case STATE::DESCRIPTION:
-                if (!isOk) {
-                    // TODO: make type of log entry with sections like [Description]
-                    throw LessonsParserException(
-                        QObject::tr("Error during parsing [Description] section "
-                                    "Unrecognized string. Expected ':', but is not found in here: ")
-                        + line);
-                }
-
-                if (key == "level") {
-                    qDebug() << "level of lesson is " << value;
-                    int level = value.toInt(&isOk);
-                    if (!isOk || level < 1 || level > 10)
-                        throw LessonsParserException(
-                            QObject::tr("Error during parsing [Description] section "
-                                        "Invalid level value. It should be number from 1 to 10, but '")
-                            + value
-                            + QObject::tr("' is found"));
-                    lesson->setLevel(level);
-                }
+            switch (section) {
+            case SECTION::DESCRIPTION:
+                parseDescriptionSection(lesson, line);
                 break;
-            case STATE::QUESTIONS:
-                if (!isOk) {
-                    keyValue = getKeyValueFromString(line, &isOk, '-');
-                    if (isOk) {
-                        // TODO: parse answers
-                        qDebug() << "answer: key = " << key << "; value = " << value;
-                    } else {
-                        int questionNumber = line.simplified().toInt(&isOk);
-                        qDebug() << "question number is " << line;
-                        if (!isOk)
-                            throw LessonsParserException(
-                                QObject::tr("Error during parsing [Questions] section. "
-                                            "Unrecognized string: ")
-                                + line);
-
-                        if (question) {
-                            qDebug() << "adding question...";
-                            lesson->addQuestion(question);
-                            question.reset();
-                        }
-                        question = std::make_shared<Question>(questionNumber);
-                        qDebug() << "creating new question number " << questionNumber;
-                    }
-                    continue;
-                }
-
-                // TODO: parse question properties
-                qDebug() << "property: key = " << key << "; value = " << value;
-
+            case SECTION::QUESTIONS:
+                parseQuestionsSection(lesson, line, stream);
                 break;
             }
         }
 
-        if (question) {
-            qDebug() << "adding question...";
-            lesson->addQuestion(question);
-            question.reset();
-        }
+        //        if (question) {
+        //            logEntry<LessonsParserLogEntry>(
+        //                LOG_ENTRY_TYPE::DEBUG,
+        //                QObject::tr("Adding question"),
+        //                path,
+        //                lineNumber,
+        //                section);
+        //            lesson->addQuestion(question);
+        //            question.reset();
+        //        }
     }
 
     //lesson->addQuestion(Question());
@@ -152,8 +107,129 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
     return lesson;
 }
 
-void LessonsParser::setLogger(std::shared_ptr<ParserLogger>& logger)
+void LessonsParser::parseDescriptionSection(std::shared_ptr<Lesson>& lesson, QString& line)
 {
-    this->logger = logger;
+    bool isOk;
+    auto keyValue = getKeyValueFromString(line, &isOk, ':');
+    auto& key = keyValue.first;
+    auto& value = keyValue.second;
+
+    if (!isOk) {
+        logEntry<LessonsParserLogEntry>(
+            LOG_ENTRY_TYPE::ERROR,
+            QObject::tr("Unrecognized string. Expected ':', but is not found"),
+            path,
+            lineNumber,
+            line,
+            section);
+        return;
+    }
+
+    if (key == "level") {
+        int level = value.toInt(&isOk);
+        if (!isOk || level < 1 || level > 10)
+            logEntry<LessonsParserLogEntry>(
+                LOG_ENTRY_TYPE::ERROR,
+                QObject::tr("Invalid level of lesson value. It should be number from 1 to 10(including)"),
+                path,
+                lineNumber,
+                line,
+                section);
+        if (lesson)
+            lesson->setLevel(level);
+    }
+}
+
+void LessonsParser::parseQuestionsSection(std::shared_ptr<Lesson>& lesson, QString& line, QTextStream& stream)
+{
+    logEntry<LessonsParserLogEntry>(
+        LOG_ENTRY_TYPE::DEBUG,
+        QObject::tr("Start paring of QUESTIONS section"),
+        path,
+        lineNumber,
+        line);
+
+    qDebug() << path;
+
+    int questionNumber = 1;
+    QString questionBuffer = "";
+
+    bool isFirstLine = true;
+    for (; !stream.atEnd(); lineNumber++) {
+        if (isFirstLine)
+            isFirstLine = false;
+        else
+            line = stream.readLine();
+        // TODO: line = line.trimmed();
+
+        if (isSection(line)) {
+            if (tryToChangeSection(line))
+                break;
+        }
+
+        bool isOk;
+        auto keyValue = getKeyValueFromString(line, &isOk, ':');
+        auto& key = keyValue.first;
+        // auto& value = keyValue.second;
+
+        if (isOk) {
+            int number = key.toInt(&isOk);
+            if (isOk) {
+                if (questionBuffer != "") {
+                    logEntry<LessonsParserLogEntry>(
+                        LOG_ENTRY_TYPE::DEBUG,
+                        QObject::tr("Start parsing of question number ")
+                            + QString::number(questionNumber)
+                            + QObject::tr(" from buffer"),
+                        path);
+                    // TODO: parse and create question and push to lesson
+
+                    questionBuffer
+                        = "";
+                }
+                questionNumber = number;
+                continue;
+            }
+        }
+
+        questionBuffer += line;
+    }
+
+    if (questionBuffer != "") {
+        // TODO: parse and create question and push to lesson
+        logEntry<LessonsParserLogEntry>(
+            LOG_ENTRY_TYPE::DEBUG,
+            QObject::tr("Start parsing of question number ")
+                + QString::number(questionNumber)
+                + QObject::tr(" from buffer"),
+            path);
+    }
+}
+
+bool LessonsParser::isSection(const QString& line) const
+{
+    return line.startsWith("[") && line.endsWith("]") && line.size() > 2;
+}
+
+bool LessonsParser::tryToChangeSection(const QString& line)
+{
+    QString substr = line.mid(1, line.size() - 2);
+    substr = substr.toLower();
+
+    if (substr == "questions")
+        section = SECTION::QUESTIONS;
+    else if (substr == "description")
+        section = SECTION::DESCRIPTION;
+    else
+        return false;
+
+    logEntry<LessonsParserLogEntry>(
+        LOG_ENTRY_TYPE::DEBUG,
+        QObject::tr("Section was changed"),
+        path,
+        lineNumber,
+        line,
+        section);
+    return true;
 }
 }

@@ -20,7 +20,7 @@ QString ParserLogEntry::toString() const
     if (path != "")
         result += QObject::tr("\r\npath: ") + path + "\r\n";
     if (lineNumber >= 0 || line != "") {
-        result += QObject::tr("Error ocurred in line");
+        result += QObject::tr("Current line is line");
         if (lineNumber >= 0)
             result += QObject::tr(" number ") + QString::number(lineNumber);
         if (line != "")

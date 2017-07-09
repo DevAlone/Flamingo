@@ -2,6 +2,7 @@
 #define LESSON_H
 
 #include "moduleitem.h"
+#include "nullable.hpp"
 #include "question.h"
 
 #include <map>
@@ -16,12 +17,12 @@ public:
 
     std::map<unsigned, std::shared_ptr<Question>>& getQuestions();
 
-    unsigned char getLevel() const;
+    Nullable<unsigned char> getLevel() const;
     void setLevel(unsigned char value);
 
 private:
     std::map<unsigned, std::shared_ptr<Question>> questions;
-    unsigned char level;
+    Nullable<unsigned char> level;
 };
 
 #endif // LESSON_H
