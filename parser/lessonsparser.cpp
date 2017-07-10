@@ -42,7 +42,7 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
 
     {
 
-        section = SECTION::DESCRIPTION;
+        section = SECTION::INFO;
 
         QTextStream stream(&lessonFile);
 
@@ -57,8 +57,8 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
             }
 
             switch (section) {
-            case SECTION::DESCRIPTION:
-                parseDescriptionSection(lesson, line);
+            case SECTION::INFO:
+                parseInfoSection(lesson, line);
                 break;
             case SECTION::QUESTIONS:
                 parseQuestionsSection(lesson, line, stream);
@@ -70,7 +70,7 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
     return lesson;
 }
 
-void LessonsParser::parseDescriptionSection(std::shared_ptr<Lesson>& lesson, QString& line)
+void LessonsParser::parseInfoSection(std::shared_ptr<Lesson>& lesson, QString& line)
 {
     bool isOk;
     auto keyValue = getKeyValueFromString(line, &isOk, ':');
@@ -125,8 +125,6 @@ void LessonsParser::parseQuestionsSection(std::shared_ptr<Lesson>& lesson, QStri
             isFirstLine = false;
         else
             line = stream.readLine();
-
-        line = line.trimmed();
 
         if (isSection(line)) {
             if (tryToChangeSection(line))
@@ -191,8 +189,8 @@ bool LessonsParser::tryToChangeSection(const QString& line)
 
     if (substr == "questions")
         section = SECTION::QUESTIONS;
-    else if (substr == "description")
-        section = SECTION::DESCRIPTION;
+    else if (substr == "info")
+        section = SECTION::INFO;
     else
         return false;
 

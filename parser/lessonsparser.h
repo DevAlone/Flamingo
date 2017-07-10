@@ -17,18 +17,19 @@ public:
 
     enum class SECTION {
         NONE,
-        DESCRIPTION,
+        INFO,
         QUESTIONS
     };
 
 private:
-    SECTION section = SECTION::DESCRIPTION;
+    SECTION section = SECTION::INFO;
     unsigned long lineNumber = 0;
     QString path;
 
-    void parseDescriptionSection(std::shared_ptr<Lesson>& lesson, QString& line);
+    void parseInfoSection(std::shared_ptr<Lesson>& lesson, QString& line);
     void parseQuestionsSection(std::shared_ptr<Lesson>& lesson, QString& line, QTextStream& stream);
 
+    // TODO: удалить эту функцию, оставить только tryToChangeSection
     bool isSection(const QString& line) const;
     bool tryToChangeSection(const QString& line);
 };

@@ -8,7 +8,7 @@ LessonsParserLogEntry::LessonsParserLogEntry(LOG_ENTRY_TYPE type, const QString&
 {
     QString resultMessage = QString("(LessonsParser) ") + this->message;
     switch (section) {
-    case LessonsParser::SECTION::DESCRIPTION:
+    case LessonsParser::SECTION::INFO:
         resultMessage += "\n Current section is DESCRIPTION\n";
         break;
     case LessonsParser::SECTION::QUESTIONS:

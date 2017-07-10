@@ -16,7 +16,18 @@ public:
         unsigned questionNumber,
         unsigned long baseLineNumber);
 
+    enum class SECTION {
+        NONE,
+        INFO,
+        ANSWERS
+    };
+
 private:
+    SECTION section = SECTION::INFO;
+    unsigned long baseLineNumber = 0;
+    unsigned long lineNumber = 0;
+
+    bool tryToChangeSection(const QString& line);
 };
 }
 

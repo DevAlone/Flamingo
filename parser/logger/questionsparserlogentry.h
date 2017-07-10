@@ -1,6 +1,7 @@
 #ifndef QUESTIONSPARSERLOGENTRY_H
 #define QUESTIONSPARSERLOGENTRY_H
 
+#include "parser/questionsparser.h"
 #include "parserlogentry.h"
 
 namespace parser {
@@ -11,7 +12,11 @@ public:
         const QString& message,
         const QString& path = "",
         long lineNumber = -1,
-        const QString& line = "");
+        const QString& line = "",
+        QuestionsParser::SECTION section = QuestionsParser::SECTION::NONE);
+
+private:
+    QuestionsParser::SECTION section;
 };
 }
 
