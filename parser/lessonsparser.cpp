@@ -1,7 +1,7 @@
 #include "lessonsparser.h"
 #include "logger/lessonsparserlogentry.h"
+#include "pagesparser.h"
 #include "parser.h"
-#include "questionsparser.h"
 
 #include <exceptions/lessonsparserexception.h>
 
@@ -60,8 +60,8 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
             case SECTION::INFO:
                 parseInfoSection(lesson, line);
                 break;
-            case SECTION::QUESTIONS:
-                parseQuestionsSection(lesson, line, stream);
+            case SECTION::PAGES:
+                parsePagesSection(lesson, line, stream);
                 break;
             }
         }
@@ -103,21 +103,19 @@ void LessonsParser::parseInfoSection(std::shared_ptr<Lesson>& lesson, QString& l
     }
 }
 
-void LessonsParser::parseQuestionsSection(std::shared_ptr<Lesson>& lesson, QString& line, QTextStream& stream)
+void LessonsParser::parsePagesSection(std::shared_ptr<Lesson>& lesson, QString& line, QTextStream& stream)
 {
     logEntry<LessonsParserLogEntry>(
         LOG_ENTRY_TYPE::DEBUG,
-        QObject::tr("Start paring of QUESTIONS section"),
+        QObject::tr("Start parsing of PAGES section"),
         path,
         lineNumber,
         line);
 
-    qDebug() << path;
+    unsigned pageNumber = 1;
+    unsigned long pageLineNumber = 0;
 
-    unsigned questionNumber = 1;
-    unsigned long questionLineNumber = 0;
-
-    QString questionBuffer = "";
+    QString pageBuffer = "";
 
     bool isFirstLine = true;
     for (; !stream.atEnd(); lineNumber++) {
@@ -126,54 +124,54 @@ void LessonsParser::parseQuestionsSection(std::shared_ptr<Lesson>& lesson, QStri
         else
             line = stream.readLine();
 
+        QString trimmedLine = line.trimmed();
+
         if (isSection(line)) {
-            if (tryToChangeSection(line))
+            if (tryToChangeSection(trimmedLine))
                 break;
         }
 
         bool isOk;
-        auto keyValue = getKeyValueFromString(line, &isOk, ':');
-        auto& key = keyValue.first;
 
-        if (isOk) {
-            int number = key.toInt(&isOk);
+        if (trimmedLine.startsWith("{") && trimmedLine.endsWith("}") && trimmedLine.size() > 2) {
+            int number = trimmedLine.mid(1, trimmedLine.size() - 2).toInt(&isOk);
             if (isOk) {
-                if (questionBuffer != "") {
-                    QuestionsParser questionsParser;
-                    questionsParser.setLogger(logger);
+                if (pageBuffer != "") {
+                    PagesParser pagesParser;
+                    pagesParser.setLogger(logger);
 
-                    std::shared_ptr<Question> question = questionsParser.parseString(
-                        questionBuffer,
-                        questionNumber,
-                        questionLineNumber);
+                    std::shared_ptr<Page> page = pagesParser.parsePage(
+                        pageBuffer,
+                        pageNumber,
+                        pageLineNumber);
 
-                    if (question)
-                        lesson->addQuestion(question);
+                    if (page)
+                        lesson->addQuestion(page);
 
-                    questionBuffer = "";
+                    pageBuffer = "";
                 }
-                questionNumber = number;
-                questionLineNumber = lineNumber;
+                pageNumber = number;
+                pageLineNumber = lineNumber;
                 continue;
             }
         }
 
-        questionBuffer += line;
+        pageBuffer += line;
     }
 
-    if (questionBuffer != "") {
-        QuestionsParser questionsParser;
-        questionsParser.setLogger(logger);
+    if (pageBuffer != "") {
+        PagesParser pagesParser;
+        pagesParser.setLogger(logger);
 
-        std::shared_ptr<Question> question = questionsParser.parseString(
-            questionBuffer,
-            questionNumber,
-            questionLineNumber);
+        std::shared_ptr<Page> page = pagesParser.parsePage(
+            pageBuffer,
+            pageNumber,
+            pageLineNumber);
 
-        if (question)
-            lesson->addQuestion(question);
+        if (page)
+            lesson->addQuestion(page);
 
-        questionBuffer = "";
+        pageBuffer = "";
     }
 }
 
@@ -188,7 +186,7 @@ bool LessonsParser::tryToChangeSection(const QString& line)
     substr = substr.toLower();
 
     if (substr == "questions")
-        section = SECTION::QUESTIONS;
+        section = SECTION::PAGES;
     else if (substr == "info")
         section = SECTION::INFO;
     else

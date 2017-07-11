@@ -11,7 +11,7 @@ LessonsParserLogEntry::LessonsParserLogEntry(LOG_ENTRY_TYPE type, const QString&
     case LessonsParser::SECTION::INFO:
         resultMessage += "\n Current section is DESCRIPTION\n";
         break;
-    case LessonsParser::SECTION::QUESTIONS:
+    case LessonsParser::SECTION::PAGES:
         resultMessage += "\n Current section is QUESTIONS\n";
         break;
     default:

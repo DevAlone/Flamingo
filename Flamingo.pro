@@ -30,7 +30,6 @@ SOURCES += \
     module.cpp \
     moduleitem.cpp \
     lesson.cpp \
-    question.cpp \
     submodule.cpp \
     parser/coursesparser.cpp \
     exceptions/parserexception.cpp \
@@ -47,8 +46,11 @@ SOURCES += \
     parser/logger/modulesparserlogentry.cpp \
     parser/logger/parserlogentry.cpp \
     parser/logger/lessonsparserlogentry.cpp \
-    parser/questionsparser.cpp \
-    parser/logger/questionsparserlogentry.cpp
+    parser/pagesparser.cpp \
+    page.cpp \
+    parser/logger/pagesparserlogentry.cpp \
+    answer.cpp \
+    parser/answersparser.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -56,7 +58,6 @@ HEADERS += \
     module.h \
     moduleitem.h \
     lesson.h \
-    question.h \
     submodule.h \
     parser/coursesparser.h \
     exceptions/parserexception.h \
@@ -75,8 +76,11 @@ HEADERS += \
     parser/logger/parserlogentry.h \
     parser/logger/lessonsparserlogentry.h \
     nullable.hpp \
-    parser/questionsparser.h \
-    parser/logger/questionsparserlogentry.h
+    parser/pagesparser.h \
+    page.h \
+    parser/logger/pagesparserlogentry.h \
+    answer.h \
+    parser/answersparser.h
 
 FORMS += \
         mainwindow.ui

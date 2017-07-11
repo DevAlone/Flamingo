@@ -1,18 +1,19 @@
-#ifndef QUESTIONSPARSER_H
-#define QUESTIONSPARSER_H
+#ifndef PAGESPARSER_H
+#define PAGESPARSER_H
 
 #include "parser.h"
 
-#include <question.h>
+#include <page.h>
 
 namespace parser {
-class QuestionsParser : public Parser {
+class PagesParser : public Parser {
 public:
-    QuestionsParser();
+    PagesParser();
 
     /// function can return empty smart pointer.
     /// Check it before using.
-    std::shared_ptr<Question> parseString(const QString& string,
+    std::shared_ptr<Page> parsePage(
+        const QString& string,
         unsigned questionNumber,
         unsigned long baseLineNumber);
 
@@ -28,7 +29,10 @@ private:
     unsigned long lineNumber = 0;
 
     bool tryToChangeSection(const QString& line);
+
+    void parseInfoSection(std::map<QString, QString>& infoSectionValues, QString& line, QTextStream& stream);
+    void parseAnswersSection(std::map<char, std::shared_ptr<Answer>>& answersMap, QString& line, QTextStream& stream);
 };
 }
 
-#endif // QUESTIONSPARSER_H
+#endif // PAGESPARSER_H
