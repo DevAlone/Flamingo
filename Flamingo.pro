@@ -32,13 +32,8 @@ SOURCES += \
     lesson.cpp \
     submodule.cpp \
     parser/coursesparser.cpp \
-    exceptions/parserexception.cpp \
-    exceptions/parseerrorexception.cpp \
     parser/modulesparser.cpp \
-    exceptions/coursesparserexception.cpp \
-    exceptions/modulesparserexception.cpp \
     parser/lessonsparser.cpp \
-    exceptions/lessonsparserexception.cpp \
     parser/parser.cpp \
     parser/logger/parserlogger.cpp \
     parser/logger/logentry.cpp \
@@ -50,7 +45,13 @@ SOURCES += \
     page.cpp \
     parser/logger/pagesparserlogentry.cpp \
     answer.cpp \
-    parser/answersparser.cpp
+    parser/answersparser.cpp \
+    textpage.cpp \
+    exceptions/pagecreatingerror.cpp \
+    htmlpage.cpp \
+    parser/logger/answersparserlogentry.cpp \
+    exceptions/answercreatingerror.cpp \
+    rightanswers.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -60,13 +61,8 @@ HEADERS += \
     lesson.h \
     submodule.h \
     parser/coursesparser.h \
-    exceptions/parserexception.h \
-    exceptions/parseerrorexception.h \
     parser/modulesparser.h \
-    exceptions/coursesparserexception.h \
-    exceptions/modulesparserexception.h \
     parser/lessonsparser.h \
-    exceptions/lessonsparserexception.h \
     parser/parser.h \
     parser/logger/parserlogger.h \
     parser/logger/logentry.h \
@@ -80,7 +76,13 @@ HEADERS += \
     page.h \
     parser/logger/pagesparserlogentry.h \
     answer.h \
-    parser/answersparser.h
+    parser/answersparser.h \
+    textpage.h \
+    exceptions/pagecreatingerror.h \
+    htmlpage.h \
+    parser/logger/answersparserlogentry.h \
+    exceptions/answercreatingerror.h \
+    rightanswers.h
 
 FORMS += \
         mainwindow.ui

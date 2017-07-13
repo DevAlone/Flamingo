@@ -6,22 +6,22 @@ Lesson::Lesson(const QString& name)
     type = MODULE_ITEM_TYPE::LESSON;
 }
 
-bool Lesson::addQuestion(std::shared_ptr<Question>& question)
+bool Lesson::addPage(std::shared_ptr<Page>& page)
 {
-    if (questions.find(question->getNumber()) != questions.end()) {
+    if (pages.find(page->getNumber()) != pages.end()) {
         // if question with same number is already in here
         return false;
     }
 
-    questions.insert(std::make_pair(
-        question->getNumber(),
-        question));
+    pages.insert(std::make_pair(
+        page->getNumber(),
+        page));
     return true;
 }
 
-std::map<unsigned, std::shared_ptr<Question>>& Lesson::getQuestions()
+std::map<unsigned, std::shared_ptr<Page> >& Lesson::getPages()
 {
-    return questions;
+    return pages;
 }
 
 Nullable<unsigned char> Lesson::getLevel() const

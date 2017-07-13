@@ -1,6 +1,4 @@
 #include "coursesparser.h"
-#include "exceptions/coursesparserexception.h"
-#include "exceptions/parseerrorexception.h"
 #include "logger/coursesparserlogentry.h"
 #include "modulesparser.h"
 #include "parser.h"

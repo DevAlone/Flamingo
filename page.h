@@ -2,9 +2,18 @@
 #define PAGE_H
 
 #include "answer.h"
+#include "rightanswers.h"
 
+#include <QObject>
+#include <QString>
+
+#include <algorithm>
+#include <map>
 #include <memory>
+#include <set>
 #include <vector>
+
+#include <exceptions/pagecreatingerror.h>
 
 enum class PAGE_TYPE {
     TEXT,
@@ -12,8 +21,10 @@ enum class PAGE_TYPE {
 };
 
 class Page {
+
 public:
-    Page() = delete;
+    Page() {}
+    virtual ~Page() {}
 
     // Fabric method which creates page
     // method automatically detect type
@@ -22,15 +33,18 @@ public:
     // method can throw exception
     static std::shared_ptr<Page> createPage(
         unsigned pageNumber,
-        std::map<QString, QString> infoSection,
-        std::map < char, std::shared_ptr<Answer> answersSection)
-        = delete;
+        std::map<QString, QString>& infoSection,
+        std::map<QChar, std::shared_ptr<Answer>>& answers);
 
-private:
+    unsigned getNumber() const;
+
+protected:
     unsigned number;
     PAGE_TYPE pageType;
     //std::vector<std::shared_ptr<Answer>> answers;
-    //std::map<char, std::shared_ptr<Answer>> answers;
+    std::map<QChar, std::shared_ptr<Answer>> answers;
+    //    QString rightAnswers;
+    RightAnswers rightAnswers;
 };
 
 #endif // PAGE_H

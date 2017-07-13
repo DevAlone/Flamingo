@@ -3,8 +3,6 @@
 #include "pagesparser.h"
 #include "parser.h"
 
-#include <exceptions/lessonsparserexception.h>
-
 #include <QChar>
 #include <QtCore>
 
@@ -143,10 +141,11 @@ void LessonsParser::parsePagesSection(std::shared_ptr<Lesson>& lesson, QString& 
                     std::shared_ptr<Page> page = pagesParser.parsePage(
                         pageBuffer,
                         pageNumber,
-                        pageLineNumber);
+                        pageLineNumber,
+                        path);
 
                     if (page)
-                        lesson->addQuestion(page);
+                        lesson->addPage(page);
 
                     pageBuffer = "";
                 }
@@ -166,10 +165,11 @@ void LessonsParser::parsePagesSection(std::shared_ptr<Lesson>& lesson, QString& 
         std::shared_ptr<Page> page = pagesParser.parsePage(
             pageBuffer,
             pageNumber,
-            pageLineNumber);
+            pageLineNumber,
+            path);
 
         if (page)
-            lesson->addQuestion(page);
+            lesson->addPage(page);
 
         pageBuffer = "";
     }

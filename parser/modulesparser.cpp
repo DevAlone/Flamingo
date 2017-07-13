@@ -3,8 +3,6 @@
 #include "logger/modulesparserlogentry.h"
 #include "submodule.h"
 
-#include <exceptions/modulesparserexception.h>
-
 namespace parser {
 
 std::vector<Module> ModulesParser::parseDirectory(const QString& path)

@@ -42,27 +42,45 @@ int main(int argc, char* argv[])
 
     std::vector<Course> courses = parser.parseDirectory("courses");
 
-    std::shared_ptr<ModuleItem> moduleItem = courses.at(0).getModules().at(0).getModuleItems().at(0);
+    //    auto& logEntries = logger->getEntries();
 
-    if (moduleItem->getType() == MODULE_ITEM_TYPE::LESSON) {
-        auto lesson = std::dynamic_pointer_cast<Lesson>(moduleItem);
-        auto submodule = std::dynamic_pointer_cast<Submodule>(moduleItem);
+    //    for (auto& entry : logEntries) {
+    //        std::clog << entry->toString().toStdString() << std::endl;
+    //    }
 
-        if (!lesson)
-            qDebug() << "ахтунг";
+    Course& ielts = courses.at(0);
+    Module& listening = ielts.getModules().at(0);
+    //    Lesson* lesson2 = dynamic_cast<Lesson*>(&listening.getModuleItems().at(0));
 
-        qDebug() << "3";
-        auto& questions = lesson->getQuestions();
+    for (Course& course : courses) {
+        std::cout << "Course: " << course.getName().toStdString() << std::endl;
+        for (Module& module : course.getModules()) {
+            std::cout << "\tModule: " << module.getName().toStdString() << std::endl;
+            for (std::shared_ptr<ModuleItem>& moduleItem : module.getModuleItems()) {
+                std::cout << "\t\tModule Item: " << moduleItem->getName().toStdString() << std::endl;
+                switch (moduleItem->getType()) {
+                case MODULE_ITEM_TYPE::LESSON: {
+                    Lesson* lesson = static_cast<Lesson*>(moduleItem.get());
 
-        //qDebug() << questions.at(1)->getNumber();
+                    std::cout << "\t\t\tLesson: " << lesson->getName().toStdString() << std::endl;
+                    std::map<unsigned, std::shared_ptr<Page>>& pages = lesson->getPages();
+
+                    for (std::map<unsigned, std::shared_ptr<Page>>::value_type& pageItem : pages) {
+
+                        std::cout << "\t\t\t\tPage(" << pageItem.first << "): " << pageItem.second->getNumber() << std::endl;
+
+                        // TODO: show answers
+                    }
+                } break;
+                case MODULE_ITEM_TYPE::SUBMODULE:
+                    std::cout << "\t\t\tsubmodule" << std::endl;
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
     }
-
-    auto& logEntries = logger->getEntries();
-
-    for (auto& entry : logEntries) {
-        std::clog << entry->toString().toStdString() << std::endl;
-    }
-
     return 0;
     QApplication a(argc, argv);
     MainWindow w;
