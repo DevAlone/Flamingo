@@ -38,7 +38,7 @@ std::shared_ptr<Page> Page::createPage(
         break;
     }
 
-    page->pageType = type;
+    page->type = type;
     page->number = pageNumber;
 
     auto rightAnswersIt = infoSection.find("right answers");
@@ -76,4 +76,14 @@ std::shared_ptr<Page> Page::createPage(
 unsigned Page::getNumber() const
 {
     return number;
+}
+
+PAGE_TYPE Page::getType() const
+{
+    return type;
+}
+
+const std::map<QChar, std::shared_ptr<Answer>>& Page::getAnswers() const
+{
+    return answers;
 }

@@ -6,6 +6,8 @@
 
 #include "exceptions/pagecreatingerror.h"
 
+#include <iostream>
+
 namespace parser {
 PagesParser::PagesParser()
 {
@@ -118,9 +120,10 @@ void PagesParser::parseInfoSection(std::map<QString, QString>& infoSectionValues
 
     bool isFirstLine = true;
 
-    std::pair<QString, QString> infoSectionBuffer;
+    std::pair<QString, QString> infoSectionBuffer = std::make_pair("", "");
 
     std::pair<QString, QString> keyValue;
+    // TODO: add check for empty stream but non empty line
     for (; !stream.atEnd(); lineNumber++) {
         if (isFirstLine)
             isFirstLine = false;
@@ -133,12 +136,12 @@ void PagesParser::parseInfoSection(std::map<QString, QString>& infoSectionValues
             break;
 
         bool isOk;
-        keyValue = getKeyValueFromString(line, &isOk, ':');
+        keyValue = getKeyValueFromString(trimmedLine, &isOk, ':');
         auto& key = keyValue.first;
-        auto& value = keyValue.second;
+        // auto& value = keyValue.second;
 
         if (isOk) {
-            if (infoSectionBuffer.first != "") {
+            if (!infoSectionBuffer.first.isEmpty()) {
                 auto it = infoSectionValues.find(key);
                 if (it != infoSectionValues.end()) {
                     logEntry<PagesParserLogEntry>(
@@ -152,7 +155,7 @@ void PagesParser::parseInfoSection(std::map<QString, QString>& infoSectionValues
                     infoSectionValues.insert(infoSectionBuffer);
                 }
             }
-            infoSectionBuffer = std::make_pair<QString, QString>("", "");
+            infoSectionBuffer = keyValue;
         } else {
             infoSectionBuffer.second += " " + trimmedLine;
         }
@@ -208,8 +211,6 @@ void PagesParser::addAnswerToMap(std::map<QChar, std::shared_ptr<Answer>>& answe
 
 void PagesParser::parseAnswersSection(std::map<QChar, std::shared_ptr<Answer>>& answersMap, QString& line, QTextStream& stream)
 {
-    throw std::logic_error("not implemented");
-
     logEntry<PagesParserLogEntry>(
         LOG_ENTRY_TYPE::DEBUG,
         QObject::tr("Start parsing of ANSWERS section"),
@@ -233,7 +234,7 @@ void PagesParser::parseAnswersSection(std::map<QChar, std::shared_ptr<Answer>>& 
         if (tryToChangeSection(trimmedLine))
             break;
 
-        // check for start of new answer
+        bool newAnswerFound = false;
         if (trimmedLine.length() > 2) {
             QString answerSubstr = trimmedLine.left(3).toLower();
             if (answerSubstr.startsWith('{') && answerSubstr.endsWith('}')) {
@@ -241,15 +242,17 @@ void PagesParser::parseAnswersSection(std::map<QChar, std::shared_ptr<Answer>>& 
                 if (letter >= 'a' && letter <= 'z') {
                     addAnswerToMap(answersMap, answerLetter, answerBuffer);
 
+                    newAnswerFound = true;
                     answerLetter = letter;
                     if (trimmedLine > 3)
-                        answerBuffer = trimmedLine.mid(3);
+                        answerBuffer = trimmedLine.mid(3) + "\n";
                     else
                         answerBuffer = "";
                 }
             }
         }
-        answerBuffer += " " + trimmedLine + " ";
+        if (!newAnswerFound)
+            answerBuffer += trimmedLine + "\n";
     }
 
     addAnswerToMap(answersMap, answerLetter, answerBuffer);

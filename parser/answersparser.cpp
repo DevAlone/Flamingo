@@ -34,8 +34,8 @@ std::shared_ptr<Answer> AnswersParser::parseAnswer(QString& string, QChar answer
         if (isOk) {
             insertKeyValue(keyValueMap, keyValueVec, buffer);
             buffer = keyValue;
-        }
-        buffer.second += " " + trimmedLine;
+        } else
+            buffer.second += " " + trimmedLine + "\n";
     }
     insertKeyValue(keyValueMap, keyValueVec, buffer);
 
@@ -77,6 +77,7 @@ void AnswersParser::insertKeyValue(std::map<QString, QString>& keyValueMap,
             path,
             baseLineNumber + lineNumber,
             line);
+        it->second = buffer.second;
     } else {
         keyValueMap.insert(buffer);
     }

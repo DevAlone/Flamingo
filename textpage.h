@@ -8,7 +8,9 @@
 class TextPage : public Page {
 public:
     // TODO: maybe make private
-    TextPage(std::map<QString, QString> infoSection);
+    TextPage(std::map<QString, QString>& infoSection);
+
+    const QString& getContent() const;
 
 protected:
     QString content;

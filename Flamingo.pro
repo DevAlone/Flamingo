@@ -51,7 +51,9 @@ SOURCES += \
     htmlpage.cpp \
     parser/logger/answersparserlogentry.cpp \
     exceptions/answercreatingerror.cpp \
-    rightanswers.cpp
+    rightanswers.cpp \
+    textanswer.cpp \
+    htmlanswer.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -82,7 +84,9 @@ HEADERS += \
     htmlpage.h \
     parser/logger/answersparserlogentry.h \
     exceptions/answercreatingerror.h \
-    rightanswers.h
+    rightanswers.h \
+    textanswer.h \
+    htmlanswer.h
 
 FORMS += \
         mainwindow.ui

@@ -155,7 +155,7 @@ void LessonsParser::parsePagesSection(std::shared_ptr<Lesson>& lesson, QString& 
             }
         }
 
-        pageBuffer += line;
+        pageBuffer += line + "\n";
     }
 
     if (pageBuffer != "") {
@@ -185,7 +185,7 @@ bool LessonsParser::tryToChangeSection(const QString& line)
     QString substr = line.mid(1, line.size() - 2);
     substr = substr.toLower();
 
-    if (substr == "questions")
+    if (substr == "pages")
         section = SECTION::PAGES;
     else if (substr == "info")
         section = SECTION::INFO;

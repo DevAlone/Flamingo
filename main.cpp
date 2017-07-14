@@ -1,7 +1,11 @@
 #include "parser/include.h"
 
+#include "htmlanswer.h"
+#include "htmlpage.h"
 #include "lesson.h"
 #include "submodule.h"
+#include "textanswer.h"
+#include "textpage.h"
 
 #include "mainwindow.h"
 #include <QApplication>
@@ -42,12 +46,6 @@ int main(int argc, char* argv[])
 
     std::vector<Course> courses = parser.parseDirectory("courses");
 
-    //    auto& logEntries = logger->getEntries();
-
-    //    for (auto& entry : logEntries) {
-    //        std::clog << entry->toString().toStdString() << std::endl;
-    //    }
-
     Course& ielts = courses.at(0);
     Module& listening = ielts.getModules().at(0);
     //    Lesson* lesson2 = dynamic_cast<Lesson*>(&listening.getModuleItems().at(0));
@@ -55,31 +53,79 @@ int main(int argc, char* argv[])
     for (Course& course : courses) {
         std::cout << "Course: " << course.getName().toStdString() << std::endl;
         for (Module& module : course.getModules()) {
-            std::cout << "\tModule: " << module.getName().toStdString() << std::endl;
+            std::cout << " Module: " << module.getName().toStdString() << std::endl;
             for (std::shared_ptr<ModuleItem>& moduleItem : module.getModuleItems()) {
-                std::cout << "\t\tModule Item: " << moduleItem->getName().toStdString() << std::endl;
+                std::cout << "  Module Item: " << moduleItem->getName().toStdString() << std::endl;
                 switch (moduleItem->getType()) {
                 case MODULE_ITEM_TYPE::LESSON: {
                     Lesson* lesson = static_cast<Lesson*>(moduleItem.get());
 
-                    std::cout << "\t\t\tLesson: " << lesson->getName().toStdString() << std::endl;
+                    std::cout << "   Lesson: " << lesson->getName().toStdString() << std::endl;
                     std::map<unsigned, std::shared_ptr<Page>>& pages = lesson->getPages();
 
                     for (std::map<unsigned, std::shared_ptr<Page>>::value_type& pageItem : pages) {
 
-                        std::cout << "\t\t\t\tPage(" << pageItem.first << "): " << pageItem.second->getNumber() << std::endl;
+                        std::cout << "    Page(" << pageItem.first << "): " << pageItem.second->getNumber() << std::endl;
 
                         // TODO: show answers
+                        auto pageType = pageItem.second->getType();
+                        switch (pageType) {
+                        case PAGE_TYPE::TEXT: {
+                            std::cout << "     Type: text" << std::endl;
+                            TextPage* page = static_cast<TextPage*>(pageItem.second.get());
+                            std::cout << "     Content: " << page->getContent().toStdString() << std::endl;
+
+                        } break;
+                        case PAGE_TYPE::HTML: {
+                            std::cout << "     Type: html" << std::endl;
+                            HtmlPage* page = static_cast<HtmlPage*>(pageItem.second.get());
+                            std::cout << "     Content: " << page->getContent().toStdString() << std::endl;
+
+                        } break;
+                        }
+
+                        const auto& answers = pageItem.second->getAnswers();
+                        for (const auto& answerItem : answers) {
+                            QChar letter = answerItem.first;
+                            const auto& answer = answerItem.second;
+
+                            std::cout << "      {" << QString(letter).toStdString() << "} " << std::endl;
+
+                            switch (answer->getType()) {
+                            case ANSWER_TYPE::TEXT: {
+                                answer.get();
+                                TextAnswer* answer = static_cast<TextAnswer*>(answerItem.second.get());
+                                std::cout << "       Type: text" << std::endl;
+                                std::cout << "       Content: " << answer->getContent().toStdString() << std::endl;
+
+                            } break;
+                            case ANSWER_TYPE::HTML: {
+                                HtmlAnswer* answer = static_cast<HtmlAnswer*>(answerItem.second.get());
+                                std::cout << "       Type: html" << std::endl;
+                                std::cout << "       Content: " << answer->getContent().toStdString() << std::endl;
+                            } break;
+                            }
+                        }
                     }
                 } break;
                 case MODULE_ITEM_TYPE::SUBMODULE:
-                    std::cout << "\t\t\tsubmodule" << std::endl;
+                    std::cout << "   submodule" << std::endl;
                     break;
                 default:
                     break;
                 }
             }
         }
+    }
+
+    std::cout << std::endl
+              << std::endl
+              << std::endl;
+
+    auto& logEntries = logger->getEntries();
+
+    for (auto& entry : logEntries) {
+        std::clog << entry->toString().toStdString() << std::endl;
     }
     return 0;
     QApplication a(argc, argv);

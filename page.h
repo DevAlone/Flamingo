@@ -38,9 +38,13 @@ public:
 
     unsigned getNumber() const;
 
+    PAGE_TYPE getType() const;
+
+    const std::map<QChar, std::shared_ptr<Answer>>& getAnswers() const;
+
 protected:
     unsigned number;
-    PAGE_TYPE pageType;
+    PAGE_TYPE type;
     //std::vector<std::shared_ptr<Answer>> answers;
     std::map<QChar, std::shared_ptr<Answer>> answers;
     //    QString rightAnswers;
