@@ -12,6 +12,8 @@
 #include <iostream>
 #include <memory>
 
+#include <db/databasemanager.h>
+
 using namespace parser;
 
 int main(int argc, char* argv[])
@@ -145,12 +147,7 @@ int main(int argc, char* argv[])
     //    while (true)
     ;
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("main.db");
-    if (!db.open()) {
-        // TODO: todo
-        throw std::exception();
-    }
+    DatabaseManager* dbManager = DatabaseManager::getInstance();
 
     MainWindow w;
 

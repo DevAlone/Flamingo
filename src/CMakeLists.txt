@@ -27,4 +27,3 @@ target_link_libraries(${PROJECT_NAME} -lpthread)
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 target_link_libraries(${PROJECT_NAME} Qt5::Sql)
 
-
