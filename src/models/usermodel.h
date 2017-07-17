@@ -20,6 +20,9 @@ public:
     static QSqlError createTable();
     static std::vector<std::shared_ptr<UserModel>> getAll();
 
+    static void setActiveUserId(int userId);
+    static int getActiveUserId();
+
     bool save();
 
     int id() const;
@@ -32,5 +35,6 @@ private:
     int _id = -1;
     QString _name;
 };
+static int activeUserId = -1;
 
 #endif // USERMODEL_H

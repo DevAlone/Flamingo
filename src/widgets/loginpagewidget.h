@@ -6,6 +6,9 @@
 
 #include <QtWidgets>
 
+#include <models/userlistmodel.h>
+#include <models/usermodel.h>
+
 class LoginPageWidgetUi;
 
 class LoginPageWidget : public QWidget {
@@ -15,8 +18,13 @@ public:
     virtual ~LoginPageWidget();
 
 signals:
-
+    void loginAsUser(int userId);
 public slots:
+    void setActiveUserId(int userId);
+    void setActiveUserId(QModelIndex userIndex);
+
+private slots:
+    void loginButtonClicked();
 
 private:
     LoginPageWidgetUi* ui = nullptr;
@@ -31,10 +39,17 @@ public:
         horizontalLayout = new QHBoxLayout();
         verticalLayout = new QVBoxLayout();
 
-        userList = new UserListWidget(parent);
+        //        userList = new UserListWidget(parent);
+        userList = new QListView(parent);
+        UserListModel* userListModel = new UserListModel(parent);
+        userList->setModel(userListModel);
+
         createUserWidget = new CreateUserWidget(parent);
 
-        userListScrollArea = new QScrollArea(parent);
+        loginButton = new QPushButton(parent);
+        loginButton->setText(QObject::tr("Login"));
+
+        //        userListScrollArea = new QScrollArea(parent);
 
         horizontalLayout->addStretch();
         horizontalLayout->addLayout(verticalLayout);
@@ -42,24 +57,38 @@ public:
 
         verticalLayout->addStretch();
         verticalLayout->addWidget(headerLabel);
-        verticalLayout->addWidget(userListScrollArea);
-        userListScrollArea->setWidget(userList);
+        verticalLayout->addWidget(userList);
+        //        verticalLayout->addWidget(userListScrollArea);
+        //        userListScrollArea->setWidget(userList);
         verticalLayout->addWidget(createUserWidget);
+        verticalLayout->addWidget(loginButton);
         verticalLayout->addStretch();
 
         parent->setLayout(horizontalLayout);
 
         QObject::connect(createUserWidget, SIGNAL(userCreated()),
-            userList, SLOT(updateUsers()));
+            userListModel, SLOT(updateModel()));
+        QObject::connect(createUserWidget, SIGNAL(userCreated()),
+            userList, SLOT(update()));
+
+        QObject::connect(userList, SIGNAL(activated(QModelIndex)),
+            parent, SLOT(setActiveUserId(QModelIndex)));
+        QObject::connect(userList, SIGNAL(clicked(QModelIndex)),
+            parent, SLOT(setActiveUserId(QModelIndex)));
+
+        QObject::connect(loginButton, SIGNAL(clicked(bool)),
+            parent, SLOT(loginButtonClicked()));
     }
 
 private:
     QHBoxLayout* horizontalLayout;
     QVBoxLayout* verticalLayout;
     QLabel* headerLabel;
-    QScrollArea* userListScrollArea;
-    UserListWidget* userList;
+    //    QScrollArea* userListScrollArea;
+    //    UserListWidget* userList;
+    QListView* userList;
     CreateUserWidget* createUserWidget;
+    QPushButton* loginButton;
 };
 
 #endif // LOGINPAGEWIDGET_H

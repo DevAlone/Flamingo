@@ -64,6 +64,16 @@ std::vector<std::shared_ptr<UserModel>> UserModel::getAll()
     return result;
 }
 
+void UserModel::setActiveUserId(int userId)
+{
+    activeUserId = userId;
+}
+
+int UserModel::getActiveUserId()
+{
+    return activeUserId;
+}
+
 bool UserModel::save()
 {
     //    QSqlQuery selectQuery(R"(SELECT * FROM users)");

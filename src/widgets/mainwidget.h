@@ -16,12 +16,15 @@ public:
 signals:
 
 public slots:
+    void loginAsUser(int userId);
 
 private:
     MainWidgetUi* ui = nullptr;
 };
 
 class MainWidgetUi {
+    friend class MainWidget;
+
 public:
     MainWidgetUi(MainWidget* parent)
     {
@@ -39,6 +42,9 @@ public:
         layout = new QHBoxLayout;
         layout->addWidget(pages);
         parent->setLayout(layout);
+
+        QObject::connect(loginPage, SIGNAL(loginAsUser(int)),
+            parent, SLOT(loginAsUser(int)));
     }
 
 private:

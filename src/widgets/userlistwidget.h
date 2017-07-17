@@ -3,6 +3,7 @@
 
 #include <QtWidgets>
 
+// TODO: remove?
 class UserListWidgetUi;
 
 class UserListWidget : public QWidget {
