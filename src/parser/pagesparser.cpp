@@ -2,7 +2,7 @@
 #include "answersparser.h"
 #include "logger/pagesparserlogentry.h"
 
-#include <answer.h>
+#include "models/include.h"
 
 #include "exceptions/pagecreatingerror.h"
 

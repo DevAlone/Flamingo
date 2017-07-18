@@ -17,4 +17,6 @@ void MainWidget::loginAsUser(int userId)
 
     // prepare main page
     ui->pages->setCurrentWidget(ui->mainPage);
+
+    QMessageBox::warning(this, "page changed", QString::number(userId));
 }

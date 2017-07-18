@@ -3,12 +3,15 @@
 
 #include "module.h"
 
+#include <QSqlError>
 #include <QString>
 #include <QVector>
 
 #include <vector>
 
-class Course {
+#include <models/model.h>
+
+class Course : public Model {
 public:
     Course(QString name);
 
@@ -25,11 +28,20 @@ public:
 
     std::vector<Module>& getModules();
 
+    int getUserId() const;
+    void setUserId(int value);
+
+    virtual void save();
+
+    static QSqlError createTable();
+
 private:
     QString name = "";
     QString author = "";
     unsigned char level = 1;
     std::vector<Module> modules;
+
+    int userId = -1;
 };
 
 #endif // COURSE_H

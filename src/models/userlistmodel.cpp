@@ -1,5 +1,5 @@
 #include "userlistmodel.h"
-#include "usermodel.h"
+#include "user.h"
 
 UserListModel::UserListModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -9,7 +9,7 @@ UserListModel::UserListModel(QObject* parent)
 
 void UserListModel::updateModel()
 {
-    userList = UserModel::getAll();
+    userList = User::getAll();
     emit dataChanged(QModelIndex(), QModelIndex());
 }
 
@@ -28,7 +28,7 @@ QVariant UserListModel::data(const QModelIndex& index, int role) const
         return QVariant();
 
     if (role == Qt::DisplayRole) {
-        return userList.at(index.row())->name();
+        return userList.at(index.row())->getName();
     } else if (role == Qt::BackgroundRole) {
         // TODO: ?
         //        int batch = (index.row() / 100) % 2;

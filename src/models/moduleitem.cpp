@@ -23,3 +23,13 @@ MODULE_ITEM_TYPE ModuleItem::getType() const
 {
     return type;
 }
+
+int ModuleItem::getModuleId() const
+{
+    return moduleId;
+}
+
+void ModuleItem::setModuleId(int value)
+{
+    moduleId = value;
+}

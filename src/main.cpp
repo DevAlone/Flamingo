@@ -18,6 +18,41 @@ using namespace parser;
 
 int main(int argc, char* argv[])
 {
+    DatabaseManager* manager1 = DatabaseManager::getInstance();
+
+    CoursesParser parser1;
+    std::shared_ptr<ParserLogger> logger1 = std::make_unique<ParserLogger>();
+    parser1.setLogger(logger1);
+
+    std::vector<Course> courses1 = parser1.parseDirectory("courses");
+
+    User admin;
+    admin.setName("admin");
+    for (auto& course1 : courses1) {
+        admin.getCourses().push_back(course1);
+
+        //        course1.save();
+    }
+    admin.save();
+    return 0;
+    /* .....*/
+
+    //    DatabaseManager* manager = DatabaseManager::getInstance();
+
+    //    User user;
+    //    user.setName("admin");
+    //    user.save();
+    //    int i = 0;
+    //    std::string str;
+    //    while (true) {
+    //        std::getline(std::cin, str);
+
+    //        user.setName(QString("neadmin")
+    //            + QString::number(i) + ": " + QString(str.data()));
+    //        i++;
+    //        user.save();
+    //    }
+
     //    ModuleItem* item = new Lesson("");
 
     //    Lesson* lesson = dynamic_cast<Lesson*>(item);

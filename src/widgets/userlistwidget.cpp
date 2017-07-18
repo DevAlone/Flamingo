@@ -1,9 +1,7 @@
 #include "userlistwidget.h"
 #include "userlistitemwidget.h"
 
-#include <db/usermanager.h>
-
-#include <models/usermodel.h>
+#include <models/user.h>
 
 UserListWidget::UserListWidget(QWidget* parent)
     : QWidget(parent)
@@ -26,8 +24,8 @@ void UserListWidget::updateUsers()
 
     //    setLayout(ui->layout);
 
-    for (auto& user : UserModel::getAll()) {
-        UserListItemWidget* widget = new UserListItemWidget(std::make_pair<QVariant, QString>(user->id(), user->name()), this);
+    for (auto& user : User::getAll()) {
+        UserListItemWidget* widget = new UserListItemWidget(std::make_pair<QVariant, QString>(user->getId(), user->getName()), this);
 
         ui->layout->addWidget(widget);
         // TODO: users.push_back

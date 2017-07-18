@@ -13,7 +13,7 @@ LoginPageWidget::~LoginPageWidget()
 
 void LoginPageWidget::setActiveUserId(int userId)
 {
-    UserModel::setActiveUserId(userId);
+    User::setActiveUserId(userId);
 }
 
 void LoginPageWidget::setActiveUserId(QModelIndex userIndex)
@@ -25,5 +25,5 @@ void LoginPageWidget::loginButtonClicked()
 {
     // TODO: check user and change page
 
-    loginAsUser(UserModel::getActiveUserId());
+    loginAsUser(User::getActiveUserId());
 }

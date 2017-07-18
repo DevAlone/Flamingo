@@ -2,7 +2,7 @@
 
 #include <QSqlDatabase>
 
-#include <models/usermodel.h>
+#include <models/include.h>
 
 #include <QDebug>
 
@@ -37,7 +37,43 @@ void DatabaseManager::init()
     }
 
     // TODO: create tables
-    QSqlError error = UserModel::createTable();
+    QSqlError error = User::createTable();
+    if (error.type() != QSqlError::NoError) {
+        // TODO: handle it
+
+        //        QString error = db.lastError().text();
+        qDebug() << error.text();
+
+        throw std::exception();
+    }
+    error = Course::createTable();
+    if (error.type() != QSqlError::NoError) {
+        // TODO: handle it
+
+        //        QString error = db.lastError().text();
+        qDebug() << error.text();
+
+        throw std::exception();
+    }
+    error = Module::createTable();
+    if (error.type() != QSqlError::NoError) {
+        // TODO: handle it
+
+        //        QString error = db.lastError().text();
+        qDebug() << error.text();
+
+        throw std::exception();
+    }
+    error = Submodule::createTable();
+    if (error.type() != QSqlError::NoError) {
+        // TODO: handle it
+
+        //        QString error = db.lastError().text();
+        qDebug() << error.text();
+
+        throw std::exception();
+    }
+    error = Lesson::createTable();
     if (error.type() != QSqlError::NoError) {
         // TODO: handle it
 

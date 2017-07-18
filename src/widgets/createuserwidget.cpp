@@ -1,8 +1,6 @@
 #include "createuserwidget.h"
 
-#include <db/usermanager.h>
-
-#include <models/usermodel.h>
+#include <models/user.h>
 
 CreateUserWidget::CreateUserWidget(QWidget* parent)
     : QWidget(parent)
@@ -22,9 +20,10 @@ void CreateUserWidget::createButtonClicked()
     //    if (UserManager::getInstance()->addUser(userName))
     //        emit userCreated();
 
-    UserModel user;
+    User user;
     user.setName(userName);
-    if (user.save())
-        emit userCreated();
+    user.save();
+
+    emit userCreated();
     // TODO: handle error
 }

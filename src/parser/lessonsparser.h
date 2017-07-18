@@ -1,8 +1,8 @@
 #ifndef LESSONSPARSER_H
 #define LESSONSPARSER_H
 
-#include "lesson.h"
 #include "logger/parserlogger.h"
+#include "models/lesson/lesson.h"
 #include "parser.h"
 
 #include <QObject>

@@ -1,7 +1,7 @@
 #include "modulesparser.h"
 #include "lessonsparser.h"
 #include "logger/modulesparserlogentry.h"
-#include "submodule.h"
+#include "models/include.h"
 
 namespace parser {
 

@@ -1,8 +1,8 @@
 #ifndef COURSESPARSER_H
 #define COURSESPARSER_H
 
-#include "course.h"
 #include "logger/parserlogger.h"
+#include "models/course.h"
 #include "parser.h"
 
 #include <QObject>

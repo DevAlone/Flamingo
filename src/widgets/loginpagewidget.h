@@ -6,8 +6,7 @@
 
 #include <QtWidgets>
 
-#include <models/userlistmodel.h>
-#include <models/usermodel.h>
+#include <models/include.h>
 
 class LoginPageWidgetUi;
 

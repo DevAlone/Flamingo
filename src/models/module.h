@@ -3,12 +3,17 @@
 
 #include "moduleitem.h"
 
+#include <QSqlError>
 #include <memory>
 #include <vector>
 
-class Module {
+#include <models/model.h>
+
+class Module : public Model {
 public:
     Module(const QString& name);
+    Module(const Module& other);
+    Module& operator=(const Module& other);
 
     QString getName() const;
     void setName(const QString& value);
@@ -17,9 +22,17 @@ public:
 
     std::vector<std::shared_ptr<ModuleItem>>& getModuleItems();
 
+    int getCourseId() const;
+    void setCourseId(int value);
+
+    virtual void save();
+    static QSqlError createTable();
+
 private:
     QString name;
     std::vector<std::shared_ptr<ModuleItem>> moduleItems;
+
+    int courseId = -1;
 };
 
 #endif // MODULE_H

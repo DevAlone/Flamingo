@@ -2,7 +2,7 @@
 #define MODULESPARSER_H
 
 #include "logger/parserlogger.h"
-#include "module.h"
+#include "models/include.h"
 #include "parser.h"
 
 #include <QtCore>

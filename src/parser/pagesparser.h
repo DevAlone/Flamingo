@@ -3,7 +3,7 @@
 
 #include "parser.h"
 
-#include <page.h>
+#include "models/include.h"
 
 namespace parser {
 class PagesParser : public Parser {

@@ -1,7 +1,7 @@
 #ifndef USERLISTMODEL_H
 #define USERLISTMODEL_H
 
-#include "usermodel.h"
+#include "user.h"
 
 #include <QtCore>
 
@@ -21,7 +21,7 @@ public:
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
 private:
-    std::vector<std::shared_ptr<UserModel>> userList;
+    std::vector<std::shared_ptr<User>> userList;
 };
 
 #endif // USERLISTMODEL_H

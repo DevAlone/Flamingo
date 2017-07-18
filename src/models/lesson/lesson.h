@@ -1,14 +1,15 @@
 #ifndef LESSON_H
 #define LESSON_H
 
-#include "moduleitem.h"
-#include "nullable.hpp"
+#include "models/moduleitem.h"
 #include "page.h"
 
+#include <QSqlError>
 #include <map>
 #include <memory>
 #include <vector>
 
+// TODO: save to database like serialized string
 class Lesson : public ModuleItem {
 public:
     Lesson(const QString& name);
@@ -17,12 +18,16 @@ public:
 
     std::map<unsigned, std::shared_ptr<Page>>& getPages();
 
-    Nullable<unsigned char> getLevel() const;
+    unsigned char getLevel() const;
     void setLevel(unsigned char value);
+
+    virtual void save();
+
+    static QSqlError createTable();
 
 private:
     std::map<unsigned, std::shared_ptr<Page>> pages;
-    Nullable<unsigned char> level;
+    unsigned char level = 1;
 };
 
 #endif // LESSON_H
