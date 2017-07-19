@@ -79,52 +79,47 @@ int User::getActiveUserId()
 
 void User::save()
 {
-    if (id < 0) {
-        // user doesn't exist
-        QSqlQuery insertQuery;
-        insertQuery.prepare(R"(
-                            INSERT INTO  main.users (name)
-                            VALUES (:name);
-                            )");
-        insertQuery.bindValue(":name", name);
-        if (!insertQuery.exec())
-            throw ModelSavingError(
-                "Unable to insert User",
-                insertQuery.lastError());
-
-        auto lastId = insertQuery.lastInsertId();
-        if (!lastId.isValid()) {
-            throw ModelSavingError(
-                "Unable to get last inserted id",
-                insertQuery.lastError());
-        }
-
-        bool isOk;
-        id = lastId.toInt(&isOk);
-        if (!isOk)
-            throw ModelSavingError(
-                "Unable to cast last inserted id to int");
-    } else {
-        // user probably exists
-        QSqlQuery updateQuery;
-        updateQuery.prepare(R"(
-                            UPDATE main.users
-                            SET name = :name
-                            WHERE id=:id;
-                            )");
-        updateQuery.bindValue(":name", name);
-        updateQuery.bindValue(":id", id);
-
-        if (!updateQuery.exec())
-            throw ModelSavingError(
-                "Unable to update User",
-                updateQuery.lastError());
-    }
+    Model::save();
 
     for (auto& course : courses) {
         course.setUserId(id);
         course.save();
     }
+}
+
+void User::sqlInsert()
+{
+    // user doesn't exist
+    QSqlQuery insertQuery;
+    insertQuery.prepare(R"(
+                        INSERT INTO  main.users (name)
+                        VALUES (:name);
+                        )");
+    insertQuery.bindValue(":name", name);
+    if (!insertQuery.exec())
+        throw ModelSavingError(
+            "Unable to insert User",
+            insertQuery.lastError());
+
+    setLastInsertedId(insertQuery);
+}
+
+void User::sqlUpdate()
+{
+    // user probably exists
+    QSqlQuery updateQuery;
+    updateQuery.prepare(R"(
+                        UPDATE main.users
+                        SET name = :name
+                        WHERE id=:id;
+                        )");
+    updateQuery.bindValue(":name", name);
+    updateQuery.bindValue(":id", id);
+
+    if (!updateQuery.exec())
+        throw ModelSavingError(
+            "Unable to update User",
+            updateQuery.lastError());
 }
 
 std::vector<Course>& User::getCourses()

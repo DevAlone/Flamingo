@@ -25,9 +25,21 @@ public:
 
     static QSqlError createTable();
 
+    QString serialize();
+    static Lesson deserialize(const QString& data, const QString& name);
+
+    int getSubmoduleId() const;
+
+    void setSubmoduleId(int value);
+
+protected:
+    virtual void sqlInsert();
+    virtual void sqlUpdate();
+
 private:
     std::map<unsigned, std::shared_ptr<Page>> pages;
     unsigned char level = 1;
+    int submoduleId = -1;
 };
 
 #endif // LESSON_H

@@ -58,64 +58,57 @@ std::vector<Module>& Course::getModules()
 
 void Course::save()
 {
-    if (id < 0) {
-        // insert
-
-        if (userId < 0)
-            // TODO: maybe remove this
-            throw ModelSavingError("Unable to save course. userId must be >= 0");
-
-        QSqlQuery insertQuery;
-        // TODO: d
-        insertQuery.prepare(R"(
-                            INSERT INTO main.courses (name, author, level, userId)
-                            VALUES (:name, :author, :level, :userId);
-                            )");
-        insertQuery.bindValue(":name", name);
-        insertQuery.bindValue(":author", author);
-        insertQuery.bindValue(":level", int(level));
-        insertQuery.bindValue(":userId", userId);
-
-        if (!insertQuery.exec())
-            throw ModelSavingError(
-                "Unable to save Course",
-                insertQuery.lastError());
-
-        auto lastId = insertQuery.lastInsertId();
-        if (!lastId.isValid()) {
-            throw ModelSavingError(
-                "Unable to get last inserted id",
-                insertQuery.lastError());
-        }
-
-        bool isOk;
-        id = lastId.toInt(&isOk);
-        if (!isOk)
-            throw ModelSavingError(
-                "Unable to cast last inserted id to int");
-    } else {
-        // update
-        QSqlQuery updateQuery;
-        updateQuery.prepare(R"(
-                            UPDATE main.courses
-                            SET name = :name, author = :author, level = :level
-                            WHERE id=:id;
-                            )");
-        updateQuery.bindValue(":name", name);
-        updateQuery.bindValue(":author", author);
-        updateQuery.bindValue(":level", level);
-        updateQuery.bindValue(":id", id);
-
-        if (!updateQuery.exec())
-            throw ModelSavingError(
-                "Unable to update Course",
-                updateQuery.lastError());
-    }
+    Model::save();
 
     for (auto& module : modules) {
         module.setCourseId(id);
         module.save();
     }
+}
+
+void Course::sqlInsert()
+{
+    if (userId < 0)
+        // TODO: maybe remove this
+        throw ModelSavingError("Unable to save Course. userId must be >= 0");
+
+    QSqlQuery insertQuery;
+    // TODO: d
+    insertQuery.prepare(R"(
+                        INSERT INTO main.courses (name, author, level, userId)
+                        VALUES (:name, :author, :level, :userId);
+                        )");
+    insertQuery.bindValue(":name", name);
+    insertQuery.bindValue(":author", author);
+    insertQuery.bindValue(":level", int(level));
+    insertQuery.bindValue(":userId", userId);
+
+    if (!insertQuery.exec())
+        throw ModelSavingError(
+            "Unable to save Course",
+            insertQuery.lastError());
+
+    setLastInsertedId(insertQuery);
+}
+
+void Course::sqlUpdate()
+{
+    // update
+    QSqlQuery updateQuery;
+    updateQuery.prepare(R"(
+                        UPDATE main.courses
+                        SET name = :name, author = :author, level = :level
+                        WHERE id=:id;
+                        )");
+    updateQuery.bindValue(":name", name);
+    updateQuery.bindValue(":author", author);
+    updateQuery.bindValue(":level", level);
+    updateQuery.bindValue(":id", id);
+
+    if (!updateQuery.exec())
+        throw ModelSavingError(
+            "Unable to update Course",
+            updateQuery.lastError());
 }
 
 QSqlError Course::createTable()

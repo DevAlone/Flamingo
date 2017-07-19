@@ -38,15 +38,70 @@ void Lesson::setLevel(unsigned char value)
 
 void Lesson::save()
 {
-    // TODO: serialize and save
+    Model::save();
+}
+
+void Lesson::sqlInsert()
+{
+    if (moduleId < 0 && submoduleId < 0)
+        throw ModelSavingError(
+            "Unable to save Lesson. moduleId or submoduleId must be >= 0");
+
+    QSqlQuery insertQuery;
+
+    insertQuery.prepare(R"(
+                        INSERT INTO main.lessons (name, moduleId, submoduleId, data)
+                        VALUES (:name, :moduleId, :submoduleId, :data);
+                        )");
+    insertQuery.bindValue(":name", name);
+    insertQuery.bindValue(":moduleId", moduleId);
+    insertQuery.bindValue(":submoduleId", submoduleId);
+    insertQuery.bindValue(":data", serialize());
+
+    if (!insertQuery.exec())
+        throw ModelSavingError(
+            "Unable to save Lesson",
+            insertQuery.lastError());
+
+    setLastInsertedId(insertQuery);
+}
+
+void Lesson::sqlUpdate()
+{
+    QSqlQuery updateQuery;
+    updateQuery.prepare(R"(
+                        UPDATE main.lessons
+                        SET name = :name, moduleId = :moduleId, submoduleId = :submoduleId, data = :data
+                        WHERE id = :id;
+                        )");
+    updateQuery.bindValue(":name", name);
+    updateQuery.bindValue(":moduleId", moduleId);
+    updateQuery.bindValue(":submoduleId", submoduleId);
+    updateQuery.bindValue(":data", serialize());
+    updateQuery.bindValue(":id", id);
+
+    if (!updateQuery.exec())
+        throw ModelSavingError(
+            "Unable to update Lesson",
+            updateQuery.lastError());
+}
+
+void Lesson::setSubmoduleId(int value)
+{
+    submoduleId = value;
+}
+
+int Lesson::getSubmoduleId() const
+{
+    return submoduleId;
 }
 
 QSqlError Lesson::createTable()
 {
     QSqlQuery query(R"(
-    CREATE TABLE IF NOT EXISTS main.lessons (
+                    CREATE TABLE IF NOT EXISTS main.lessons (
                     id integer PRIMARY KEY,
-                    level integer NOT NULL,
+                    name text NOT NULL,
                     moduleId integer,
                     submoduleId integer,
                     data text NOT NULL,
@@ -62,4 +117,16 @@ QSqlError Lesson::createTable()
         error = query.lastError();
 
     return error;
+}
+
+QString Lesson::serialize()
+{
+    // TODO: do it!
+    return "";
+}
+
+Lesson Lesson::deserialize(const QString& data, const QString& name)
+{
+    // TODO: do it!
+    return Lesson(name);
 }

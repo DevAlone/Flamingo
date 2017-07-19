@@ -5,6 +5,8 @@
 
 #include <QtWidgets>
 
+#include <widgets/main_page/mainpagewidget.h>
+
 class MainWidgetUi;
 
 class MainWidget : public QWidget {
@@ -32,7 +34,7 @@ public:
 
         loginPage = new LoginPageWidget(pages);
         // TODO: todo
-        mainPage = new QWidget(pages);
+        mainPage = new MainPageWidget(pages);
 
         pages->addWidget(loginPage);
         pages->addWidget(mainPage);
@@ -51,7 +53,7 @@ private:
     QHBoxLayout* layout;
     QStackedWidget* pages;
     LoginPageWidget* loginPage;
-    QWidget* mainPage;
+    MainPageWidget* mainPage;
 };
 
 #endif // MAINWIDGET_H

@@ -3,6 +3,8 @@
 
 #include <QSqlQuery>
 
+#include <exceptions/modelsavingerror.h>
+
 Module::Module(const QString& name)
     : name(name)
 {
@@ -70,11 +72,51 @@ std::vector<std::shared_ptr<ModuleItem> >& Module::getModuleItems()
 
 void Module::save()
 {
-    // TODO: todo
+    Model::save();
 
-    //    for (auto& moduleItem : moduleItems) {
-    //        moduleItem
-    //    }
+    for (auto& moduleItem : moduleItems) {
+        moduleItem->setModuleId(id);
+        moduleItem->save();
+    }
+}
+
+void Module::sqlInsert()
+{
+    if (courseId < 0)
+        throw ModelSavingError("Unable to save module. courseId must be >= 0");
+
+    QSqlQuery insertQuery;
+
+    insertQuery.prepare(R"(
+                        INSERT INTO main.modules (name, courseId)
+                        VALUES (:name, :courseId);
+                        )");
+    insertQuery.bindValue(":name", name);
+    insertQuery.bindValue(":courseId", courseId);
+
+    if (!insertQuery.exec())
+        throw ModelSavingError(
+            "Unable to save Module",
+            insertQuery.lastError());
+
+    setLastInsertedId(insertQuery);
+}
+
+void Module::sqlUpdate()
+{
+    QSqlQuery updateQuery;
+    updateQuery.prepare(R"(
+                        UPDATE main.modules
+                        SET name = :name
+                        WHERE id=:id;
+                        )");
+    updateQuery.bindValue(":name", name);
+    updateQuery.bindValue(":id", id);
+
+    if (!updateQuery.exec())
+        throw ModelSavingError(
+            "Unable to update Module",
+            updateQuery.lastError());
 }
 
 QSqlError Module::createTable()

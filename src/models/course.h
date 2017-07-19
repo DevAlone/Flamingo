@@ -32,6 +32,8 @@ public:
     void setUserId(int value);
 
     virtual void save();
+    virtual void sqlInsert();
+    virtual void sqlUpdate();
 
     static QSqlError createTable();
 

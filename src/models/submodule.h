@@ -17,6 +17,8 @@ public:
     void addLesson(std::shared_ptr<Lesson> lesson);
 
     virtual void save();
+    virtual void sqlInsert();
+    virtual void sqlUpdate();
 
     static QSqlError createTable();
 

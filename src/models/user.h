@@ -23,7 +23,9 @@ public:
     static void setActiveUserId(int userId);
     static int getActiveUserId();
 
-    void save();
+    virtual void save();
+    virtual void sqlInsert();
+    virtual void sqlUpdate();
 
     std::vector<Course>& getCourses();
 
