@@ -10,6 +10,11 @@ Course::Course(QString name)
 {
 }
 
+Course::operator QString() const
+{
+    return name;
+}
+
 QString Course::getName() const
 {
     return name;

@@ -13,6 +13,7 @@
 class Lesson : public ModuleItem {
 public:
     Lesson(const QString& name);
+    virtual operator QString() const;
 
     bool addPage(std::shared_ptr<Page>& page);
 
@@ -40,6 +41,9 @@ private:
     std::map<unsigned, std::shared_ptr<Page>> pages;
     unsigned char level = 1;
     int submoduleId = -1;
+
+    // Model interface
+public:
 };
 
 #endif // LESSON_H

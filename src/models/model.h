@@ -5,6 +5,8 @@
 
 #include <QSqlQuery>
 
+#include <QString>
+
 class Model {
 public:
     Model();
@@ -13,6 +15,8 @@ public:
     int getId() const;
 
     virtual void save();
+
+    virtual operator QString() const = 0;
 
 protected:
     int id = -1;

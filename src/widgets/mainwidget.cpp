@@ -11,12 +11,17 @@ MainWidget::~MainWidget()
     delete ui;
 }
 
-void MainWidget::loginAsUser(int userId)
+void MainWidget::backToLoginPage()
+{
+    ui->pages->setCurrentWidget(ui->loginPage);
+    ui->loginPage->activate();
+}
+
+void MainWidget::loginAsUser(std::shared_ptr<User> user)
 {
     // TODO: check and so on
 
     // prepare main page
     ui->pages->setCurrentWidget(ui->mainPage);
-
-    QMessageBox::warning(this, "page changed", QString::number(userId));
+    ui->mainPage->activate();
 }

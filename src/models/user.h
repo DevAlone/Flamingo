@@ -13,6 +13,7 @@
 class User : public Model {
 public:
     User();
+    virtual operator QString() const;
 
     QString getName() const;
     void setName(const QString& name);
@@ -22,6 +23,7 @@ public:
 
     static void setActiveUserId(int userId);
     static int getActiveUserId();
+    static std::shared_ptr<User> getActiveUser();
 
     virtual void save();
     virtual void sqlInsert();
@@ -36,6 +38,7 @@ protected:
 struct UserPrivate {
 
     static int activeUserId;
+    static std::shared_ptr<User> activeUser;
 };
 
 #endif // USERMODEL_H

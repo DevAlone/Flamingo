@@ -146,3 +146,8 @@ void Module::setCourseId(int value)
 {
     courseId = value;
 }
+
+Module::operator QString() const
+{
+    return name;
+}

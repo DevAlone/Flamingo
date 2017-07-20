@@ -13,6 +13,7 @@ public:
     Submodule(const QString& name);
     Submodule(const Submodule& other);
     Submodule& operator=(const Submodule& other);
+    virtual operator QString() const;
 
     void addLesson(std::shared_ptr<Lesson> lesson);
 

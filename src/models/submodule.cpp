@@ -99,3 +99,8 @@ QSqlError Submodule::createTable()
 
     return error;
 }
+
+Submodule::operator QString() const
+{
+    return name;
+}

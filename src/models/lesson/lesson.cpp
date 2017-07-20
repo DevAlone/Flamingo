@@ -8,6 +8,11 @@ Lesson::Lesson(const QString& name)
     type = MODULE_ITEM_TYPE::LESSON;
 }
 
+Lesson::operator QString() const
+{
+    return name;
+}
+
 bool Lesson::addPage(std::shared_ptr<Page>& page)
 {
     if (pages.find(page->getNumber()) != pages.end()) {

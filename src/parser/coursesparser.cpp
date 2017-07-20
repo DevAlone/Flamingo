@@ -46,6 +46,7 @@ std::vector<Course> CoursesParser::parseDirectory(const QString& path)
 
     return courses;
 }
+
 Course CoursesParser::parseCourse(const QString& courseDirPath)
 {
     logEntry<CoursesParserLogEntry>(

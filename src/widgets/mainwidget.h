@@ -18,7 +18,8 @@ public:
 signals:
 
 public slots:
-    void loginAsUser(int userId);
+    void backToLoginPage();
+    void loginAsUser(std::shared_ptr<User> user);
 
 private:
     MainWidgetUi* ui = nullptr;
@@ -40,13 +41,19 @@ public:
         pages->addWidget(mainPage);
 
         pages->setCurrentWidget(loginPage);
+        loginPage->activate();
 
         layout = new QHBoxLayout;
         layout->addWidget(pages);
         parent->setLayout(layout);
 
-        QObject::connect(loginPage, SIGNAL(loginAsUser(int)),
-            parent, SLOT(loginAsUser(int)));
+        QObject::connect(
+            loginPage, &LoginPageWidget::loginAsUser,
+            parent, &MainWidget::loginAsUser);
+
+        QObject::connect(
+            mainPage, &MainPageWidget::backToPreviousPage,
+            parent, &MainWidget::backToLoginPage);
     }
 
 private:

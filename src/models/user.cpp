@@ -6,7 +6,10 @@
 
 #include "exceptions/include.h"
 
+#include <exceptions/modelerror.h>
+
 int UserPrivate::activeUserId = -1;
+std::shared_ptr<User> UserPrivate::activeUser;
 
 User::User()
 {
@@ -77,6 +80,27 @@ int User::getActiveUserId()
     return UserPrivate::activeUserId;
 }
 
+std::shared_ptr<User> User::getActiveUser()
+{
+    // TODO: optimize this shit;
+    std::vector<std::shared_ptr<User>> users = User::getAll();
+
+    UserPrivate::activeUser.reset();
+    int index = UserPrivate::activeUserId;
+    for (auto& user : users) {
+        if (user->getId() == User::getActiveUserId()) {
+            UserPrivate::activeUser = user;
+            break;
+        }
+    }
+
+    if (UserPrivate::activeUser)
+        return UserPrivate::activeUser;
+    else
+        throw ModelError(
+            QObject::tr("User not found"));
+}
+
 void User::save()
 {
     Model::save();
@@ -128,4 +152,9 @@ std::vector<Course>& User::getCourses()
         // TODO: update from db
     }
     return courses;
+}
+
+User::operator QString() const
+{
+    return name;
 }

@@ -14,6 +14,7 @@
 class Course : public Model {
 public:
     Course(QString name);
+    virtual operator QString() const;
 
     QString getName() const;
     void setName(const QString& value);

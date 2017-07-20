@@ -14,6 +14,7 @@ public:
     Module(const QString& name);
     Module(const Module& other);
     Module& operator=(const Module& other);
+    virtual operator QString() const;
 
     QString getName() const;
     void setName(const QString& value);
