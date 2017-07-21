@@ -15,12 +15,15 @@ public:
     void addItem(BreadcrumbWidgetItem* item);
 
     const QString& getFullPath();
-    BreadcrumbWidgetItem const* getLastItem() const;
+    const BreadcrumbWidgetItem* getLastItem() const;
+
+    bool cdUp();
 
 signals:
     void fullPathChanged(const QString& fullPath);
 
 public slots:
+    void clear();
 
 private:
     QString fullPath;
@@ -29,8 +32,9 @@ private:
 
 private slots:
     void itemClicked();
-    void removeLastItem();
+    bool removeLastItem();
     void updateFullPath();
+    void goToItem(BreadcrumbWidgetItem* item);
 };
 
 class BreadcrumbWidgetUi {

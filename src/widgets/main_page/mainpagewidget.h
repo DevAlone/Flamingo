@@ -2,6 +2,7 @@
 #define MAINPAGEWIDGET_H
 
 #include "breadcrumbwidget.h"
+#include "coursespagewidget.h"
 
 #include <QtWidgets>
 
@@ -26,9 +27,12 @@ public slots:
     // calls when widget needs to be updated
     // for example on login
     void activate();
+    void breadcrubFullPathChanged(const QString& fullPath);
 
 private:
     MainPageWidgetUi* ui;
+
+private slots:
 };
 
 class MainPageWidgetUi {
@@ -44,7 +48,9 @@ public:
         breadcrumb = new BreadcrumbWidget(parent);
         userNameWidget = new QLabel(parent);
 
+        coursesPage = new CoursesPageWidget(parent);
         pages = new QStackedWidget(parent);
+        pages->addWidget(coursesPage);
 
         backButton->setText(QObject::tr("< Back"));
 
@@ -58,8 +64,13 @@ public:
 
         parent->setLayout(verticalLayout);
 
-        QObject::connect(backButton, SIGNAL(clicked(bool)),
-            parent, SLOT(backButtonClicked()));
+        QObject::connect(
+            backButton, &QPushButton::clicked,
+            parent, &MainPageWidget::backButtonClicked);
+
+        QObject::connect(
+            breadcrumb, &BreadcrumbWidget::fullPathChanged,
+            parent, &MainPageWidget::breadcrubFullPathChanged);
     }
 
 private:
@@ -71,6 +82,8 @@ private:
     QLabel* userNameWidget;
 
     QStackedWidget* pages;
+
+    CoursesPageWidget* coursesPage;
 };
 
 #endif // MAINPAGEWIDGET_H

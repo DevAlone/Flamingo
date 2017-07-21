@@ -37,6 +37,9 @@ public:
     virtual void sqlUpdate();
 
     static QSqlError createTable();
+    static std::vector<std::shared_ptr<Course>> getAll();
+    static std::vector<std::shared_ptr<Course>> getByUserId(int userId);
+    static std::vector<std::shared_ptr<Course>> filter(int userId = -1);
 
 private:
     QString name = "";

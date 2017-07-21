@@ -3,6 +3,7 @@
 #include <QtCore>
 #include <QtSql>
 
+#include <exceptions/modelerror.h>
 #include <exceptions/modelsavingerror.h>
 
 Course::Course(QString name)
@@ -134,6 +135,65 @@ QSqlError Course::createTable()
         error = query.lastError();
 
     return error;
+}
+
+std::vector<std::shared_ptr<Course>> Course::getAll()
+{
+    return filter(-1);
+}
+
+std::vector<std::shared_ptr<Course>> Course::getByUserId(int userId)
+{
+    return filter(userId);
+}
+
+std::vector<std::shared_ptr<Course>> Course::filter(int userId)
+{
+    std::vector<std::shared_ptr<Course>> result;
+
+    QString query = R"(
+                    SELECT id, name, author, level
+                    FROM main.courses
+                    )";
+    if (userId >= 0) {
+        query += "WHERE userId = :userId";
+    }
+
+    query += ";";
+
+    QSqlQuery selectQuery;
+    selectQuery.prepare(query);
+
+    if (userId >= 0)
+        selectQuery.bindValue(":userId", userId);
+
+    if (!selectQuery.exec()) {
+        throw ModelError(
+            "Unable to fetch courses from DB");
+    }
+
+    while (selectQuery.next()) {
+        bool isOk;
+        int id = selectQuery.value(0).toInt(&isOk);
+        if (!isOk) {
+            throw ModelError(
+                "Unable to get id from course");
+        }
+        QString name = selectQuery.value(1).toString();
+
+        QString author = selectQuery.value(2).toString();
+        int level = selectQuery.value(3).toInt(&isOk);
+        if (!isOk || level < 1 || level > 10) {
+            throw ModelError(
+                "Unable to get level from course");
+        }
+        auto courseModel = std::make_shared<Course>(name);
+        courseModel->id = id;
+        courseModel->author = author;
+        courseModel->level = level;
+        result.push_back(courseModel);
+    }
+    return result;
 }
 
 int Course::getUserId() const

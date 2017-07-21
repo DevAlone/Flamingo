@@ -8,7 +8,7 @@
 
 namespace parser {
 
-std::vector<Course> CoursesParser::parseDirectory(const QString& path)
+std::vector<Course> CoursesParser::parseCoursesInDirectory(const QString& path)
 {
     logEntry<CoursesParserLogEntry>(
         LOG_ENTRY_TYPE::INFO,
@@ -16,6 +16,25 @@ std::vector<Course> CoursesParser::parseDirectory(const QString& path)
         path);
 
     std::vector<Course> courses;
+
+    std::vector<QString> coursesList;
+
+    for (auto& courseDir : coursesList) {
+        Course course = parseCourse(courseDir);
+        courses.push_back(course);
+    }
+
+    return courses;
+}
+
+std::vector<QString> CoursesParser::listCoursesInDirectory(const QString& path)
+{
+    logEntry<CoursesParserLogEntry>(
+        LOG_ENTRY_TYPE::INFO,
+        QObject::tr("List of courses in directory was started"),
+        path);
+
+    std::vector<QString> courses;
 
     QDir baseDir(path);
 
@@ -30,8 +49,6 @@ std::vector<Course> CoursesParser::parseDirectory(const QString& path)
     auto entries = baseDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
 
     for (auto& entry : entries) {
-        //Course course(entry); // TODO: убедиться, что entry не будет абсолютным путём
-
         QString courseDirPath = baseDir.absoluteFilePath(entry);
 
         QFileInfo fileInfo(courseDirPath);
@@ -39,9 +56,7 @@ std::vector<Course> CoursesParser::parseDirectory(const QString& path)
         if (!fileInfo.isDir())
             continue;
 
-        Course course = parseCourse(courseDirPath);
-
-        courses.push_back(course);
+        courses.push_back(courseDirPath);
     }
 
     return courses;

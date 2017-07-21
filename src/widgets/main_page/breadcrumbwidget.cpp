@@ -20,6 +20,9 @@ void BreadcrumbWidget::addItem(BreadcrumbWidgetItem* item)
 
     connect(item, &BreadcrumbWidgetItem::clicked,
         this, &BreadcrumbWidget::itemClicked);
+
+    updateFullPath();
+    emit fullPathChanged(fullPath);
 }
 
 const QString& BreadcrumbWidget::getFullPath()
@@ -27,9 +30,24 @@ const QString& BreadcrumbWidget::getFullPath()
     return fullPath;
 }
 
-BreadcrumbWidgetItem const* BreadcrumbWidget::getLastItem() const
+const BreadcrumbWidgetItem* BreadcrumbWidget::getLastItem() const
 {
     return items.back();
+}
+bool BreadcrumbWidget::cdUp()
+{
+    if (items.size() > 1) {
+        goToItem(items.at(items.size() - 2));
+        return true;
+    }
+    return false;
+}
+
+void BreadcrumbWidget::clear()
+{
+    while (removeLastItem())
+        ;
+    updateFullPath();
 }
 
 void BreadcrumbWidget::itemClicked()
@@ -41,6 +59,34 @@ void BreadcrumbWidget::itemClicked()
         return;
     }
 
+    goToItem(item);
+}
+
+bool BreadcrumbWidget::removeLastItem()
+{
+    if (items.size() <= 0)
+        return false;
+
+    BreadcrumbWidgetItem* item = items.back();
+    items.pop_back();
+    ui->layout->removeWidget(item);
+
+    // TODO: check it
+    delete item;
+
+    return true;
+}
+
+void BreadcrumbWidget::updateFullPath()
+{
+    fullPath = "/";
+    for (BreadcrumbWidgetItem* item : items) {
+        fullPath += item->getPathItem() + "/";
+    }
+}
+
+void BreadcrumbWidget::goToItem(BreadcrumbWidgetItem* item)
+{
     QString prevPath = fullPath;
 
     for (auto revIt = items.rbegin(); revIt != items.rend(); revIt++) {
@@ -52,22 +98,4 @@ void BreadcrumbWidget::itemClicked()
     updateFullPath();
     if (prevPath != fullPath)
         emit fullPathChanged(fullPath);
-}
-
-void BreadcrumbWidget::removeLastItem()
-{
-    BreadcrumbWidgetItem* item = items.back();
-    items.pop_back();
-    ui->layout->removeWidget(item);
-
-    // TODO: check it
-    delete item;
-}
-
-void BreadcrumbWidget::updateFullPath()
-{
-    fullPath = "/";
-    for (BreadcrumbWidgetItem* item : items) {
-        fullPath += item->getPathItem() + "/";
-    }
 }

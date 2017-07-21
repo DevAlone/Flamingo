@@ -5,6 +5,7 @@
 
 #include <QApplication>
 
+#include <QSettings>
 // TODO: replace exceptions to logging errors in parsers
 
 #include <QSplashScreen>
@@ -163,6 +164,12 @@ int main(int argc, char* argv[])
     //    }
     //    return 0;
     QApplication a(argc, argv);
+    QSettings::setDefaultFormat(QSettings::IniFormat);
+    QApplication::setOrganizationName("DevAlone");
+    QApplication::setApplicationName("Flamingo");
+
+    QSettings s;
+    s.setValue("courseParser/courseDirectory", "courses");
 
     QPixmap pixmap(":/images/flamingo1.png");
     FlamingoSplashScreen splash(pixmap);
@@ -175,12 +182,15 @@ int main(int argc, char* argv[])
     std::shared_ptr<ParserLogger> logger = std::make_unique<ParserLogger>();
     parser.setLogger(logger);
 
-    std::vector<Course> courses = parser.parseDirectory("courses");
+    std::vector<Course> courses = parser.parseCoursesInDirectory("courses");
 
     splash.showMessage(QObject::tr("Initializing database..."));
 
     //    while (true)
     ;
+    //    QTime endTime = QTime::currentTime().addSecs(2);
+    //    while (QTime::currentTime() < endTime)
+    //        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     DatabaseManager* dbManager = DatabaseManager::getInstance();
 
