@@ -23,6 +23,7 @@ public:
     void setLevel(unsigned char value);
 
     virtual void save();
+    virtual bool update();
 
     static QSqlError createTable();
 

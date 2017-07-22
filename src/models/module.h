@@ -27,6 +27,7 @@ public:
     void setCourseId(int value);
 
     virtual void save();
+    virtual bool update();
     virtual void sqlInsert();
     virtual void sqlUpdate();
     static QSqlError createTable();

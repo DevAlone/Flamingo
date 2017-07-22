@@ -9,6 +9,8 @@
 
 #include <views/userlistview.h>
 
+#include <memory>
+
 class LoginPageWidgetUi;
 
 class LoginPageWidget : public QWidget {
@@ -28,7 +30,7 @@ private slots:
     void loginButtonClicked();
 
 private:
-    LoginPageWidgetUi* ui = nullptr;
+    std::unique_ptr<LoginPageWidgetUi> ui;
     int activeUserId = -1;
 };
 

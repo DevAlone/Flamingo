@@ -3,6 +3,7 @@
 
 #include "breadcrumbwidget.h"
 #include "coursespagewidget.h"
+#include "modulespagewidget.h"
 
 #include <QtWidgets>
 
@@ -16,6 +17,7 @@ class MainPageWidget : public QWidget {
     Q_OBJECT
 public:
     explicit MainPageWidget(QWidget* parent = nullptr);
+    virtual ~MainPageWidget();
 
 signals:
     // signal generates when widget wants to close itself
@@ -28,9 +30,12 @@ public slots:
     // for example on login
     void activate();
     void breadcrubFullPathChanged(const QString& fullPath);
+    void goToCoursesPage();
+    void goToModulesPage(std::shared_ptr<Course> course = std::shared_ptr<Course>());
+    void goToModuleItemsPage(std::shared_ptr<Module> module = std::shared_ptr<Module>());
 
 private:
-    MainPageWidgetUi* ui;
+    std::unique_ptr<MainPageWidgetUi> ui;
 
 private slots:
 };
@@ -45,12 +50,15 @@ public:
         topPanelLayout = new QHBoxLayout;
 
         backButton = new QPushButton(parent);
-        breadcrumb = new BreadcrumbWidget(parent);
+        breadcrumb = new BreadcrumbWidget;
         userNameWidget = new QLabel(parent);
 
         coursesPage = new CoursesPageWidget(parent);
+        modulesPage = new ModulesPageWidget(parent);
+
         pages = new QStackedWidget(parent);
         pages->addWidget(coursesPage);
+        pages->addWidget(modulesPage);
 
         backButton->setText(QObject::tr("< Back"));
 
@@ -71,6 +79,15 @@ public:
         QObject::connect(
             breadcrumb, &BreadcrumbWidget::fullPathChanged,
             parent, &MainPageWidget::breadcrubFullPathChanged);
+
+        QObject::connect(
+            coursesPage, &CoursesPageWidget::goToModulesPage,
+            parent, &MainPageWidget::goToModulesPage);
+
+        // TODO: add it
+        //        QObject::connect(
+        //            modulesPage, &CoursesPageWidget::goToModuleItemsPage,
+        //            parent, &MainPageWidget::goToModuleItemsPage);
     }
 
 private:
@@ -84,6 +101,7 @@ private:
     QStackedWidget* pages;
 
     CoursesPageWidget* coursesPage;
+    ModulesPageWidget* modulesPage;
 };
 
 #endif // MAINPAGEWIDGET_H

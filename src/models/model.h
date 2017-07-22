@@ -14,7 +14,15 @@ public:
 
     int getId() const;
 
+    // save model to database
+    // method creates new instance if id < 0 or updates existent if id >= 0
     virtual void save();
+    // update from database
+    // if id < 0 method returns false
+    // if id >= 0 method gets data from DB
+    // and update corresponding fields on model
+    // return true if model was changed
+    virtual bool update() = 0;
 
     virtual operator QString() const = 0;
 

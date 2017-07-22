@@ -3,15 +3,17 @@
 ModelListView::ModelListView(QWidget* parent)
     : ModelView(parent)
 {
-    ui = new ModelListViewUi(this);
+    ui = std::make_unique<ModelListViewUi>(this);
 }
 
 std::shared_ptr<Model> ModelListView::getSelectedModel()
 {
     // TODO: just do it
     if (items.empty())
-        throw std::exception();
-    //        return std::shared_ptr<Model>();
+        //        throw std::exception();
+        return std::shared_ptr<Model>();
+    if (ui->listWidget->currentIndex().row() < 0 || ui->listWidget->currentIndex().row() >= items.size())
+        return std::shared_ptr<Model>();
 
     return items.at(ui->listWidget->currentIndex().row());
 }

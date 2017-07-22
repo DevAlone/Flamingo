@@ -46,6 +46,57 @@ void Lesson::save()
     Model::save();
 }
 
+bool Lesson::update()
+{
+    if (id < 0)
+        return false;
+
+    bool isChanged = false;
+
+    QSqlQuery selectQuery;
+    selectQuery.prepare(R"(
+                SELECT name, moduleId, submoduleId, data FROM main.lessons
+                WHERE id = :id;
+                )");
+    selectQuery.bindValue(":id", id);
+
+    if (!selectQuery.exec()) {
+        throw ModelSqlError(
+            QObject::tr("Unable to get Lesson data from database"),
+            selectQuery.lastError());
+    }
+
+    while (selectQuery.next()) {
+        bool isOk;
+        QString name = selectQuery.value(0).toString();
+        int moduleId = selectQuery.value(1).toInt(&isOk);
+        if (!isOk)
+            throw ModelError(
+                QObject::tr("Unable to get Lessons moduleId from database"));
+        int submoduleId = selectQuery.value(2).toInt(&isOk);
+        if (!isOk)
+            throw ModelError(
+                QObject::tr("Unable to get Lessons submoduleId from database"));
+
+        QString data = selectQuery.value(3).toString();
+
+        if (getName() != name) {
+            isChanged = true;
+            setName(name);
+        }
+        if (getModuleId() != moduleId) {
+            isChanged = true;
+            setModuleId(moduleId);
+        }
+        if (getSubmoduleId() != submoduleId) {
+            isChanged = true;
+            setSubmoduleId(submoduleId);
+        }
+    }
+
+    return isChanged;
+}
+
 void Lesson::sqlInsert()
 {
     if (moduleId < 0 && submoduleId < 0)

@@ -5,6 +5,8 @@
 
 #include <QtWidgets>
 
+#include <memory>
+
 class MainWindowUi;
 
 class MainWindow : public QMainWindow {
@@ -18,7 +20,7 @@ signals:
 public slots:
 
 private:
-    MainWindowUi* ui = nullptr;
+    std::unique_ptr<MainWindowUi> ui;
 };
 
 class MainWindowUi {

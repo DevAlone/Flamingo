@@ -5,12 +5,11 @@
 CreateUserWidget::CreateUserWidget(QWidget* parent)
     : QWidget(parent)
 {
-    ui = new CreateUserWidgetUi(this);
+    ui = std::make_unique<CreateUserWidgetUi>(this);
 }
 
 CreateUserWidget::~CreateUserWidget()
 {
-    delete ui;
 }
 
 void CreateUserWidget::createButtonClicked()

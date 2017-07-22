@@ -5,6 +5,8 @@
 
 #include <QtWidgets>
 
+#include <memory>
+
 class BreadcrumbWidgetUi;
 
 class BreadcrumbWidget : public QWidget {
@@ -26,8 +28,9 @@ public slots:
     void clear();
 
 private:
+    std::unique_ptr<BreadcrumbWidgetUi> ui;
     QString fullPath;
-    BreadcrumbWidgetUi* ui;
+    BreadcrumbWidgetItem* rootItem;
     QVector<BreadcrumbWidgetItem*> items;
 
 private slots:

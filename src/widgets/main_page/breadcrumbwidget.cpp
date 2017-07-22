@@ -3,9 +3,12 @@
 BreadcrumbWidget::BreadcrumbWidget(QWidget* parent)
     : QWidget(parent)
 {
-    ui = new BreadcrumbWidgetUi(this);
+    ui = std::make_unique<BreadcrumbWidgetUi>(this);
 
     fullPath = "/";
+
+    rootItem = new BreadcrumbWidgetItem("", "", this);
+    rootItem->hide();
 }
 
 void BreadcrumbWidget::addItem(BreadcrumbWidgetItem* item)
@@ -32,6 +35,8 @@ const QString& BreadcrumbWidget::getFullPath()
 
 const BreadcrumbWidgetItem* BreadcrumbWidget::getLastItem() const
 {
+    if (items.empty())
+        return rootItem;
     return items.back();
 }
 bool BreadcrumbWidget::cdUp()

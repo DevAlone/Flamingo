@@ -7,7 +7,7 @@
 AvailableCoursesListWidget::AvailableCoursesListWidget(QWidget* parent)
     : QWidget(parent)
 {
-    ui = new AvailableCoursesListWidgetUi(this);
+    ui = std::make_unique<AvailableCoursesListWidgetUi>(this);
 
     updateItems();
 }

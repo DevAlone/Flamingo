@@ -26,6 +26,7 @@ public:
     static std::shared_ptr<User> getActiveUser();
 
     virtual void save();
+    virtual bool update();
     virtual void sqlInsert();
     virtual void sqlUpdate();
 

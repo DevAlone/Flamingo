@@ -3,6 +3,8 @@
 
 #include <QtWidgets>
 
+#include <memory>
+
 class AvailableCoursesListWidgetUi;
 
 class AvailableCoursesListWidget : public QWidget {
@@ -18,7 +20,7 @@ public slots:
 
 private:
     std::vector<QString> items;
-    AvailableCoursesListWidgetUi* ui;
+    std::unique_ptr<AvailableCoursesListWidgetUi> ui;
 };
 
 class AvailableCoursesListWidgetUi {

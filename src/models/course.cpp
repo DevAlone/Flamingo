@@ -52,8 +52,11 @@ unsigned char Course::getLevel() const
     return level;
 }
 
-void Course::setLevel(unsigned char value)
+void Course::setLevel(int value)
 {
+    if (value < 1 || value > 10)
+        throw ModelError(
+            QObject::tr("Logic error: level must be from 1 to 10(included)"));
     level = value;
 }
 
@@ -70,6 +73,52 @@ void Course::save()
         module.setCourseId(id);
         module.save();
     }
+}
+
+bool Course::update()
+{
+    if (id < 0)
+        return false;
+
+    bool isChanged = false;
+
+    QSqlQuery selectQuery;
+    selectQuery.prepare(R"(
+                        SELECT name, author, level FROM main.courses
+                        WHERE id = :id;
+                        )");
+    selectQuery.bindValue(":id", id);
+
+    if (!selectQuery.exec()) {
+        throw ModelSqlError(
+            QObject::tr("Unable to get Course from database"),
+            selectQuery.lastError());
+    }
+
+    while (selectQuery.next()) {
+        bool isOk;
+        QString name = selectQuery.value(0).toString();
+        QString author = selectQuery.value(1).toString();
+        int level = selectQuery.value(2).toInt(&isOk);
+        if (!isOk)
+            throw ModelError(
+                QObject::tr("Unable to get Course level from database"));
+
+        if (getName() != name) {
+            isChanged = true;
+            setName(name);
+        }
+        if (getAuthor() != author) {
+            isChanged = true;
+            setAuthor(author);
+        }
+        if (getLevel() != level) {
+            isChanged = true;
+            setLevel(level);
+        }
+    }
+
+    return isChanged;
 }
 
 void Course::sqlInsert()

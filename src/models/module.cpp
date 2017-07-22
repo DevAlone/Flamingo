@@ -80,6 +80,38 @@ void Module::save()
     }
 }
 
+bool Module::update()
+{
+    if (id < 0)
+        return false;
+
+    bool isChanged = false;
+
+    QSqlQuery selectQuery;
+    selectQuery.prepare(R"(
+                        SELECT name FROM main.modules
+                        WHERE id = :id;
+                        )");
+    selectQuery.bindValue("id", id);
+
+    if (!selectQuery.exec()) {
+        throw ModelSqlError(
+            QObject::tr("Unable to get Module from database"),
+            selectQuery.lastError());
+    }
+
+    while (selectQuery.next()) {
+        QString name = selectQuery.value(0).toString();
+
+        if (getName() != name) {
+            isChanged = true;
+            setName(name);
+        }
+    }
+
+    return isChanged;
+}
+
 void Module::sqlInsert()
 {
     if (courseId < 0)

@@ -7,6 +7,8 @@
 
 #include <vector>
 
+#include <memory>
+
 class ModelListViewUi;
 
 class ModelListView : public ModelView {
@@ -17,12 +19,15 @@ public:
     virtual std::shared_ptr<Model> getSelectedModel();
 
 signals:
-
+    void selectionChanged();
 public slots:
     void updateItems();
 
+protected:
+    std::unique_ptr<ModelDispatcher> dispatcher;
+
 private:
-    ModelListViewUi* ui;
+    std::unique_ptr<ModelListViewUi> ui;
     std::vector<std::shared_ptr<Model>> items;
 };
 
@@ -37,6 +42,9 @@ public:
         layout->addWidget(listWidget);
 
         parent->setLayout(layout);
+
+        QObject::connect(listWidget, &QListWidget::currentTextChanged,
+            parent, &ModelListView::selectionChanged);
     }
 
 private:

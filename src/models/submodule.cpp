@@ -43,6 +43,48 @@ void Submodule::save()
     }
 }
 
+bool Submodule::update()
+{
+    if (id < 0)
+        return false;
+
+    bool isChanged = false;
+
+    QSqlQuery selectQuery;
+    selectQuery.prepare(R"(
+                        SELECT name, moduleId FROM main.submodules
+                        WHERE id = :id;
+                        )");
+    selectQuery.bindValue(":id", id);
+
+    if (!selectQuery.exec()) {
+        throw ModelSqlError(
+            QObject::tr("Unable to get Submodule from database"),
+            selectQuery.lastError());
+    }
+
+    while (selectQuery.next()) {
+        bool isOk;
+        QString name = selectQuery.value(0).toString();
+        int moduleId = selectQuery.value(1).toInt(&isOk);
+
+        if (!isOk)
+            throw ModelError(
+                QObject::tr("Unable to get Submodule moduleId from database"));
+
+        if (getName() != name) {
+            isChanged = true;
+            setName(name);
+        }
+        if (getModuleId() != moduleId) {
+            isChanged = true;
+            setModuleId(moduleId);
+        }
+    }
+
+    return isChanged;
+}
+
 void Submodule::sqlInsert()
 {
     if (moduleId < 0)

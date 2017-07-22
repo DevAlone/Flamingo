@@ -8,19 +8,21 @@
 
 namespace parser {
 
-std::vector<Course> CoursesParser::parseCoursesInDirectory(const QString& path)
+std::vector<std::shared_ptr<Course>> CoursesParser::parseCoursesInDirectory(const QString& path)
 {
     logEntry<CoursesParserLogEntry>(
         LOG_ENTRY_TYPE::INFO,
         QObject::tr("Parsing of courses directory was started"),
         path);
 
-    std::vector<Course> courses;
+    std::vector<std::shared_ptr<Course>> courses;
 
-    std::vector<QString> coursesList;
+    std::vector<QString> coursesList = listCoursesInDirectory(path);
 
-    for (auto& courseDir : coursesList) {
-        Course course = parseCourse(courseDir);
+    for (auto& courseName : coursesList) {
+        QDir courseDir(path);
+        auto course = parseCourse(courseDir.absoluteFilePath(courseName));
+
         courses.push_back(course);
     }
 
@@ -56,13 +58,13 @@ std::vector<QString> CoursesParser::listCoursesInDirectory(const QString& path)
         if (!fileInfo.isDir())
             continue;
 
-        courses.push_back(courseDirPath);
+        courses.push_back(QDir(courseDirPath).dirName());
     }
 
     return courses;
 }
 
-Course CoursesParser::parseCourse(const QString& courseDirPath)
+std::shared_ptr<Course> CoursesParser::parseCourse(const QString& courseDirPath)
 {
     logEntry<CoursesParserLogEntry>(
         LOG_ENTRY_TYPE::INFO,
@@ -71,7 +73,9 @@ Course CoursesParser::parseCourse(const QString& courseDirPath)
 
     QDir courseDir(courseDirPath);
 
-    Course course(courseDir.path()); // TODO: ?
+    std::shared_ptr<Course> coursePtr = std::make_shared<Course>(courseDir.dirName()); // TODO: ?
+
+    Course& course = *coursePtr;
 
     QString infoFilePath = courseDir.absoluteFilePath("info.txt");
     QFile infoFile(infoFilePath);
@@ -139,6 +143,6 @@ Course CoursesParser::parseCourse(const QString& courseDirPath)
     auto modules = modulesParser.parseDirectory(courseDir.absoluteFilePath("modules"));
     course.addModules(modules);
 
-    return course;
+    return coursePtr;
 }
 }

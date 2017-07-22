@@ -3,18 +3,11 @@
 MainPageWidget::MainPageWidget(QWidget* parent)
     : QWidget(parent)
 {
-    ui = new MainPageWidgetUi(this);
+    ui = std::make_unique<MainPageWidgetUi>(this);
+}
 
-    //    BreadcrumbWidgetItem* item1
-    //        = new BreadcrumbWidgetItem("home", "home", this);
-    //    BreadcrumbWidgetItem* item2
-    //        = new BreadcrumbWidgetItem("user", "user", this);
-    //    BreadcrumbWidgetItem* item3
-    //        = new BreadcrumbWidgetItem("tmp", "tmp", this);
-
-    //    ui->breadcrumb->addItem(item1);
-    //    ui->breadcrumb->addItem(item2);
-    //    ui->breadcrumb->addItem(item3);
+MainPageWidget::~MainPageWidget()
+{
 }
 
 void MainPageWidget::backButtonClicked()
@@ -29,9 +22,7 @@ void MainPageWidget::activate()
     ui->userNameWidget->setText(activeUser->getName());
 
     ui->breadcrumb->clear();
-    BreadcrumbWidgetItem* rootItem
-        = new BreadcrumbWidgetItem("root", "courses", this);
-    ui->breadcrumb->addItem(rootItem);
+    goToCoursesPage();
 }
 
 void MainPageWidget::breadcrubFullPathChanged(const QString& fullPath)
@@ -41,8 +32,55 @@ void MainPageWidget::breadcrubFullPathChanged(const QString& fullPath)
 
     QString pathItem = lastItem->getPathItem();
 
-    if (pathItem == "root") {
-        ui->pages->setCurrentWidget(ui->coursesPage);
-        ui->coursesPage->activate();
+    if (pathItem == "courses")
+        goToCoursesPage();
+    else if (pathItem == "modules")
+        goToModulesPage();
+    else if (pathItem == "moduleItems")
+        goToModuleItemsPage();
+}
+
+void MainPageWidget::goToCoursesPage()
+{
+    ui->pages->setCurrentWidget(ui->coursesPage);
+    ui->coursesPage->activate();
+
+    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("courses", "courses");
+
+    if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
+        delete currentItem;
+        return;
     }
+
+    ui->breadcrumb->addItem(currentItem); //TODO: add
+}
+
+void MainPageWidget::goToModulesPage(std::shared_ptr<Course> course)
+{ // TODO: do it
+    ui->pages->setCurrentWidget(ui->modulesPage);
+    ui->modulesPage->activate(course);
+
+    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("modules", "modules");
+
+    if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
+        delete currentItem;
+        return;
+    }
+
+    ui->breadcrumb->addItem(currentItem);
+}
+
+void MainPageWidget::goToModuleItemsPage(std::shared_ptr<Module> module)
+{ // TODO: do it
+    //    ui->pages->setCurrentWidget(ui->moduleItemsPage);
+    //    ui->moduleItemsPage->activate(module);
+
+    //    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("moduleItems", "moduleItems");
+
+    //    if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
+    //        delete currentItem;
+    //        return;
+    //    }
+
+    //    ui->breadcrumb->addItem(currentItem);
 }

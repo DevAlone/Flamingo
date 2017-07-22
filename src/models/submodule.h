@@ -18,6 +18,7 @@ public:
     void addLesson(std::shared_ptr<Lesson> lesson);
 
     virtual void save();
+    virtual bool update();
     virtual void sqlInsert();
     virtual void sqlUpdate();
 

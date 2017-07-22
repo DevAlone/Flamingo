@@ -25,7 +25,7 @@ public:
     void setAuthor(const QString& value);
 
     unsigned char getLevel() const;
-    void setLevel(unsigned char value);
+    void setLevel(int value);
 
     std::vector<Module>& getModules();
 
@@ -33,6 +33,7 @@ public:
     void setUserId(int value);
 
     virtual void save();
+    virtual bool update();
     virtual void sqlInsert();
     virtual void sqlUpdate();
 

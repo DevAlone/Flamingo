@@ -7,6 +7,8 @@
 
 #include <widgets/main_page/mainpagewidget.h>
 
+#include <memory>
+
 class MainWidgetUi;
 
 class MainWidget : public QWidget {
@@ -22,7 +24,7 @@ public slots:
     void loginAsUser(std::shared_ptr<User> user);
 
 private:
-    MainWidgetUi* ui = nullptr;
+    std::unique_ptr<MainWidgetUi> ui;
 };
 
 class MainWidgetUi {

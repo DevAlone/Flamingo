@@ -3,6 +3,8 @@
 
 #include <QtWidgets>
 
+#include <memory>
+
 class CreateUserWidgetUi;
 
 class CreateUserWidget : public QWidget {
@@ -20,7 +22,7 @@ private slots:
     void createButtonClicked();
 
 private:
-    CreateUserWidgetUi* ui = nullptr;
+    std::unique_ptr<CreateUserWidgetUi> ui;
 };
 
 class CreateUserWidgetUi {

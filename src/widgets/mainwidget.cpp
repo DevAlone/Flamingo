@@ -3,12 +3,11 @@
 MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent)
 {
-    ui = new MainWidgetUi(this);
+    ui = std::make_unique<MainWidgetUi>(this);
 }
 
 MainWidget::~MainWidget()
 {
-    delete ui;
 }
 
 void MainWidget::backToLoginPage()

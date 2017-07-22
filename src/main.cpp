@@ -178,11 +178,11 @@ int main(int argc, char* argv[])
 
     splash.showMessage(QObject::tr("Parsing courses..."));
 
-    CoursesParser parser;
-    std::shared_ptr<ParserLogger> logger = std::make_unique<ParserLogger>();
-    parser.setLogger(logger);
+    //    CoursesParser parser;
+    //    std::shared_ptr<ParserLogger> logger = std::make_unique<ParserLogger>();
+    //    parser.setLogger(logger);
 
-    std::vector<Course> courses = parser.parseCoursesInDirectory("courses");
+    //    std::vector<Course> courses = parser.parseCoursesInDirectory("courses");
 
     splash.showMessage(QObject::tr("Initializing database..."));
 
