@@ -4,7 +4,7 @@
 CourseListView::CourseListView(QWidget* parent)
     : ModelListView(parent)
 {
-    dispatcher = std::make_unique<CourseDispatcher>();
+    dispatcher = std::make_shared<CourseDispatcher>();
 }
 
 std::shared_ptr<Course> CourseListView::getSelectedCourse()

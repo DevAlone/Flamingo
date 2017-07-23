@@ -2,8 +2,8 @@
 #define MAINPAGEWIDGET_H
 
 #include "breadcrumbwidget.h"
-#include "coursespagewidget.h"
-#include "modulespagewidget.h"
+#include "courses_page/coursespagewidget.h"
+#include "modules_page/modulespagewidget.h"
 
 #include <QtWidgets>
 

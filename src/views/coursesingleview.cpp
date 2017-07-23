@@ -8,12 +8,12 @@ CourseSingleView::CourseSingleView(QWidget* parent)
 
 void CourseSingleView::setModel(std::shared_ptr<Model>& model)
 {
-    ModelSingleView::setModel(model);
-
     std::shared_ptr<Course> coursePtr = std::dynamic_pointer_cast<Course>(model);
+    if (!coursePtr)
+        return;
 
-    if (coursePtr)
-        course = coursePtr;
+    ModelSingleView::setModel(model);
+    course = coursePtr;
 
     updateData();
 }

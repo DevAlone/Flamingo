@@ -24,7 +24,7 @@ public slots:
     void updateItems();
 
 protected:
-    std::unique_ptr<ModelDispatcher> dispatcher;
+    std::shared_ptr<ModelDispatcher> dispatcher;
 
 private:
     std::unique_ptr<ModelListViewUi> ui;
