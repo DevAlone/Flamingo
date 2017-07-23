@@ -142,6 +142,61 @@ QSqlError Submodule::createTable()
     return error;
 }
 
+std::vector<std::shared_ptr<Submodule>> Submodule::getAll()
+{
+    return filter(-1);
+}
+
+std::vector<std::shared_ptr<Submodule>> Submodule::getByModuleId(int moduleId)
+{
+    return filter(moduleId);
+}
+
+std::vector<std::shared_ptr<Submodule>> Submodule::filter(int moduleId)
+{
+    std::vector<std::shared_ptr<Submodule>> result;
+
+    QString query = R"(
+            SELECT id, name, moduleId
+            FROM main.submodules
+                    )";
+    if (moduleId >= 0)
+        query += "WHERE moduleId = :moduleId";
+
+    query += ";";
+
+    QSqlQuery selectQuery;
+    selectQuery.prepare(query);
+
+    if (moduleId >= 0)
+        selectQuery.bindValue(":moduleId", moduleId);
+
+    if (!selectQuery.exec()) {
+        throw ModelSqlError(
+            QObject::tr("Unable to fetch submodules from DB"),
+            selectQuery.lastError());
+    }
+
+    while (selectQuery.next()) {
+        bool isOk;
+        int id = selectQuery.value(0).toInt(&isOk);
+        if (!isOk)
+            throw ModelError(
+                QObject::tr("Unable to get id from submodule"));
+        QString name = selectQuery.value(1).toString();
+        int moduleId = selectQuery.value(2).toInt(&isOk);
+        if (!isOk)
+            throw ModelError(
+                QObject::tr("Unable to get moduleId from submodule"));
+        auto submodule = std::make_shared<Submodule>(name);
+        submodule->id = id;
+        submodule->moduleId = moduleId;
+        result.push_back(submodule);
+    }
+
+    return result;
+}
+
 Submodule::operator QString() const
 {
     return name;

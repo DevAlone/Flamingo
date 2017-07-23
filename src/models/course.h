@@ -18,8 +18,8 @@ public:
 
     QString getName() const;
     void setName(const QString& value);
-    void addModule(Module& module);
-    void addModules(std::vector<Module>& modules);
+    void addModule(std::shared_ptr<Module> module);
+    void addModules(std::vector<std::shared_ptr<Module>>& modules);
 
     QString getAuthor() const;
     void setAuthor(const QString& value);
@@ -27,7 +27,7 @@ public:
     unsigned char getLevel() const;
     void setLevel(int value);
 
-    std::vector<Module>& getModules();
+    std::vector<std::shared_ptr<Module>>& getModules();
 
     int getUserId() const;
     void setUserId(int value);
@@ -54,7 +54,7 @@ private:
     unsigned char level = 1;
     QString description = "";
     QString languageCode = "";
-    std::vector<Module> modules;
+    std::vector<std::shared_ptr<Module>> modules;
 
     int userId = -1;
 };

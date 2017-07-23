@@ -26,7 +26,7 @@ bool Lesson::addPage(std::shared_ptr<Page>& page)
     return true;
 }
 
-std::map<unsigned, std::shared_ptr<Page> >& Lesson::getPages()
+std::map<unsigned, std::shared_ptr<Page>>& Lesson::getPages()
 {
     return pages;
 }
@@ -82,6 +82,8 @@ bool Lesson::update()
             isChanged = true;
             setSubmoduleId(submoduleId);
         }
+
+        // TODO: add deserialization of data right here
     }
 
     return isChanged;
@@ -165,14 +167,90 @@ QSqlError Lesson::createTable()
     return error;
 }
 
+std::vector<std::shared_ptr<Lesson>> Lesson::getAll()
+{
+    return filter(-1, -1);
+}
+
+std::vector<std::shared_ptr<Lesson>> Lesson::getByModuleId(int moduleId)
+{
+    return filter(moduleId, -1);
+}
+
+std::vector<std::shared_ptr<Lesson>> Lesson::getBySubmoduleId(int submoduleId)
+{
+    return filter(-1, submoduleId);
+}
+
+std::vector<std::shared_ptr<Lesson>> Lesson::filter(int moduleId, int submoduleId)
+{
+    if (moduleId >= 0 && submoduleId >= 0)
+        throw ModelError(
+            QObject::tr("Logic error. You cannot get lesson with both moduleId and submoduleId more or equal 0"));
+
+    std::vector<std::shared_ptr<Lesson>> result;
+
+    QString query = R"(
+                    SELECT id, name, moduleId, submoduleId, data
+                    )";
+
+    if (moduleId >= 0)
+        query += "WHERE moduleId = :moduleId";
+    else if (submoduleId >= 0)
+        query += "WHERE submoduleId = :submoduleId";
+
+    query += ";";
+
+    QSqlQuery selectQuery;
+    selectQuery.prepare(query);
+
+    if (moduleId >= 0)
+        selectQuery.bindValue(":moduleId", moduleId);
+    else if (submoduleId >= 0)
+        selectQuery.bindValue(":submoduleId", submoduleId);
+
+    if (!selectQuery.exec()) {
+        throw ModelSqlError(
+            QObject::tr("Unable to fetch lessons from DB"),
+            selectQuery.lastError());
+    }
+
+    while (selectQuery.next()) {
+        bool isOk;
+
+        int id = selectQuery.value(0).toInt(&isOk);
+        if (!isOk)
+            throw ModelError(
+                QObject::tr("Unable to get id from lesson"));
+        QString name = selectQuery.value(1).toString();
+        int moduleId = selectQuery.value(2).toInt(&isOk);
+        if (!isOk)
+            throw ModelError(
+                QObject::tr("Unable to get moduleId from lesson"));
+        int submoduleId = selectQuery.value(3).toInt(&isOk);
+        if (!isOk)
+            throw ModelError(
+                QObject::tr("Unable to get submoduleId from lesson"));
+        QString data = selectQuery.value(4).toString();
+
+        auto lesson = deserialize(data, name);
+        lesson->id = id;
+        lesson->moduleId = moduleId;
+        lesson->submoduleId = submoduleId;
+        result.push_back(lesson);
+    }
+
+    return result;
+}
+
 QString Lesson::serialize()
 {
     // TODO: do it!
     return "";
 }
 
-Lesson Lesson::deserialize(const QString& data, const QString& name)
+std::shared_ptr<Lesson> Lesson::deserialize(const QString& data, const QString& name)
 {
     // TODO: do it!
-    return Lesson(name);
+    return std::make_shared<Lesson>(name);
 }

@@ -33,7 +33,7 @@ public:
     static QSqlError createTable();
     static std::vector<std::shared_ptr<Module>> getAll();
     static std::vector<std::shared_ptr<Module>> getByCourseId(int courseId);
-    static std::vector<std::shared_ptr<Module>> filter(int userId = -1);
+    static std::vector<std::shared_ptr<Module>> filter(int courseId = -1);
 
     int getLevel() const;
     void setLevel(int value);

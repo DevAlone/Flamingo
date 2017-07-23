@@ -10,9 +10,9 @@
 namespace parser {
 class ModulesParser : public Parser {
 public:
-    std::vector<Module> parseDirectory(const QString& path);
+    std::vector<std::shared_ptr<Module>> parseDirectory(const QString& path);
 
-    Module parseModule(const QString& modulePath);
+    std::shared_ptr<Module> parseModule(const QString& modulePath);
 
 private:
 };

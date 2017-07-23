@@ -22,14 +22,18 @@ public:
     virtual void save();
     virtual bool update();
 
-    static QSqlError createTable();
-
     QString serialize();
-    static Lesson deserialize(const QString& data, const QString& name);
+    static std::shared_ptr<Lesson> deserialize(const QString& data, const QString& name);
 
     int getSubmoduleId() const;
 
     void setSubmoduleId(int value);
+
+    static QSqlError createTable();
+    static std::vector<std::shared_ptr<Lesson>> getAll();
+    static std::vector<std::shared_ptr<Lesson>> getByModuleId(int moduleId);
+    static std::vector<std::shared_ptr<Lesson>> getBySubmoduleId(int submoduleId);
+    static std::vector<std::shared_ptr<Lesson>> filter(int moduleId = -1, int submoduleId = -1);
 
 protected:
     virtual void sqlInsert();

@@ -67,6 +67,9 @@ void Module::addModuleItem(std::shared_ptr<ModuleItem> moduleItem)
 
 std::vector<std::shared_ptr<ModuleItem>>& Module::getModuleItems()
 {
+    if (id >= 0) {
+        moduleItems = ModuleItem::getByModuleId(id);
+    }
     return moduleItems;
 }
 
@@ -208,14 +211,57 @@ std::vector<std::shared_ptr<Module>> Module::getByCourseId(int courseId)
     return filter(courseId);
 }
 
-std::vector<std::shared_ptr<Module>> Module::filter(int userId)
+std::vector<std::shared_ptr<Module>> Module::filter(int courseId)
 {
     std::vector<std::shared_ptr<Module>> result;
 
-    //    QString query = R"(
-    //                    SELECT
-    //                    )";
-    // TODO: complete it
+    QString query = R"(
+                    SELECT id, name, level, description, courseId
+                    FROM main.modules
+                    )";
+    if (courseId >= 0)
+        query += "WHERE courseId = :courseId";
+
+    query += ";";
+
+    QSqlQuery selectQuery;
+    selectQuery.prepare(query);
+
+    if (courseId >= 0)
+        selectQuery.bindValue(":courseId", courseId);
+
+    if (!selectQuery.exec()) {
+        throw ModelSqlError(
+            QObject::tr("Unable to fetch modules from DB"),
+            selectQuery.lastError());
+    }
+
+    while (selectQuery.next()) {
+        bool isOk;
+        int id = selectQuery.value(0).toInt(&isOk);
+        if (!isOk)
+            throw ModelError(
+                QObject::tr("Unable to get id from module"));
+        QString name = selectQuery.value(1).toString();
+        int level = selectQuery.value(2).toInt(&isOk);
+        if (!isOk)
+            throw ModelError(
+                QObject::tr("Unable to get level from module"));
+        QString description = selectQuery.value(3).toString();
+        int courseId = selectQuery.value(4).toInt(&isOk);
+        if (!isOk)
+            throw ModelError(
+                QObject::tr("Unable to get courseId from module"));
+
+        auto module = std::make_shared<Module>(name);
+        module->id = id;
+        //        module->name = name;
+        module->level = level;
+        module->description = description;
+        module->courseId = courseId;
+        result.push_back(module);
+    }
+
     return result;
 }
 

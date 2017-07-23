@@ -23,6 +23,9 @@ public:
     virtual void sqlUpdate();
 
     static QSqlError createTable();
+    static std::vector<std::shared_ptr<Submodule>> getAll();
+    static std::vector<std::shared_ptr<Submodule>> getByModuleId(int moduleId);
+    static std::vector<std::shared_ptr<Submodule>> filter(int moduleId = -1);
 
 private:
     std::vector<std::shared_ptr<Lesson>> lessons;

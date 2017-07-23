@@ -26,12 +26,12 @@ void Course::setName(const QString& value)
     name = value;
 }
 
-void Course::addModule(Module& module)
+void Course::addModule(std::shared_ptr<Module> module)
 {
     modules.push_back(module);
 }
 
-void Course::addModules(std::vector<Module>& modules)
+void Course::addModules(std::vector<std::shared_ptr<Module>>& modules)
 {
     for (auto& module : modules)
         addModule(module);
@@ -60,9 +60,10 @@ void Course::setLevel(int value)
     level = value;
 }
 
-std::vector<Module>& Course::getModules()
+std::vector<std::shared_ptr<Module>>& Course::getModules()
 {
     if (id >= 0) {
+        modules = Module::getByCourseId(id);
     }
     return modules;
 }
@@ -72,8 +73,8 @@ void Course::save()
     Model::save();
 
     for (auto& module : modules) {
-        module.setCourseId(id);
-        module.save();
+        module->setCourseId(id);
+        module->save();
     }
 }
 
@@ -219,7 +220,7 @@ std::vector<std::shared_ptr<Course>> Course::filter(int userId)
     std::vector<std::shared_ptr<Course>> result;
 
     QString query = R"(
-                    SELECT id, name, author, level, description, languageCode
+                    SELECT id, name, author, level, description, languageCode, userId
                     FROM main.courses
                     )";
     if (userId >= 0) {
@@ -245,24 +246,30 @@ std::vector<std::shared_ptr<Course>> Course::filter(int userId)
         int id = selectQuery.value(0).toInt(&isOk);
         if (!isOk) {
             throw ModelError(
-                "Unable to get id from course");
+                QObject::tr("Unable to get id from course"));
         }
         QString name = selectQuery.value(1).toString();
 
         QString author = selectQuery.value(2).toString();
         int level = selectQuery.value(3).toInt(&isOk);
-        if (!isOk || level < 1 || level > 10) {
+        if (!isOk) {
             throw ModelError(
-                "Unable to get level from course");
+                QObject::tr("Unable to get level from course"));
         }
         QString description = selectQuery.value(4).toString();
         QString languageCode = selectQuery.value(5).toString();
+        int userId = selectQuery.value(6).toInt(&isOk);
+        if (!isOk)
+            throw ModelError(
+                QObject::tr("Unable to get userId from course"));
+
         auto courseModel = std::make_shared<Course>(name);
         courseModel->id = id;
         courseModel->author = author;
         courseModel->level = level;
         courseModel->description = description;
         courseModel->languageCode = languageCode;
+        courseModel->userId = userId;
         result.push_back(courseModel);
     }
     return result;

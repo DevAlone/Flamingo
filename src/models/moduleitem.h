@@ -5,6 +5,9 @@
 
 #include <QString>
 
+#include <memory>
+#include <vector>
+
 enum class MODULE_ITEM_TYPE {
     NONE,
     SUBMODULE,
@@ -25,6 +28,10 @@ public:
 
     int getModuleId() const;
     void setModuleId(int value);
+
+    static std::vector<std::shared_ptr<ModuleItem>> getAll();
+    static std::vector<std::shared_ptr<ModuleItem>> getByModuleId(int moduleId);
+    static std::vector<std::shared_ptr<ModuleItem>> filter(int moduleId = -1);
 
 protected:
     QString name = "";

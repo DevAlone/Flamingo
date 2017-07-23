@@ -5,14 +5,14 @@
 
 namespace parser {
 
-std::vector<Module> ModulesParser::parseDirectory(const QString& path)
+std::vector<std::shared_ptr<Module> > ModulesParser::parseDirectory(const QString& path)
 {
     logEntry<ModulesParserLogEntry>(
         LOG_ENTRY_TYPE::INFO,
         QObject::tr("Parsing of modules directory was started"),
         path);
 
-    std::vector<Module> modules;
+    std::vector<std::shared_ptr<Module> > modules;
 
     QDir baseDir(path);
 
@@ -37,7 +37,7 @@ std::vector<Module> ModulesParser::parseDirectory(const QString& path)
         if (!fileInfo.isDir())
             continue;
 
-        Module module = parseModule(moduleDirPath);
+        auto module = parseModule(moduleDirPath);
 
         modules.push_back(module);
     }
@@ -45,14 +45,14 @@ std::vector<Module> ModulesParser::parseDirectory(const QString& path)
     return modules;
 }
 
-Module ModulesParser::parseModule(const QString& modulePath)
+std::shared_ptr<Module> ModulesParser::parseModule(const QString& modulePath)
 {
     logEntry<ModulesParserLogEntry>(
         LOG_ENTRY_TYPE::INFO,
         QObject::tr("Parsing of module directory was started"),
         modulePath);
 
-    Module module(modulePath); // TODO: ?
+    auto module = std::make_shared<Module>(modulePath); // TODO: ?
 
     QDir moduleDir(modulePath);
 
@@ -63,6 +63,8 @@ Module ModulesParser::parseModule(const QString& modulePath)
             QObject::tr("Directory ") + modulePath + QObject::tr(" doesn't exist"));
         return module;
     }
+
+    module->setName(moduleDir.dirName());
 
     auto entries = moduleDir.entryList(
         QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,
@@ -79,7 +81,7 @@ Module ModulesParser::parseModule(const QString& modulePath)
         if (fileInfo.isFile()) {
             auto lesson = lessonsParser.parseFile(entryPath);
 
-            module.addModuleItem(lesson);
+            module->addModuleItem(lesson);
         } else if (fileInfo.isDir()) {
             logEntry<ModulesParserLogEntry>(
                 LOG_ENTRY_TYPE::INFO,
@@ -105,7 +107,7 @@ Module ModulesParser::parseModule(const QString& modulePath)
 
                 submodule->addLesson(lesson);
             }
-            module.addModuleItem(submodule);
+            module->addModuleItem(submodule);
         }
     }
 
