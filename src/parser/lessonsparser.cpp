@@ -86,19 +86,20 @@ void LessonsParser::parseInfoSection(std::shared_ptr<Lesson>& lesson, QString& l
         return;
     }
 
-    if (key == "level") {
-        int level = value.toInt(&isOk);
-        if (!isOk || level < 1 || level > 10)
-            logEntry<LessonsParserLogEntry>(
-                LOG_ENTRY_TYPE::ERROR,
-                QObject::tr("Invalid level of lesson value. It should be number from 1 to 10(including)"),
-                path,
-                lineNumber,
-                line,
-                section);
-        if (lesson)
-            lesson->setLevel(level);
-    }
+    // TODO: add description and so on
+    //    if (key == "level") {
+    //        int level = value.toInt(&isOk);
+    //        if (!isOk || level < 1 || level > 10)
+    //            logEntry<LessonsParserLogEntry>(
+    //                LOG_ENTRY_TYPE::ERROR,
+    //                QObject::tr("Invalid level of lesson value. It should be number from 1 to 10(including)"),
+    //                path,
+    //                lineNumber,
+    //                line,
+    //                section);
+    //        if (lesson)
+    //            lesson->setLevel(level);
+    //    }
 }
 
 void LessonsParser::parsePagesSection(std::shared_ptr<Lesson>& lesson, QString& line, QTextStream& stream)

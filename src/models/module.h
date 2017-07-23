@@ -31,9 +31,20 @@ public:
     virtual void sqlInsert();
     virtual void sqlUpdate();
     static QSqlError createTable();
+    static std::vector<std::shared_ptr<Module>> getAll();
+    static std::vector<std::shared_ptr<Module>> getByCourseId(int courseId);
+    static std::vector<std::shared_ptr<Module>> filter(int userId = -1);
+
+    int getLevel() const;
+    void setLevel(int value);
+
+    QString getDescription() const;
+    void setDescription(const QString& value);
 
 private:
-    QString name;
+    QString name = "";
+    unsigned char level = 1;
+    QString description = "";
     std::vector<std::shared_ptr<ModuleItem>> moduleItems;
 
     int courseId = -1;

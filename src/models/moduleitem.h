@@ -27,7 +27,7 @@ public:
     void setModuleId(int value);
 
 protected:
-    QString name;
+    QString name = "";
     MODULE_ITEM_TYPE type = MODULE_ITEM_TYPE::NONE;
     int moduleId = -1;
 };

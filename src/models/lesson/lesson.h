@@ -19,9 +19,6 @@ public:
 
     std::map<unsigned, std::shared_ptr<Page>>& getPages();
 
-    unsigned char getLevel() const;
-    void setLevel(unsigned char value);
-
     virtual void save();
     virtual bool update();
 
@@ -40,7 +37,7 @@ protected:
 
 private:
     std::map<unsigned, std::shared_ptr<Page>> pages;
-    unsigned char level = 1;
+    //    unsigned char level = 1;
     int submoduleId = -1;
 
     // Model interface

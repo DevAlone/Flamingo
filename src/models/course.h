@@ -42,10 +42,18 @@ public:
     static std::vector<std::shared_ptr<Course>> getByUserId(int userId);
     static std::vector<std::shared_ptr<Course>> filter(int userId = -1);
 
+    QString getLanguageCode() const;
+    void setLanguageCode(const QString& value);
+
+    QString getDescription() const;
+    void setDescription(const QString& value);
+
 private:
     QString name = "";
     QString author = "";
     unsigned char level = 1;
+    QString description = "";
+    QString languageCode = "";
     std::vector<Module> modules;
 
     int userId = -1;

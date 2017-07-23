@@ -31,16 +31,6 @@ std::map<unsigned, std::shared_ptr<Page> >& Lesson::getPages()
     return pages;
 }
 
-unsigned char Lesson::getLevel() const
-{
-    return level;
-}
-
-void Lesson::setLevel(unsigned char value)
-{
-    level = value;
-}
-
 void Lesson::save()
 {
     Model::save();

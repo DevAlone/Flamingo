@@ -30,11 +30,11 @@ public:
     virtual void sqlInsert();
     virtual void sqlUpdate();
 
-    std::vector<Course>& getCourses();
+    std::vector<std::shared_ptr<Course>>& getCourses();
 
 protected:
     QString name = "";
-    std::vector<Course> courses;
+    std::vector<std::shared_ptr<Course>> courses;
 };
 struct UserPrivate {
 

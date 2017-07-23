@@ -62,6 +62,8 @@ void Course::setLevel(int value)
 
 std::vector<Module>& Course::getModules()
 {
+    if (id >= 0) {
+    }
     return modules;
 }
 
@@ -84,7 +86,7 @@ bool Course::update()
 
     QSqlQuery selectQuery;
     selectQuery.prepare(R"(
-                        SELECT name, author, level FROM main.courses
+                        SELECT name, author, level, description, languageCode FROM main.courses
                         WHERE id = :id;
                         )");
     selectQuery.bindValue(":id", id);
@@ -103,6 +105,8 @@ bool Course::update()
         if (!isOk)
             throw ModelError(
                 QObject::tr("Unable to get Course level from database"));
+        QString description = selectQuery.value(3).toString();
+        QString languageCode = selectQuery.value(4).toString();
 
         if (getName() != name) {
             isChanged = true;
@@ -115,6 +119,14 @@ bool Course::update()
         if (getLevel() != level) {
             isChanged = true;
             setLevel(level);
+        }
+        if (getDescription() != description) {
+            isChanged = true;
+            setDescription(description);
+        }
+        if (getLanguageCode() != languageCode) {
+            isChanged = true;
+            setLanguageCode(languageCode);
         }
     }
 
@@ -130,13 +142,15 @@ void Course::sqlInsert()
     QSqlQuery insertQuery;
     // TODO: d
     insertQuery.prepare(R"(
-                        INSERT INTO main.courses (name, author, level, userId)
-                        VALUES (:name, :author, :level, :userId);
+                        INSERT INTO main.courses (name, author, level, userId, description, languageCode)
+                        VALUES (:name, :author, :level, :userId, :description, :languageCode);
                         )");
     insertQuery.bindValue(":name", name);
     insertQuery.bindValue(":author", author);
     insertQuery.bindValue(":level", int(level));
     insertQuery.bindValue(":userId", userId);
+    insertQuery.bindValue(":description", description);
+    insertQuery.bindValue(":languageCode", languageCode);
 
     if (!insertQuery.exec())
         throw ModelSavingError(
@@ -152,13 +166,15 @@ void Course::sqlUpdate()
     QSqlQuery updateQuery;
     updateQuery.prepare(R"(
                         UPDATE main.courses
-                        SET name = :name, author = :author, level = :level
+                        SET name = :name, author = :author, level = :level, description = :description, languageCode = :languageCode
                         WHERE id=:id;
                         )");
     updateQuery.bindValue(":name", name);
     updateQuery.bindValue(":author", author);
     updateQuery.bindValue(":level", level);
     updateQuery.bindValue(":id", id);
+    updateQuery.bindValue(":description", description);
+    updateQuery.bindValue(":languageCode", languageCode);
 
     if (!updateQuery.exec())
         throw ModelSavingError(
@@ -170,14 +186,16 @@ QSqlError Course::createTable()
 {
     QSqlQuery query(R"(
                     CREATE TABLE IF NOT EXISTS main.courses (
-                                        id integer PRIMARY KEY,
-                                        name text NOT NULL,
-                                        author text NOT NULL,
-                                        level integer NOT NULL,
-                                        userId integer,
-                                        FOREIGN KEY(userId) REFERENCES users(id)
-                                        ON UPDATE CASCADE
-                                        ON DELETE CASCADE);
+                    id integer PRIMARY KEY,
+                    name text NOT NULL,
+                    author text NOT NULL,
+                    level integer NOT NULL,
+                    description text NOT NULL,
+                    languageCode text NOT NULL,
+                    userId integer,
+                    FOREIGN KEY(userId) REFERENCES users(id)
+                    ON UPDATE CASCADE
+                    ON DELETE CASCADE);
                     )");
     QSqlError error;
     if (!query.exec())
@@ -201,7 +219,7 @@ std::vector<std::shared_ptr<Course>> Course::filter(int userId)
     std::vector<std::shared_ptr<Course>> result;
 
     QString query = R"(
-                    SELECT id, name, author, level
+                    SELECT id, name, author, level, description, languageCode
                     FROM main.courses
                     )";
     if (userId >= 0) {
@@ -217,8 +235,9 @@ std::vector<std::shared_ptr<Course>> Course::filter(int userId)
         selectQuery.bindValue(":userId", userId);
 
     if (!selectQuery.exec()) {
-        throw ModelError(
-            "Unable to fetch courses from DB");
+        throw ModelSqlError(
+            "Unable to fetch courses from DB",
+            selectQuery.lastError());
     }
 
     while (selectQuery.next()) {
@@ -236,13 +255,37 @@ std::vector<std::shared_ptr<Course>> Course::filter(int userId)
             throw ModelError(
                 "Unable to get level from course");
         }
+        QString description = selectQuery.value(4).toString();
+        QString languageCode = selectQuery.value(5).toString();
         auto courseModel = std::make_shared<Course>(name);
         courseModel->id = id;
         courseModel->author = author;
         courseModel->level = level;
+        courseModel->description = description;
+        courseModel->languageCode = languageCode;
         result.push_back(courseModel);
     }
     return result;
+}
+
+QString Course::getLanguageCode() const
+{
+    return languageCode;
+}
+
+void Course::setLanguageCode(const QString& value)
+{
+    languageCode = value;
+}
+
+QString Course::getDescription() const
+{
+    return description;
+}
+
+void Course::setDescription(const QString& value)
+{
+    description = value;
 }
 
 int Course::getUserId() const

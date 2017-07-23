@@ -6,7 +6,6 @@
 #include <QApplication>
 
 #include <QSettings>
-// TODO: replace exceptions to logging errors in parsers
 
 #include <QSplashScreen>
 #include <QSqlDatabase>

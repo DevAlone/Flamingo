@@ -106,8 +106,8 @@ void User::save()
     Model::save();
 
     for (auto& course : courses) {
-        course.setUserId(id);
-        course.save();
+        course->setUserId(id);
+        course->save();
     }
 }
 
@@ -178,11 +178,12 @@ void User::sqlUpdate()
             updateQuery.lastError());
 }
 
-std::vector<Course>& User::getCourses()
+std::vector<std::shared_ptr<Course>>& User::getCourses()
 {
     if (id >= 0) {
-        // TODO: update from db
+        courses = Course::getByUserId(id);
     }
+
     return courses;
 }
 
