@@ -1,6 +1,7 @@
 #ifndef MODELLISTVIEW_H
 #define MODELLISTVIEW_H
 
+#include "modellistdispatcher.h"
 #include "modelview.h"
 
 #include <QtWidgets>
@@ -24,7 +25,7 @@ public slots:
     void updateItems();
 
 protected:
-    std::shared_ptr<ModelDispatcher> dispatcher;
+    std::shared_ptr<ModelListDispatcher> dispatcher;
 
 private:
     std::unique_ptr<ModelListViewUi> ui;

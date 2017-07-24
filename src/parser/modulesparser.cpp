@@ -90,7 +90,7 @@ std::shared_ptr<Module> ModulesParser::parseModule(const QString& modulePath)
 
             QDir submoduleDir(entryPath);
 
-            auto submodule = std::make_shared<Submodule>(entryPath); // TODO: ?
+            auto submodule = std::make_shared<Submodule>(submoduleDir.dirName());
 
             auto submoduleEntries = submoduleDir.entryList(
                 QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,
@@ -99,11 +99,12 @@ std::shared_ptr<Module> ModulesParser::parseModule(const QString& modulePath)
             for (auto& submoduleEntry : submoduleEntries) {
                 QString submoduleEntryPath = submoduleDir.absoluteFilePath(submoduleEntry);
 
-                QFileInfo submoduleFileInfo(submoduleEntryPath);
+                QFileInfo submoduleEntryFileInfo(submoduleEntryPath);
 
-                if (!submoduleFileInfo.isFile())
+                if (!submoduleEntryFileInfo.isFile())
                     continue;
-                auto lesson = lessonsParser.parseFile(entryPath);
+
+                auto lesson = lessonsParser.parseFile(submoduleEntryPath);
 
                 submodule->addLesson(lesson);
             }

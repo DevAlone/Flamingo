@@ -42,6 +42,7 @@ void MainPageWidget::breadcrubFullPathChanged(const QString& fullPath)
 
 void MainPageWidget::goToCoursesPage()
 {
+    // BUG: проверить, почему метод срабатывает дважды
     ui->pages->setCurrentWidget(ui->coursesPage);
     ui->coursesPage->activate();
 
@@ -71,16 +72,16 @@ void MainPageWidget::goToModulesPage(std::shared_ptr<Course> course)
 }
 
 void MainPageWidget::goToModuleItemsPage(std::shared_ptr<Module> module)
-{ // TODO: do it
-    //    ui->pages->setCurrentWidget(ui->moduleItemsPage);
-    //    ui->moduleItemsPage->activate(module);
+{
+    ui->pages->setCurrentWidget(ui->moduleItemsPage);
+    ui->moduleItemsPage->activate(module);
 
-    //    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("moduleItems", "moduleItems");
+    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("moduleItems", "moduleItems");
 
-    //    if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
-    //        delete currentItem;
-    //        return;
-    //    }
+    if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
+        delete currentItem;
+        return;
+    }
 
-    //    ui->breadcrumb->addItem(currentItem);
+    ui->breadcrumb->addItem(currentItem);
 }

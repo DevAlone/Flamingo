@@ -1,10 +1,10 @@
 #include "courselistview.h"
-#include "coursedispatcher.h"
+#include "courselistdispatcher.h"
 
 CourseListView::CourseListView(QWidget* parent)
     : ModelListView(parent)
 {
-    dispatcher = std::make_shared<CourseDispatcher>();
+    dispatcher = std::make_shared<CourseListDispatcher>();
 }
 
 std::shared_ptr<Course> CourseListView::getSelectedCourse()

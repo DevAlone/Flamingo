@@ -24,7 +24,7 @@ void ModelListView::updateItems()
     if (!dispatcher)
         return;
 
-    items = dispatcher->getItems();
+    items = dispatcher->getItemList();
     ui->listWidget->clear();
 
     for (auto& item : items) {

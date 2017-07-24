@@ -32,9 +32,13 @@ void CourseSingleView::updateData()
         return;
     // TODO: update
     course->update();
-    ui->courseNameValue->setText(course->getName());
-    ui->courseAuthorValue->setText(course->getAuthor());
+    ui->courseNameValue->setText(returnValueOrPlaceholder(course->getName()));
+    ui->courseAuthorValue->setText(returnValueOrPlaceholder(course->getAuthor()));
     ui->courseLevelValue->setText(QString::number(course->getLevel()));
+    // TODO: convert to language name
+    // for example "rus" converts to "Russian (Русский)"
+    ui->courseLanguageValue->setText(returnValueOrPlaceholder(course->getLanguageCode()));
+    ui->courseDescriptionValue->setText(returnValueOrPlaceholder(course->getDescription()));
 }
 
 std::shared_ptr<Course> CourseSingleView::getCourse() const

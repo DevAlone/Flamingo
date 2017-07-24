@@ -1,12 +1,12 @@
-#include "userdispatcher.h"
+#include "userlistdispatcher.h"
 
 #include <models/user.h>
 
-UserDispatcher::UserDispatcher()
+UserListDispatcher::UserListDispatcher()
 {
 }
 
-std::vector<std::shared_ptr<Model>> UserDispatcher::getItems()
+std::vector<std::shared_ptr<Model>> UserListDispatcher::getItemList()
 {
     std::vector<std::shared_ptr<User>> users = User::getAll();
     std::vector<std::shared_ptr<Model>> models;

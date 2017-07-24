@@ -1,14 +1,14 @@
-#include "coursedispatcher.h"
+#include "courselistdispatcher.h"
 
 #include <models/course.h>
 #include <models/user.h>
 
-CourseDispatcher::CourseDispatcher(bool showOnlyActive)
+CourseListDispatcher::CourseListDispatcher(bool showOnlyActive)
     : showOnlyActive(showOnlyActive)
 {
 }
 
-std::vector<std::shared_ptr<Model>> CourseDispatcher::getItems()
+std::vector<std::shared_ptr<Model>> CourseListDispatcher::getItemList()
 {
     int userId = showOnlyActive ? User::getActiveUserId() : -1;
 

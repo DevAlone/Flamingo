@@ -7,7 +7,7 @@
 
 #include <models/module.h>
 
-#include "moduledispatcher.h"
+#include "modulelistdispatcher.h"
 
 #include <memory>
 
@@ -17,8 +17,8 @@ public:
     explicit ModuleListView(QWidget* parent = nullptr);
 
     std::shared_ptr<Module> getSelectedModule();
-    std::weak_ptr<ModuleDispatcher> getModuleDispatcher() const;
-    void setModuleDispatcher(std::shared_ptr<ModuleDispatcher> dispatcher);
+    std::weak_ptr<ModuleListDispatcher> getModuleListDispatcher() const;
+    void setModuleDispatcher(std::shared_ptr<ModuleListDispatcher> dispatcher);
 
 signals:
 

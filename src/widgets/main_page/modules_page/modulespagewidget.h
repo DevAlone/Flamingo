@@ -10,23 +10,30 @@
 #include <views/modulelistview.h>
 #include <views/modulesingleview.h>
 
+#include <widgets/main_page/twocolumnswidget.h>
+
 class ModulesPageWidgetUi;
 
 class ModulesPageWidget : public QWidget {
     Q_OBJECT
+
+    friend class ModulesPageWidgetUi;
+
 public:
     explicit ModulesPageWidget(QWidget* parent = nullptr);
 
 signals:
-
+    void goToModuleItemsPage(std::shared_ptr<Module> module);
 public slots:
     void activate(std::shared_ptr<Course> course);
-    void selectedModuleChanged();
 
 private slots:
+    void selectedModuleChanged();
+    void moduleOpenButtonPressed();
 
 private:
     std::unique_ptr<ModulesPageWidgetUi> ui;
+    std::shared_ptr<Course> course;
 };
 
 class ModulesPageWidgetUi {
@@ -38,19 +45,27 @@ public:
         mainLayout = new QHBoxLayout;
         moduleList = new ModuleListView(parent);
         moduleView = new ModuleSingleView(parent);
+        columns = new TwoColumnsWidget(parent);
 
-        mainLayout->addWidget(moduleList);
-        mainLayout->addWidget(moduleView);
+        mainLayout->addWidget(columns);
+
+        columns->addLeftWidget(moduleList);
+        columns->addRightWidget(moduleView);
 
         parent->setLayout(mainLayout);
 
         QObject::connect(
             moduleList, &ModuleListView::selectionChanged,
             parent, &ModulesPageWidget::selectedModuleChanged);
+
+        QObject::connect(
+            moduleView, &ModuleSingleView::openButtonPressed,
+            parent, &ModulesPageWidget::moduleOpenButtonPressed);
     }
 
 private:
     QHBoxLayout* mainLayout;
+    TwoColumnsWidget* columns;
 
     ModuleListView* moduleList;
     ModuleSingleView* moduleView;

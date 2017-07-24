@@ -10,6 +10,8 @@
 
 #include <memory>
 
+#include <widgets/main_page/twocolumnswidget.h>
+
 class CoursesPageWidgetUi;
 
 class CoursesPageWidget : public QWidget {
@@ -41,7 +43,9 @@ public:
     CoursesPageWidgetUi(CoursesPageWidget* parent)
     {
         layout = new QHBoxLayout;
-        verticalLayout = new QVBoxLayout;
+        //        verticalLayout = new QVBoxLayout;
+        columns = new TwoColumnsWidget(parent);
+
         courseList = new CourseListView(parent);
         courseView = new CourseSingleView(parent);
 
@@ -50,18 +54,16 @@ public:
         addCourse = new QPushButton(QObject::tr("+"), parent);
         addCourse->setToolTip(QObject::tr("Add course to current user"));
 
-        verticalLayout->addWidget(courseList);
-        verticalLayout->addLayout(availableCoursesLayout);
-        availableCoursesLayout->addWidget(availableCoursesList);
-        availableCoursesLayout->addWidget(addCourse);
+        //        verticalLayout->addWidget(courseList);
+        //        verticalLayout->addLayout(availableCoursesLayout);
+        columns->addLeftWidget(courseList);
+        columns->addLeftLayout(availableCoursesLayout);
 
-        layout->addLayout(verticalLayout, 1);
-        layout->addWidget(courseView, 2);
+        availableCoursesLayout->addWidget(availableCoursesList, 3);
+        availableCoursesLayout->addWidget(addCourse, 1);
 
-        //        QSizePolicy rightSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
-        //        courseView->setSizePolicy(rightSizePolicy);
-        layout->setStretch(0, 1);
-        layout->setStretch(1, 5);
+        columns->addRightWidget(courseView);
+        layout->addWidget(columns);
 
         parent->setLayout(layout);
 
@@ -80,7 +82,8 @@ public:
 
 private:
     QHBoxLayout* layout;
-    QVBoxLayout* verticalLayout;
+    //    QVBoxLayout* verticalLayout;
+    TwoColumnsWidget* columns;
 
     CourseListView* courseList;
     CourseSingleView* courseView;

@@ -5,14 +5,15 @@
 
 #include <QWidget>
 
-class ModelSingleView : public ModelView
-{
+class ModelSingleView : public ModelView {
     Q_OBJECT
 public:
-    explicit ModelSingleView(QWidget *parent = nullptr);
+    explicit ModelSingleView(QWidget* parent = nullptr);
 
     std::shared_ptr<Model> getModel() const;
-    void setModel(const std::shared_ptr<Model> &value);
+    void setModel(const std::shared_ptr<Model>& value);
+
+    static QString returnValueOrPlaceholder(const QString& value, const QString& placeholder = "Unknown");
 
 signals:
 

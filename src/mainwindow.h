@@ -15,6 +15,8 @@ public:
     explicit MainWindow(QWidget* parent = nullptr);
     virtual ~MainWindow();
 
+    virtual void closeEvent(QCloseEvent* event);
+
 signals:
 
 public slots:

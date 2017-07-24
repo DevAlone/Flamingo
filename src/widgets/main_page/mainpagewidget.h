@@ -11,6 +11,8 @@
 
 #include <models/user.h>
 
+#include <widgets/main_page/module_items_page/moduleitemspagewidget.h>
+
 class MainPageWidgetUi;
 
 class MainPageWidget : public QWidget {
@@ -55,10 +57,12 @@ public:
 
         coursesPage = new CoursesPageWidget(parent);
         modulesPage = new ModulesPageWidget(parent);
+        moduleItemsPage = new ModuleItemsPageWidget(parent);
 
         pages = new QStackedWidget(parent);
         pages->addWidget(coursesPage);
         pages->addWidget(modulesPage);
+        pages->addWidget(moduleItemsPage);
 
         backButton->setText(QObject::tr("< Back"));
 
@@ -84,10 +88,9 @@ public:
             coursesPage, &CoursesPageWidget::goToModulesPage,
             parent, &MainPageWidget::goToModulesPage);
 
-        // TODO: add it
-        //        QObject::connect(
-        //            modulesPage, &CoursesPageWidget::goToModuleItemsPage,
-        //            parent, &MainPageWidget::goToModuleItemsPage);
+        QObject::connect(
+            modulesPage, &ModulesPageWidget::goToModuleItemsPage,
+            parent, &MainPageWidget::goToModuleItemsPage);
     }
 
 private:
@@ -102,6 +105,7 @@ private:
 
     CoursesPageWidget* coursesPage;
     ModulesPageWidget* modulesPage;
+    ModuleItemsPageWidget* moduleItemsPage;
 };
 
 #endif // MAINPAGEWIDGET_H

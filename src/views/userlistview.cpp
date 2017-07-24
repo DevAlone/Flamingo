@@ -1,12 +1,12 @@
 #include "userlistview.h"
-#include "userdispatcher.h"
+#include "userlistdispatcher.h"
 
 #include <memory>
 
 UserListView::UserListView(QWidget* parent)
     : ModelListView(parent)
 {
-    dispatcher = std::make_unique<UserDispatcher>();
+    dispatcher = std::make_unique<UserListDispatcher>();
 }
 
 std::shared_ptr<User> UserListView::getSelectedUser()

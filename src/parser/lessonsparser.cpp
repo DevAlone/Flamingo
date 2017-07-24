@@ -29,6 +29,10 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
         return lesson;
     }
 
+    QFileInfo lessonFileInfo(lessonFile.fileName());
+
+    lesson->setName(lessonFileInfo.fileName()); // TODO: ?
+
     if (!lessonFile.open(QIODevice::ReadOnly)) {
         logEntry<LessonsParserLogEntry>(
             LOG_ENTRY_TYPE::ERROR,

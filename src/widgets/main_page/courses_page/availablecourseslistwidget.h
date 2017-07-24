@@ -34,8 +34,8 @@ public:
         updateButton->setToolTip("update course list");
 
         courseList = new QComboBox(parent);
-        layout->addWidget(updateButton);
-        layout->addWidget(courseList);
+        layout->addWidget(updateButton, 1);
+        layout->addWidget(courseList, 5);
 
         parent->setLayout(layout);
 

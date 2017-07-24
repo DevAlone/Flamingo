@@ -192,6 +192,7 @@ std::vector<std::shared_ptr<Lesson>> Lesson::filter(int moduleId, int submoduleI
 
     QString query = R"(
                     SELECT id, name, moduleId, submoduleId, data
+            FROM main.lessons
                     )";
 
     if (moduleId >= 0)

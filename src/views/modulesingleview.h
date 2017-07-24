@@ -22,7 +22,7 @@ public:
     std::shared_ptr<Module> getModule() const;
 
 signals:
-
+    void openButtonPressed();
 public slots:
     void updateData();
 
@@ -41,19 +41,46 @@ public:
     {
         mainLayout = new QVBoxLayout;
         topLayout = new QHBoxLayout;
-        moduleNameValue = new QLabel(parent);
+        keyValueLayout = new QFormLayout;
+        nameValue = new QLabel(parent);
+        openButton = new QPushButton(QObject::tr("Open"), parent);
 
-        topLayout->addWidget(moduleNameValue);
+        level = new QLabel(QObject::tr("Level"), parent);
+        levelValue = new QLabel(parent);
+
+        description = new QLabel(QObject::tr("Description"), parent);
+        descriptionValue = new QLabel(parent);
+
+        topLayout->addWidget(nameValue);
+        topLayout->addStretch();
+        topLayout->addWidget(openButton);
+
+        keyValueLayout->addRow(level, levelValue);
+        keyValueLayout->addRow(description, descriptionValue);
 
         mainLayout->addLayout(topLayout);
+        mainLayout->addLayout(keyValueLayout);
 
         parent->setLayout(mainLayout);
+
+        QObject::connect(
+            openButton, &QPushButton::clicked,
+            parent, &ModuleSingleView::openButtonPressed);
     }
 
 private:
     QVBoxLayout* mainLayout;
     QHBoxLayout* topLayout;
-    QLabel* moduleNameValue;
+    QFormLayout* keyValueLayout;
+    QLabel* nameValue;
+
+    QPushButton* openButton;
+
+    QLabel* level;
+    QLabel* levelValue;
+
+    QLabel* description;
+    QLabel* descriptionValue;
 };
 
 #endif // MODULESINGLEVIEW_H

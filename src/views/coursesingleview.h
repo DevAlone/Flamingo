@@ -56,14 +56,27 @@ public:
             = new QLabel(QObject::tr("Level"), parent);
         courseLevelValue = new QLabel(parent);
 
+        courseLanguage
+            = new QLabel(QObject::tr("Language"), parent);
+        courseLanguageValue = new QLabel(parent);
+
+        courseDescription
+            = new QLabel(QObject::tr("Description"), parent);
+        courseDescriptionValue = new QLabel(parent);
+        courseDescriptionValue->setWordWrap(true);
+
         topLayout->addWidget(courseNameValue);
         topLayout->addWidget(startButton);
 
         keyValueData->addRow(courseAuthor, courseAuthorValue);
         keyValueData->addRow(courseLevel, courseLevelValue);
+        keyValueData->addRow(courseLanguage, courseLanguageValue);
 
         mainLayout->addLayout(topLayout);
         mainLayout->addLayout(keyValueData);
+        mainLayout->addWidget(courseDescription);
+        mainLayout->addWidget(courseDescriptionValue);
+        mainLayout->addStretch();
 
         parent->setLayout(mainLayout);
 
@@ -87,6 +100,12 @@ private:
 
     QLabel* courseLevel;
     QLabel* courseLevelValue;
+
+    QLabel* courseLanguage;
+    QLabel* courseLanguageValue;
+
+    QLabel* courseDescription;
+    QLabel* courseDescriptionValue;
 };
 
 #endif // COURSESINGLEVIEW_H

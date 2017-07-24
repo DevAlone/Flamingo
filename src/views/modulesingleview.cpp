@@ -38,6 +38,8 @@ void ModuleSingleView::updateData()
         return;
 
     module->update();
-    // TODO: update ui
-    ui->moduleNameValue->setText(module->getName());
+
+    ui->nameValue->setText(returnValueOrPlaceholder(module->getName()));
+    ui->levelValue->setText(QString::number(module->getLevel()));
+    ui->descriptionValue->setText(returnValueOrPlaceholder(module->getDescription()));
 }
