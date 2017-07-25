@@ -8,7 +8,8 @@ ModuleSingleView::ModuleSingleView(QWidget* parent)
 
 void ModuleSingleView::setModel(std::shared_ptr<Model> model)
 {
-    std::shared_ptr<Module> modulePtr = std::dynamic_pointer_cast<Module>(model);
+    std::shared_ptr<Module> modulePtr
+        = std::dynamic_pointer_cast<Module>(model);
 
     if (!modulePtr)
         return;

@@ -27,10 +27,9 @@ public slots:
     void updateData();
 
 protected:
-    std::shared_ptr<Module> module;
-
 private:
     std::unique_ptr<ModuleSingleViewUi> ui;
+    std::shared_ptr<Module> module;
 };
 
 class ModuleSingleViewUi {

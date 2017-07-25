@@ -22,8 +22,8 @@ void ModuleItemsPageWidget::activate(std::shared_ptr<Module> module)
 
 void ModuleItemsPageWidget::selectedModuleItemChanged()
 {
-    // TODO: do it
-    //    ui->moduleItemView->setModuleItem(ui->moduleItemsTree->getSelectedModuleItem());
+
+    ui->moduleItemView->setModuleItem(ui->moduleItemsTree->getSelectedModuleItem());
 }
 
 void ModuleItemsPageWidget::moduleItemOpenButtonPressed()
