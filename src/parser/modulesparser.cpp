@@ -16,7 +16,9 @@ std::vector<std::shared_ptr<Module> > ModulesParser::parseDirectory(const QStrin
 
     QDir baseDir(path);
 
-    if (!baseDir.exists()) {
+    QDir modulesDir = baseDir;
+
+    if (!modulesDir.exists()) {
         logEntry<ModulesParserLogEntry>(
             LOG_ENTRY_TYPE::ERROR,
             QObject::tr("Directory ") + path + QObject::tr(" doesn't exist"),
@@ -25,12 +27,12 @@ std::vector<std::shared_ptr<Module> > ModulesParser::parseDirectory(const QStrin
         return modules;
     }
 
-    auto entries = baseDir.entryList(
+    auto entries = modulesDir.entryList(
         QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks,
         QDir::Name);
 
     for (auto& entry : entries) {
-        QString moduleDirPath = baseDir.absoluteFilePath(entry);
+        QString moduleDirPath = modulesDir.absoluteFilePath(entry);
 
         QFileInfo fileInfo(moduleDirPath);
 
@@ -66,7 +68,17 @@ std::shared_ptr<Module> ModulesParser::parseModule(const QString& modulePath)
 
     module->setName(moduleDir.dirName());
 
-    auto entries = moduleDir.entryList(
+    QDir moduleItemsDir = moduleDir.absoluteFilePath("items");
+
+    if (!moduleItemsDir.exists()) {
+        logEntry<ModulesParserLogEntry>(
+            LOG_ENTRY_TYPE::ERROR,
+            QObject::tr("Directory ") + moduleItemsDir.absolutePath()
+                + QObject::tr(" doesnt' exist"));
+        return module;
+    }
+
+    auto entries = moduleItemsDir.entryList(
         QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks,
         QDir::Name);
 
@@ -74,7 +86,7 @@ std::shared_ptr<Module> ModulesParser::parseModule(const QString& modulePath)
     lessonsParser.setLogger(logger);
 
     for (auto& entry : entries) {
-        QString entryPath = moduleDir.absoluteFilePath(entry);
+        QString entryPath = moduleItemsDir.absoluteFilePath(entry);
 
         QFileInfo fileInfo(entryPath);
 
