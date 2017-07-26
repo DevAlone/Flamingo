@@ -2,6 +2,8 @@
 
 #include <QSqlQuery>
 
+#include <iostream>
+
 Lesson::Lesson(const QString& name)
     : ModuleItem(name)
 {
@@ -83,7 +85,7 @@ bool Lesson::update()
             setSubmoduleId(submoduleId);
         }
 
-        // TODO: add deserialization of data right here
+        updateSerializedData(data);
     }
 
     return isChanged;
@@ -246,12 +248,101 @@ std::vector<std::shared_ptr<Lesson>> Lesson::filter(int moduleId, int submoduleI
 
 QString Lesson::serialize()
 {
-    // TODO: do it!
-    return "";
+    QJsonObject obj;
+
+    QJsonArray jsonPages;
+
+    for (auto& page : pages) {
+        jsonPages.push_back(QJsonObject{
+            { "page_number", QString::number(page.first) },
+            { "page", page.second->toJsonObject() } });
+    }
+    obj["pages"] = jsonPages;
+
+    QJsonDocument doc(obj);
+
+    std::cout << doc.toJson(QJsonDocument::Indented).toStdString() << std::endl;
+
+    return doc.toJson(QJsonDocument::Compact);
 }
 
 std::shared_ptr<Lesson> Lesson::deserialize(const QString& data, const QString& name)
 {
-    // TODO: do it!
-    return std::make_shared<Lesson>(name);
+    std::shared_ptr<Lesson> lesson = std::make_shared<Lesson>(name);
+
+    QJsonObject obj;
+
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(data.toUtf8(), &error);
+
+    if (doc.isNull())
+        throw ModelError(
+            QObject::tr("Unable to parse json in lesson object: ")
+            + error.errorString());
+
+    if (!doc.isObject())
+        throw ModelError(
+            QObject::tr("Unable to parse json in lesson object: json document is not an object"));
+
+    obj = doc.object();
+
+    QJsonArray pages;
+    if (obj["pages"].isArray())
+        pages = obj["pages"].toArray();
+    else
+        throw ModelError(
+            QObject::tr("Unable to parse json in lesson object: "
+                        "pages is not exist or is not an array"));
+
+    for (auto jsonPage : pages) {
+        QJsonObject jsonPagePair;
+
+        if (jsonPage.isObject())
+            jsonPagePair = jsonPage.toObject();
+        else
+            throw ModelError(
+                QObject::tr("Unable to parse json in lesson object: "
+                            "jsonPage doesn't exist or is not an object"));
+
+        // parse page
+        std::pair<unsigned, std::shared_ptr<Page>> pagePair;
+
+        if (jsonPagePair["page_number"].isString()) {
+            QString str = jsonPagePair["page_number"].toString();
+            bool isOk;
+            unsigned number = str.toUInt(&isOk);
+            if (!isOk)
+                throw ModelError(
+                    QObject::tr("Unable to parse json in lesson object: "
+                                "page_number isn't an unsigned number"));
+            pagePair.first = number;
+        } else
+            throw ModelError(
+                QObject::tr("Unable to parse json in lesson object: "
+                            "page_number doesn't exist or isn't a string"));
+
+        if (jsonPagePair["page"].isObject()) {
+            pagePair.second = Page::fromJsonObject(jsonPagePair["page"].toObject());
+        } else
+            throw ModelError(
+                QObject::tr("Unable to parse json in lesson object: "
+                            "page doesn't exist or isn't an object"));
+
+        // add page to map
+        if (lesson->pages.find(pagePair.first) != lesson->pages.end())
+            throw ModelError(
+                QObject::tr("Unable to deserialize lesson: "
+                            "attempting to add more than one lesson with same number"));
+
+        lesson->pages.insert(pagePair);
+    }
+
+    return lesson;
+}
+
+void Lesson::updateSerializedData(const QString& data)
+{
+    std::shared_ptr<Lesson> lesson = deserialize(data, "");
+
+    pages = lesson->pages;
 }

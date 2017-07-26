@@ -42,6 +42,9 @@ public:
 
     const std::map<QChar, std::shared_ptr<Answer>>& getAnswers() const;
 
+    virtual QJsonObject toJsonObject() const;
+    static std::shared_ptr<Page> fromJsonObject(const QJsonObject& obj);
+
 protected:
     unsigned number;
     PAGE_TYPE type;

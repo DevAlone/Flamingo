@@ -87,3 +87,15 @@ const std::map<QChar, std::shared_ptr<Answer>>& Page::getAnswers() const
 {
     return answers;
 }
+
+QJsonObject Page::toJsonObject() const
+{
+    // TODO: do it
+    return QJsonObject();
+}
+
+std::shared_ptr<Page> Page::fromJsonObject(const QJsonObject& obj)
+{
+    // TODO: do it
+    return std::shared_ptr<Page>();
+}

@@ -24,6 +24,7 @@ public:
 
     QString serialize();
     static std::shared_ptr<Lesson> deserialize(const QString& data, const QString& name);
+    void updateSerializedData(const QString& data);
 
     int getSubmoduleId() const;
 
@@ -40,6 +41,7 @@ protected:
     virtual void sqlUpdate();
 
 private:
+    // TODO: change to set?
     std::map<unsigned, std::shared_ptr<Page>> pages;
     //    unsigned char level = 1;
     int submoduleId = -1;
