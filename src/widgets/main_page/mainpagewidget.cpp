@@ -38,6 +38,8 @@ void MainPageWidget::breadcrubFullPathChanged(const QString& fullPath)
         goToModulesPage();
     else if (pathItem == "moduleItems")
         goToModuleItemsPage();
+    else if (pathItem == "lesson")
+        goToLessonPage();
 }
 
 void MainPageWidget::goToCoursesPage()
@@ -77,6 +79,21 @@ void MainPageWidget::goToModuleItemsPage(std::shared_ptr<Module> module)
     ui->moduleItemsPage->activate(module);
 
     BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("moduleItems", "moduleItems");
+
+    if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
+        delete currentItem;
+        return;
+    }
+
+    ui->breadcrumb->addItem(currentItem);
+}
+
+void MainPageWidget::goToLessonPage(std::shared_ptr<Lesson> lesson)
+{
+    ui->pages->setCurrentWidget(ui->lessonPage);
+    ui->lessonPage->activate(lesson);
+
+    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("lesson", "lesson");
 
     if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
         delete currentItem;

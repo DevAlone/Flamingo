@@ -80,6 +80,8 @@ public:
 
         parent->setLayout(mainLayout);
 
+        mainLayout->setContentsMargins(0, 0, 0, 0);
+
         QObject::connect(
             startButton, &QPushButton::clicked,
             parent, &CourseSingleView::openButtonPressed);

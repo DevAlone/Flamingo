@@ -49,6 +49,8 @@ public:
         layout->addWidget(pages);
         parent->setLayout(layout);
 
+        layout->setContentsMargins(0, 0, 0, 0);
+
         QObject::connect(
             loginPage, &LoginPageWidget::loginAsUser,
             parent, &MainWidget::loginAsUser);

@@ -31,7 +31,10 @@ public:
     {
         layout = new QHBoxLayout;
         userNameLineEdit = new QLineEdit;
-        createButton = new QPushButton;
+        userNameLineEdit->setPlaceholderText(
+            QObject::tr("Enter username here"));
+        createButton = new QPushButton("+", parent);
+        createButton->setToolTip(QObject::tr("Add user"));
 
         layout->addWidget(userNameLineEdit);
         layout->addWidget(createButton);

@@ -11,6 +11,8 @@
 #include <views/moduleitemsingleview.h>
 #include <views/moduleitemtreeview.h>
 
+#include <models/lesson/lesson.h>
+
 class ModuleItemsPageWidgetUi;
 
 class ModuleItemsPageWidget : public QWidget {
@@ -22,13 +24,13 @@ public:
     explicit ModuleItemsPageWidget(QWidget* parent = nullptr);
 
 signals:
-
+    void goToLessonPage(std::shared_ptr<Lesson> lesson);
 public slots:
     void activate(std::shared_ptr<Module> module);
 
 private slots:
     void selectedModuleItemChanged();
-    void moduleItemOpenButtonPressed();
+    void lessonStartButtonPressed();
 
 private:
     std::unique_ptr<ModuleItemsPageWidgetUi> ui;
@@ -53,13 +55,16 @@ public:
 
         parent->setLayout(mainLayout);
 
+        mainLayout->setContentsMargins(0, 0, 0, 0);
+        mainLayout->setSpacing(0);
+
         QObject::connect(
             moduleItemsTree, &ModuleItemTreeView::selectionChanged,
             parent, &ModuleItemsPageWidget::selectedModuleItemChanged);
 
-        //        QObject::connect(
-        //            moduleItemView, &ModuleItemSingleView::openButtonPressed,
-        //            parent, &ModuleItemsPageWidget::moduleItemOpenButtonPressed);
+        QObject::connect(
+            moduleItemView, &ModuleItemSingleView::lessonStartButtonPressed,
+            parent, &ModuleItemsPageWidget::lessonStartButtonPressed);
     }
 
 private:

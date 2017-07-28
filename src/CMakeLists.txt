@@ -11,6 +11,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(Qt5Widgets)
 find_package(Qt5Sql)
+find_package(Qt5Concurrent)
 
 include_directories(".")
 
@@ -26,4 +27,4 @@ target_link_libraries(${PROJECT_NAME} -lpthread)
 
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 target_link_libraries(${PROJECT_NAME} Qt5::Sql)
-
+target_link_libraries(${PROJECT_NAME} Qt5::Concurrent)

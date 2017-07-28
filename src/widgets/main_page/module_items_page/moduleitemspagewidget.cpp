@@ -26,7 +26,16 @@ void ModuleItemsPageWidget::selectedModuleItemChanged()
     ui->moduleItemView->setModuleItem(ui->moduleItemsTree->getSelectedModuleItem());
 }
 
-void ModuleItemsPageWidget::moduleItemOpenButtonPressed()
+void ModuleItemsPageWidget::lessonStartButtonPressed()
 {
-    // TODO: do it
+    std::shared_ptr<ModuleItem> moduleItem
+        = ui->moduleItemsTree->getSelectedModuleItem();
+
+    std::shared_ptr<Lesson> lesson
+        = std::dynamic_pointer_cast<Lesson>(moduleItem);
+
+    if (!lesson)
+        return;
+
+    emit goToLessonPage(lesson);
 }

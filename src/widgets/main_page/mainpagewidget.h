@@ -3,7 +3,9 @@
 
 #include "breadcrumbwidget.h"
 #include "courses_page/coursespagewidget.h"
+#include "lesson_page/lessonpagewidget.h"
 #include "modules_page/modulespagewidget.h"
+#include "toppanelwidget.h"
 
 #include <QtWidgets>
 
@@ -12,6 +14,8 @@
 #include <models/user.h>
 
 #include <widgets/main_page/module_items_page/moduleitemspagewidget.h>
+
+#include <models/lesson/lesson.h>
 
 class MainPageWidgetUi;
 
@@ -35,6 +39,7 @@ public slots:
     void goToCoursesPage();
     void goToModulesPage(std::shared_ptr<Course> course = std::shared_ptr<Course>());
     void goToModuleItemsPage(std::shared_ptr<Module> module = std::shared_ptr<Module>());
+    void goToLessonPage(std::shared_ptr<Lesson> lesson = std::shared_ptr<Lesson>());
 
 private:
     std::unique_ptr<MainPageWidgetUi> ui;
@@ -49,32 +54,43 @@ public:
     MainPageWidgetUi(MainPageWidget* parent)
     {
         verticalLayout = new QVBoxLayout;
-        topPanelLayout = new QHBoxLayout;
+        //        topPanelLayout = new QHBoxLayout;
+        topPanel = new TopPanelWidget(parent);
 
-        backButton = new QPushButton(parent);
-        breadcrumb = new BreadcrumbWidget;
-        userNameWidget = new QLabel(parent);
+        backButton = topPanel->ui->backButton;
+        breadcrumb = topPanel->ui->breadcrumb;
+        userNameWidget = topPanel->ui->userNameWidget;
 
         coursesPage = new CoursesPageWidget(parent);
         modulesPage = new ModulesPageWidget(parent);
         moduleItemsPage = new ModuleItemsPageWidget(parent);
+        lessonPage = new LessonPageWidget(parent);
+
+        verticalLayout->addWidget(topPanel);
 
         pages = new QStackedWidget(parent);
         pages->addWidget(coursesPage);
         pages->addWidget(modulesPage);
         pages->addWidget(moduleItemsPage);
+        pages->addWidget(lessonPage);
 
         backButton->setText(QObject::tr("< Back"));
 
-        topPanelLayout->addWidget(backButton);
-        topPanelLayout->addWidget(breadcrumb);
-        topPanelLayout->addStretch();
-        topPanelLayout->addWidget(userNameWidget);
+        //        topPanelLayout->addWidget(backButton);
+        //        topPanelLayout->addWidget(breadcrumb);
+        //        topPanelLayout->addStretch();
+        //        topPanelLayout->addWidget(userNameWidget);
 
-        verticalLayout->addLayout(topPanelLayout);
+        //        verticalLayout->addLayout(topPanelLayout);
         verticalLayout->addWidget(pages);
 
         parent->setLayout(verticalLayout);
+
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
+        verticalLayout->setSpacing(0);
+
+        //        topPanelLayout->setContentsMargins(10, 0, 10, 0);
+        //        topPanelLayout->setSpacing(0);
 
         QObject::connect(
             backButton, &QPushButton::clicked,
@@ -91,11 +107,16 @@ public:
         QObject::connect(
             modulesPage, &ModulesPageWidget::goToModuleItemsPage,
             parent, &MainPageWidget::goToModuleItemsPage);
+
+        QObject::connect(
+            moduleItemsPage, &ModuleItemsPageWidget::goToLessonPage,
+            parent, &MainPageWidget::goToLessonPage);
     }
 
 private:
     QVBoxLayout* verticalLayout;
-    QHBoxLayout* topPanelLayout;
+    //    QHBoxLayout* topPanelLayout;
+    TopPanelWidget* topPanel;
 
     QPushButton* backButton;
     BreadcrumbWidget* breadcrumb;
@@ -106,6 +127,7 @@ private:
     CoursesPageWidget* coursesPage;
     ModulesPageWidget* modulesPage;
     ModuleItemsPageWidget* moduleItemsPage;
+    LessonPageWidget* lessonPage;
 };
 
 #endif // MAINPAGEWIDGET_H

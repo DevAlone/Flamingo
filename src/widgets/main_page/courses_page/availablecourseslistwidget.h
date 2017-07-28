@@ -39,6 +39,9 @@ public:
 
         parent->setLayout(layout);
 
+        layout->setContentsMargins(0, 0, 0, 0);
+        layout->setSpacing(5);
+
         QObject::connect(
             updateButton, &QPushButton::clicked,
             parent, &AvailableCoursesListWidget::updateItems);

@@ -40,23 +40,18 @@ class LoginPageWidgetUi {
 public:
     LoginPageWidgetUi(LoginPageWidget* parent)
     {
-        headerLabel = new QLabel("Войти", parent);
+        headerLabel = new QLabel(
+            QObject::tr("Choose username"), parent);
 
         horizontalLayout = new QHBoxLayout();
         verticalLayout = new QVBoxLayout();
 
         userListView = new UserListView(parent);
-        //        userList = new UserListWidget(parent);
-        //        userList = new QListView(parent);
-        //        userListModel = new UserListModel(parent);
-        //        userList->setModel(userListModel);
 
         createUserWidget = new CreateUserWidget(parent);
 
         loginButton = new QPushButton(parent);
         loginButton->setText(QObject::tr("Login"));
-
-        //        userListScrollArea = new QScrollArea(parent);
 
         horizontalLayout->addStretch();
         horizontalLayout->addLayout(verticalLayout);
@@ -65,19 +60,24 @@ public:
         verticalLayout->addStretch();
         verticalLayout->addWidget(headerLabel);
         verticalLayout->addWidget(userListView);
-        //        verticalLayout->addWidget(userList);
-        //        verticalLayout->addWidget(userListScrollArea);
-        //        userListScrollArea->setWidget(userList);
         verticalLayout->addWidget(createUserWidget);
         verticalLayout->addWidget(loginButton);
         verticalLayout->addStretch();
 
         parent->setLayout(horizontalLayout);
 
-        QObject::connect(createUserWidget, &CreateUserWidget::userCreated,
+        horizontalLayout->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout->setSpacing(0);
+
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
+        verticalLayout->setSpacing(0);
+
+        QObject::connect(
+            createUserWidget, &CreateUserWidget::userCreated,
             userListView, &UserListView::updateItems);
 
-        QObject::connect(loginButton, SIGNAL(clicked(bool)),
+        QObject::connect(
+            loginButton, SIGNAL(clicked(bool)),
             parent, SLOT(loginButtonClicked()));
     }
 

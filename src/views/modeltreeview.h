@@ -40,10 +40,14 @@ public:
         mainLayout = new QVBoxLayout;
         treeWidget = new QTreeWidget(parent);
         treeWidget->setColumnCount(1);
+        treeWidget->setHeaderLabel(
+            QObject::tr("Lessons and sub-modules"));
 
         mainLayout->addWidget(treeWidget);
 
         parent->setLayout(mainLayout);
+
+        mainLayout->setContentsMargins(0, 0, 0, 0);
 
         QObject::connect(
             treeWidget, &QTreeWidget::currentItemChanged,

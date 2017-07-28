@@ -51,7 +51,6 @@ public:
         descriptionValue = new QLabel(parent);
 
         topLayout->addWidget(nameValue);
-        topLayout->addStretch();
         topLayout->addWidget(openButton);
 
         keyValueLayout->addRow(level, levelValue);
@@ -61,6 +60,8 @@ public:
         mainLayout->addLayout(keyValueLayout);
 
         parent->setLayout(mainLayout);
+
+        mainLayout->setContentsMargins(0, 0, 0, 0);
 
         QObject::connect(
             openButton, &QPushButton::clicked,

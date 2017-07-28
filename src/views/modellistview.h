@@ -44,6 +44,8 @@ public:
 
         parent->setLayout(layout);
 
+        layout->setContentsMargins(0, 0, 0, 0);
+
         QObject::connect(listWidget, &QListWidget::currentTextChanged,
             parent, &ModelListView::selectionChanged);
     }

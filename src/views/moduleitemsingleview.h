@@ -24,7 +24,7 @@ public:
     std::shared_ptr<ModuleItem> getModuleItem() const;
 
 signals:
-
+    void lessonStartButtonPressed();
 public slots:
     void updateData();
 
@@ -59,6 +59,14 @@ public:
         showSubmodule();
 
         parent->setLayout(mainLayout);
+
+        mainLayout->setContentsMargins(0, 0, 0, 0);
+        submoduleLayout->setContentsMargins(0, 0, 0, 0);
+        lessonLayout->setContentsMargins(0, 0, 0, 0);
+
+        QObject::connect(
+            lessonStartButton, &QPushButton::clicked,
+            parent, &ModuleItemSingleView::lessonStartButtonPressed);
     }
     void showSubmodule()
     {
@@ -84,6 +92,7 @@ private:
 
     QLabel* submoduleNameValue;
 
+    QHBoxLayout* lessonTopLayout;
     QLabel* lessonNameValue;
     QLabel* lessonPagesCount;
     QLabel* lessonPagesCountValue;
@@ -99,6 +108,8 @@ private:
     }
     void makeLessonsWidgets(ModuleItemSingleView* parent)
     {
+        lessonTopLayout = new QHBoxLayout;
+
         lessonKeyValueLayout = new QFormLayout;
 
         lessonNameValue = new QLabel(parent);
@@ -110,8 +121,10 @@ private:
         lessonStartButton = new QPushButton(
             QObject::tr("Start training"), parent);
 
-        lessonLayout->addWidget(lessonStartButton);
-        lessonLayout->addWidget(lessonNameValue);
+        lessonTopLayout->addWidget(lessonNameValue);
+        lessonTopLayout->addWidget(lessonStartButton);
+
+        lessonLayout->addLayout(lessonTopLayout);
         lessonLayout->addLayout(lessonKeyValueLayout);
         lessonLayout->addStretch();
     }

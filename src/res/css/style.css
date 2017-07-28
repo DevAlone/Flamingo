@@ -1,0 +1,40 @@
+LoginPageWidget QWidget {
+/*    background-color: #aaa;*/
+}
+
+QPushButton {
+
+    
+}
+
+QWidget {
+/*    background-color: #fff;*/
+}
+
+CourseSingleView {
+    background-color: white;
+}
+
+UserListView QListWidget::item,
+CourseListView QListWidget::item,
+ModuleListView QListWidget::item, 
+ModuleItemTreeView QTreeWidget::item {
+    padding: 10px;
+}
+
+CourseSingleView QLabel,
+ModuleSingleView QLabel,
+ModuleItemSingleView QLabel {
+/*    background-color: white;*/
+    padding: 10px 5px;
+    border: 1px solid #ccc;
+}
+CourseSingleView QPushButton,
+ModuleSingleView QPushButton,
+ModuleItemSingleView QPushButton {
+    padding: 10px 20px;
+}
+
+BreadcrumbWidget QPushButton {
+    
+}

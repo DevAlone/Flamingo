@@ -49,6 +49,9 @@ public:
         courseList = new CourseListView(parent);
         courseView = new CourseSingleView(parent);
 
+        courseListHeader = new QLabel(
+            QObject::tr("Choose course"), parent);
+
         availableCoursesLayout = new QHBoxLayout;
         availableCoursesList = new AvailableCoursesListWidget(parent);
         addCourse = new QPushButton(QObject::tr("+"), parent);
@@ -56,8 +59,9 @@ public:
 
         //        verticalLayout->addWidget(courseList);
         //        verticalLayout->addLayout(availableCoursesLayout);
-        columns->addLeftWidget(courseList);
         columns->addLeftLayout(availableCoursesLayout);
+        columns->addLeftWidget(courseListHeader);
+        columns->addLeftWidget(courseList);
 
         availableCoursesLayout->addWidget(availableCoursesList, 3);
         availableCoursesLayout->addWidget(addCourse, 1);
@@ -66,6 +70,11 @@ public:
         layout->addWidget(columns);
 
         parent->setLayout(layout);
+
+        layout->setContentsMargins(0, 0, 0, 0);
+
+        availableCoursesLayout->setContentsMargins(0, 0, 0, 0);
+        availableCoursesLayout->setSpacing(5);
 
         QObject::connect(
             addCourse, &QPushButton::clicked,
@@ -91,6 +100,8 @@ private:
     QHBoxLayout* availableCoursesLayout;
     AvailableCoursesListWidget* availableCoursesList;
     QPushButton* addCourse;
+
+    QLabel* courseListHeader;
 };
 
 #endif // COURSESPAGEWIDGET_H

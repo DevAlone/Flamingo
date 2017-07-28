@@ -97,5 +97,5 @@ QJsonObject Page::toJsonObject() const
 std::shared_ptr<Page> Page::fromJsonObject(const QJsonObject& obj)
 {
     // TODO: do it
-    return std::shared_ptr<Page>();
+    return std::shared_ptr<Page>(new Page());
 }

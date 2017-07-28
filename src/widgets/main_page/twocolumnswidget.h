@@ -7,12 +7,10 @@
 
 class TwoColumnsWidgetUi;
 
-
-class TwoColumnsWidget : public QWidget
-{
+class TwoColumnsWidget : public QWidget {
     Q_OBJECT
 public:
-    explicit TwoColumnsWidget(QWidget *parent = nullptr);
+    explicit TwoColumnsWidget(QWidget* parent = nullptr);
 
     void addLeftWidget(QWidget* widget);
     void addRightWidget(QWidget* widget);
@@ -29,9 +27,9 @@ private:
     std::unique_ptr<TwoColumnsWidgetUi> ui;
 };
 
-class TwoColumnsWidgetUi
-{
+class TwoColumnsWidgetUi {
     friend class TwoColumnsWidget;
+
 public:
     TwoColumnsWidgetUi(TwoColumnsWidget* parent)
     {
@@ -45,11 +43,18 @@ public:
         leftColumnWidget->setLayout(leftColumnLayout);
         rightColumnWidget->setLayout(rightColumnLayout);
 
-
-
         mainLayout->addWidget(leftColumnWidget);
         mainLayout->addWidget(rightColumnWidget);
         parent->setLayout(mainLayout);
+
+        mainLayout->setContentsMargins(10, 10, 10, 10);
+        mainLayout->setSpacing(10);
+
+        leftColumnLayout->setContentsMargins(0, 0, 0, 0);
+        leftColumnLayout->setSpacing(5);
+
+        rightColumnLayout->setContentsMargins(0, 0, 0, 0);
+        rightColumnLayout->setSpacing(5);
     }
 
 private:

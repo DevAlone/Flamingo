@@ -47,12 +47,19 @@ public:
         moduleView = new ModuleSingleView(parent);
         columns = new TwoColumnsWidget(parent);
 
+        modulesHeader = new QLabel(
+            QObject::tr("Choose module"), parent);
+
         mainLayout->addWidget(columns);
 
+        columns->addLeftWidget(modulesHeader);
         columns->addLeftWidget(moduleList);
+
         columns->addRightWidget(moduleView);
 
         parent->setLayout(mainLayout);
+
+        mainLayout->setContentsMargins(0, 0, 0, 0);
 
         QObject::connect(
             moduleList, &ModuleListView::selectionChanged,
@@ -69,6 +76,8 @@ private:
 
     ModuleListView* moduleList;
     ModuleSingleView* moduleView;
+
+    QLabel* modulesHeader;
 };
 
 #endif // MODULESPAGEWIDGET_H
