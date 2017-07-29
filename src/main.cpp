@@ -20,8 +20,7 @@ using namespace parser;
 #include <QDebug>
 #include <QtCore>
 
-#include <QtConcurrent>
-
+// TODO: It's just for debug. Remove it later
 void tick()
 {
     QFile styleFile("style.css");

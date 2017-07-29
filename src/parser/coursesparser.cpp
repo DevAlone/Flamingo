@@ -1,4 +1,5 @@
 #include "coursesparser.h"
+#include "infofileparser.h"
 #include "logger/coursesparserlogentry.h"
 #include "modulesparser.h"
 #include "parser.h"
@@ -73,68 +74,43 @@ std::shared_ptr<Course> CoursesParser::parseCourse(const QString& courseDirPath)
 
     QDir courseDir(courseDirPath);
 
-    std::shared_ptr<Course> coursePtr = std::make_shared<Course>(courseDir.dirName()); // TODO: ?
+    std::shared_ptr<Course> coursePtr = std::make_shared<Course>(courseDir.dirName());
 
     Course& course = *coursePtr;
 
     QString infoFilePath = courseDir.absoluteFilePath("info.txt");
-    QFile infoFile(infoFilePath);
 
-    if (!infoFile.exists()) {
-        logEntry<CoursesParserLogEntry>(
-            LOG_ENTRY_TYPE::WARNING,
-            QObject::tr("info.txt file wasn't found here: ")
-                + courseDir.absolutePath());
-    } else if (!infoFile.open(QIODevice::ReadOnly)) {
-        logEntry<CoursesParserLogEntry>(
-            LOG_ENTRY_TYPE::ERROR,
-            QObject::tr("info.txt can't be opened. Maybe you don't have permissions to do that"),
-            courseDir.absolutePath());
-    } else {
-        logEntry<CoursesParserLogEntry>(
-            LOG_ENTRY_TYPE::INFO,
-            QObject::tr("Parsing of course info file was started"),
-            infoFilePath);
+    InfoFileParser infoFileParser;
+    infoFileParser.setLogger(logger);
 
-        // parsing info file
-        QTextStream stream(&infoFile);
-        int lineNumber = 0;
-        for (; !stream.atEnd(); lineNumber++) {
+    auto infoFileMap = infoFileParser.parseFile(infoFilePath);
 
-            QString line = stream.readLine();
+    for (auto& keyValue : infoFileMap) {
+        auto& key = keyValue.first;
+        auto& value = keyValue.second;
+
+        if (key == "author") {
+            course.setAuthor(value);
+        } else if (key == "level") {
             bool isOk;
-            auto keyValue = getKeyValueFromString(line, &isOk, ':');
-
-            if (!isOk)
+            int level = value.toInt(&isOk);
+            if (!isOk || level < 1 || level > 10) {
+                logEntry<CoursesParserLogEntry>(
+                    LOG_ENTRY_TYPE::ERROR,
+                    QObject::tr("Unable to recognize level of course. It have to be number in range from 1 to 10"),
+                    infoFilePath);
                 continue;
-
-            auto& key = keyValue.first;
-            auto& value = keyValue.second;
-
-            // TODO: check for empty strings
-
-            std::cout << "key = " << key.toStdString() << "; value = " << value.toStdString() << "; " << std::endl;
-
-            if (key == "author") {
-                course.setAuthor(value);
-            } else if (key == "level") {
-                bool isOk;
-                int level = value.toInt(&isOk);
-                if (!isOk || level < 1 || level > 10) {
-                    logEntry<CoursesParserLogEntry>(
-                        LOG_ENTRY_TYPE::ERROR,
-                        QObject::tr("Unable to recognize level of course. It have to be number in range from 1 to 10"),
-                        infoFilePath,
-                        lineNumber,
-                        line);
-                    continue;
-                }
-
-                course.setLevel(level);
             }
+
+            course.setLevel(level);
+        } else if (key == "name") {
+            course.setName(value);
+        } else if (key == "description") {
+            course.setDescription(value);
+        } else if (key == "language") {
+            course.setLanguageCode(value);
         }
     }
-    infoFile.close();
 
     // parsing modules
     ModulesParser modulesParser;

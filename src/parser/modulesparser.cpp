@@ -1,7 +1,10 @@
 #include "modulesparser.h"
+#include "infofileparser.h"
 #include "lessonsparser.h"
 #include "logger/modulesparserlogentry.h"
 #include "models/include.h"
+
+#include <iostream>
 
 namespace parser {
 
@@ -67,6 +70,44 @@ std::shared_ptr<Module> ModulesParser::parseModule(const QString& modulePath)
     }
 
     module->setName(moduleDir.dirName());
+
+    //parse info file
+
+    QString infoFilePath = moduleDir.absoluteFilePath("info.txt");
+
+    InfoFileParser infoFileParser;
+    infoFileParser.setLogger(logger);
+
+    for (auto& entry : logger->getEntries()) {
+        std::cout << entry->toString().toStdString() << std::endl;
+    }
+
+    std::map<QString, QString> infoFileMap = infoFileParser.parseFile(infoFilePath);
+
+    for (auto& keyValue : infoFileMap) {
+        const auto& key = keyValue.first;
+        const auto& value = keyValue.second;
+
+        if (key == "name") {
+            module->setName(value);
+        } else if (key == "description") {
+            module->setDescription(value);
+        } else if (key == "level") {
+            bool isOk;
+            int number = value.toInt(&isOk);
+            if (!isOk || number < 1 || number > 10) {
+                logEntry<ModulesParserLogEntry>(
+                    LOG_ENTRY_TYPE::ERROR,
+                    QObject::tr("Module level must be number from 1 to 10 (included): \n\t")
+                        + value,
+                    infoFilePath);
+            } else {
+                module->setLevel(number);
+            }
+        }
+    }
+
+    // parse items
 
     QDir moduleItemsDir = moduleDir.absoluteFilePath("items");
 
