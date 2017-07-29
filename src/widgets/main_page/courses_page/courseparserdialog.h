@@ -5,7 +5,11 @@
 
 #include "parser/include.h"
 
+#include "logentriesviewerwidget.h"
+
 #include <memory>
+
+#include <parser/logger/parserlogger.h>
 
 class CourseParserDialogUi;
 class CourseParserDialogThreadHelper;
@@ -30,6 +34,7 @@ public slots:
 private:
     std::unique_ptr<CourseParserDialogUi> ui;
     std::shared_ptr<parser::CoursesParser> parser;
+    std::shared_ptr<parser::ParserLogger> logger;
     QStringList directories;
     std::vector<std::shared_ptr<Course>> parsedCourses;
     std::unique_ptr<CourseParserDialogThreadHelper> thread;
@@ -54,7 +59,10 @@ public:
         infoLabel = new QLabel(QObject::tr("Parsing is started"), parent);
         buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
+        logEntriesViewer = new LogEntriesViewerWidget(parent);
+
         mainLayout->addWidget(infoLabel);
+        mainLayout->addWidget(logEntriesViewer);
         mainLayout->addWidget(buttons);
 
         parent->setLayout(mainLayout);
@@ -69,6 +77,7 @@ private:
     QVBoxLayout* mainLayout;
     QLabel* infoLabel;
     // TODO: log entries viewer
+    LogEntriesViewerWidget* logEntriesViewer;
     QDialogButtonBox* buttons;
 };
 

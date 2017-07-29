@@ -9,7 +9,6 @@
 
 #include <QSplashScreen>
 #include <QSqlDatabase>
-#include <iostream>
 #include <memory>
 #include <thread>
 

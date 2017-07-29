@@ -30,6 +30,9 @@ public:
 
     void setSubmoduleId(int value);
 
+    QString getDescription() const;
+    void setDescription(const QString& value);
+
     static QSqlError createTable();
     static std::vector<std::shared_ptr<Lesson>> getAll();
     static std::vector<std::shared_ptr<Lesson>> getByModuleId(int moduleId);
@@ -43,11 +46,9 @@ protected:
 private:
     // TODO: change to set?
     std::map<unsigned, std::shared_ptr<Page>> pages;
-    //    unsigned char level = 1;
     int submoduleId = -1;
 
-    // Model interface
-public:
+    QString description;
 };
 
 #endif // LESSON_H

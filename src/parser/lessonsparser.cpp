@@ -1,4 +1,5 @@
 #include "lessonsparser.h"
+#include "infosectionparser.h"
 #include "logger/lessonsparserlogentry.h"
 #include "pagesparser.h"
 #include "parser.h"
@@ -60,7 +61,7 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
 
             switch (section) {
             case SECTION::INFO:
-                parseInfoSection(lesson, line);
+                parseInfoSection(lesson, line, stream);
                 break;
             case SECTION::PAGES:
                 parsePagesSection(lesson, line, stream);
@@ -72,38 +73,47 @@ std::shared_ptr<Lesson> LessonsParser::parseFile(const QString& path)
     return lesson;
 }
 
-void LessonsParser::parseInfoSection(std::shared_ptr<Lesson>& lesson, QString& line)
+void LessonsParser::parseInfoSection(std::shared_ptr<Lesson>& lesson, QString& line, QTextStream& stream)
 {
-    bool isOk;
-    auto keyValue = getKeyValueFromString(line, &isOk, ':');
-    auto& key = keyValue.first;
-    auto& value = keyValue.second;
+    logEntry<LessonsParserLogEntry>(
+        LOG_ENTRY_TYPE::DEBUG,
+        QObject::tr("Start parsing of INFO section"),
+        path,
+        lineNumber,
+        line);
 
-    if (!isOk) {
-        logEntry<LessonsParserLogEntry>(
-            LOG_ENTRY_TYPE::ERROR,
-            QObject::tr("Unrecognized string. Expected ':', but is not found"),
-            path,
-            lineNumber,
-            line,
-            section);
-        return;
+    QString buffer = "";
+
+    bool isFirstLine = true;
+    for (; !stream.atEnd(); lineNumber++) {
+        if (isFirstLine)
+            isFirstLine = false;
+        else
+            line = stream.readLine();
+        QString trimmedLine = line.trimmed();
+
+        if (tryToChangeSection(trimmedLine))
+            break;
+
+        buffer += line;
     }
 
-    // TODO: add description and so on
-    //    if (key == "level") {
-    //        int level = value.toInt(&isOk);
-    //        if (!isOk || level < 1 || level > 10)
-    //            logEntry<LessonsParserLogEntry>(
-    //                LOG_ENTRY_TYPE::ERROR,
-    //                QObject::tr("Invalid level of lesson value. It should be number from 1 to 10(including)"),
-    //                path,
-    //                lineNumber,
-    //                line,
-    //                section);
-    //        if (lesson)
-    //            lesson->setLevel(level);
-    //    }
+    InfoSectionParser infoSectionParser;
+    infoSectionParser.setLogger(logger);
+
+    std::map<QString, QString> infoSectionData
+        = infoSectionParser.parseInfoSection(buffer);
+
+    for (auto& keyValue : infoSectionData) {
+        auto& key = keyValue.first;
+        auto& value = keyValue.second;
+
+        if (key == "name") {
+            lesson->setName(value);
+        } else if (key == "description") {
+            lesson->setDescription(value);
+        }
+    }
 }
 
 void LessonsParser::parsePagesSection(std::shared_ptr<Lesson>& lesson, QString& line, QTextStream& stream)

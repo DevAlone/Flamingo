@@ -1,11 +1,10 @@
 #include "coursesparser.h"
-#include "infofileparser.h"
+#include "infosectionparser.h"
 #include "logger/coursesparserlogentry.h"
 #include "modulesparser.h"
 #include "parser.h"
 
 #include <QDebug>
-#include <iostream>
 
 namespace parser {
 
@@ -80,10 +79,10 @@ std::shared_ptr<Course> CoursesParser::parseCourse(const QString& courseDirPath)
 
     QString infoFilePath = courseDir.absoluteFilePath("info.txt");
 
-    InfoFileParser infoFileParser;
+    InfoSectionParser infoFileParser;
     infoFileParser.setLogger(logger);
 
-    auto infoFileMap = infoFileParser.parseFile(infoFilePath);
+    auto infoFileMap = infoFileParser.parseInfoFile(infoFilePath);
 
     for (auto& keyValue : infoFileMap) {
         auto& key = keyValue.first;

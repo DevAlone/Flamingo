@@ -2,7 +2,7 @@
 
 #include "answersparserlogentry.h"
 #include "coursesparserlogentry.h"
-#include "infofileparserlogentry.h"
+#include "infosectionparserlogentry.h"
 #include "lessonsparserlogentry.h"
 #include "logentry.h"
 #include "modulesparserlogentry.h"

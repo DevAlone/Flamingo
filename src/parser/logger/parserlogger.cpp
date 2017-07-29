@@ -5,12 +5,23 @@ ParserLogger::ParserLogger()
 {
 }
 
-std::vector<std::unique_ptr<LogEntry>>& ParserLogger::getEntries()
+std::vector<std::shared_ptr<LogEntry>>& ParserLogger::getEntries()
 {
     return entries;
 }
 
-void ParserLogger::addEntry(std::unique_ptr<LogEntry>&& entry)
+std::vector<std::shared_ptr<LogEntry>>& ParserLogger::getEntries(LOG_ENTRY_TYPE type)
+{
+    std::vector<std::shared_ptr<LogEntry>> result;
+
+    for (auto& entry : entries) {
+        if (entry->getType() == type)
+            result.push_back(entry);
+    }
+    return result;
+}
+
+void ParserLogger::addEntry(std::shared_ptr<LogEntry>&& entry)
 {
     entries.push_back(std::move(entry));
 }

@@ -7,6 +7,11 @@ void Parser::setLogger(std::shared_ptr<ParserLogger>& logger)
     this->logger = logger;
 }
 
+std::shared_ptr<ParserLogger> Parser::getLogger()
+{
+    return logger;
+}
+
 std::pair<QString, QString> getKeyValueFromString(const QString& str, bool* isOk, QChar delimiter)
 {
     int indexOfDelimiter = str.indexOf(delimiter);

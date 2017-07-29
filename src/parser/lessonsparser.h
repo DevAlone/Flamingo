@@ -26,7 +26,7 @@ private:
     unsigned long lineNumber = 0;
     QString path;
 
-    void parseInfoSection(std::shared_ptr<Lesson>& lesson, QString& line);
+    void parseInfoSection(std::shared_ptr<Lesson>& lesson, QString& line, QTextStream& stream);
     void parsePagesSection(std::shared_ptr<Lesson>& lesson, QString& line, QTextStream& stream);
 
     // TODO: удалить эту функцию, оставить только tryToChangeSection

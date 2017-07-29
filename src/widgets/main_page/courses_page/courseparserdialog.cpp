@@ -18,6 +18,15 @@ CourseParserDialog::CourseParserDialog(std::shared_ptr<parser::CoursesParser>& p
     connect(
         thread.get(), &CourseParserDialogThreadHelper::finished,
         this, &CourseParserDialog::threadFinished);
+
+    if (parser->getLogger())
+        logger = parser->getLogger();
+    else {
+        logger = std::make_shared<parser::ParserLogger>();
+        parser->setLogger(logger);
+    }
+
+    resize(640, 480);
 }
 
 CourseParserDialog::~CourseParserDialog()
@@ -53,6 +62,8 @@ void CourseParserDialog::reject()
 void CourseParserDialog::threadFinished()
 {
     ui->infoLabel->setText(tr("Parsing is finished"));
+
+    ui->logEntriesViewer->updateItems(parser->getLogger());
 
     // TODO: do something
     if (okButton)

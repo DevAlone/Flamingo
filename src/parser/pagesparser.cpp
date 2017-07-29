@@ -6,8 +6,6 @@
 
 #include "exceptions/pagecreatingerror.h"
 
-#include <iostream>
-
 namespace parser {
 PagesParser::PagesParser()
 {

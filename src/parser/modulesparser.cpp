@@ -1,10 +1,8 @@
 #include "modulesparser.h"
-#include "infofileparser.h"
+#include "infosectionparser.h"
 #include "lessonsparser.h"
 #include "logger/modulesparserlogentry.h"
 #include "models/include.h"
-
-#include <iostream>
 
 namespace parser {
 
@@ -75,14 +73,10 @@ std::shared_ptr<Module> ModulesParser::parseModule(const QString& modulePath)
 
     QString infoFilePath = moduleDir.absoluteFilePath("info.txt");
 
-    InfoFileParser infoFileParser;
+    InfoSectionParser infoFileParser;
     infoFileParser.setLogger(logger);
 
-    for (auto& entry : logger->getEntries()) {
-        std::cout << entry->toString().toStdString() << std::endl;
-    }
-
-    std::map<QString, QString> infoFileMap = infoFileParser.parseFile(infoFilePath);
+    std::map<QString, QString> infoFileMap = infoFileParser.parseInfoFile(infoFilePath);
 
     for (auto& keyValue : infoFileMap) {
         const auto& key = keyValue.first;

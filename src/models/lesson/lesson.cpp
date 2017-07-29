@@ -2,8 +2,6 @@
 
 #include <QSqlQuery>
 
-#include <iostream>
-
 Lesson::Lesson(const QString& name)
     : ModuleItem(name)
 {
@@ -136,6 +134,16 @@ void Lesson::sqlUpdate()
             updateQuery.lastError());
 }
 
+QString Lesson::getDescription() const
+{
+    return description;
+}
+
+void Lesson::setDescription(const QString& value)
+{
+    description = value;
+}
+
 void Lesson::setSubmoduleId(int value)
 {
     submoduleId = value;
@@ -260,8 +268,6 @@ QString Lesson::serialize()
     obj["pages"] = jsonPages;
 
     QJsonDocument doc(obj);
-
-    std::cout << doc.toJson(QJsonDocument::Indented).toStdString() << std::endl;
 
     return doc.toJson(QJsonDocument::Compact);
 }

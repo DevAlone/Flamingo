@@ -11,6 +11,7 @@ namespace parser {
 class Parser {
 public:
     void setLogger(std::shared_ptr<ParserLogger>& logger);
+    std::shared_ptr<ParserLogger> getLogger();
 
 protected:
     std::shared_ptr<ParserLogger> logger;
