@@ -2,6 +2,7 @@
 #include "htmlpage.h"
 #include "textpage.h"
 
+#include <exceptions/modelserializationerror.h>
 #include <exceptions/pagecreatingerror.h>
 
 std::shared_ptr<Page> Page::createPage(
@@ -90,12 +91,111 @@ const std::map<QChar, std::shared_ptr<Answer>>& Page::getAnswers() const
 
 QJsonObject Page::toJsonObject() const
 {
-    // TODO: do it
-    return QJsonObject();
+    QJsonObject obj;
+
+    obj["number"] = QJsonValue(QString::number(number));
+    obj["type"] = QString::number(int(type));
+
+    QJsonArray jsonAnswers;
+
+    for (auto& answer : answers) {
+        jsonAnswers.push_back(QJsonObject{
+            { "answer_letter", QString(answer.first) },
+            { "answer", answer.second->toJsonObject() } });
+    }
+    obj["answers"] = jsonAnswers;
+
+    obj["right_answers"] = rightAnswers.toJsonObject();
+
+    return obj;
 }
 
 std::shared_ptr<Page> Page::fromJsonObject(const QJsonObject& obj)
 {
-    // TODO: do it
-    return std::shared_ptr<Page>(new Page());
+    // TODO: use fabric method?
+
+    std::shared_ptr<Page> page = std::make_shared<Page>();
+
+    if (obj["number"].isString()) {
+        unsigned number;
+        bool isOk;
+        number = obj["number"].toString().toUInt(&isOk);
+        if (!isOk)
+            throw ModelSerializationError(
+                QObject::tr("page number is not a number"));
+        page->number = number;
+    } else
+        throw ModelSerializationError(
+            QObject::tr("page number is not exist or is not a json string"));
+
+    if (obj["type"].isString()) {
+        int type;
+        bool isOk;
+        type = obj["type"].toString().toInt(&isOk);
+        if (!isOk)
+            throw ModelSerializationError(
+                QObject::tr("page type is not a number"));
+
+        PAGE_TYPE pageType = static_cast<PAGE_TYPE>(type);
+
+        if (pageType < PAGE_TYPE::TEXT || pageType >= PAGE_TYPE::PAGE_TYPE_COUNT)
+            throw ModelSerializationError(
+                QObject::tr("page type is not valid type"));
+
+        page->type = pageType;
+    } else
+        throw ModelSerializationError(
+            QObject::tr("page type is not exist or is not a json string"));
+
+    QJsonArray jsonAnswers;
+
+    if (obj["answers"].isArray())
+        jsonAnswers = obj["answers"].toArray();
+    else
+        throw ModelSerializationError(
+            QObject::tr("page answers is not exist or is not a json array"));
+
+    for (auto jsonAnswer : jsonAnswers) {
+        QJsonObject jsonAnswerPair;
+
+        if (jsonAnswer.isObject())
+            jsonAnswerPair = jsonAnswer.toObject();
+        else
+            throw ModelSerializationError(
+                QObject::tr("json_answers doesn't exist or is not an json object"));
+
+        std::pair<QChar, std::shared_ptr<Answer>> answerPair;
+
+        if (jsonAnswerPair["answer_letter"].isString()) {
+            QString str = jsonAnswerPair["answer_letter"].toString();
+            if (str.size() != 1)
+                throw ModelSerializationError(
+                    QObject::tr("answer letter cannot be string"));
+            answerPair.first = str[0];
+        } else
+            throw ModelSerializationError(
+                QObject::tr("answer_letter doesn't exist or isn't a json string"));
+
+        if (jsonAnswerPair["answer"].isObject()) {
+            answerPair.second = Answer::fromJsonObject(jsonAnswerPair["answer"].toObject());
+        } else
+            throw ModelSerializationError(
+                QObject::tr("answer doesn't exist or isn't an json object"));
+
+        if (page->answers.find(answerPair.first) != page->answers.end())
+            throw ModelSerializationError(
+                QObject::tr("attempting to add more than one answer with same nubmer"));
+
+        page->answers.insert(answerPair);
+    }
+
+    if (obj["right_answers"].isObject()) {
+        page->rightAnswers = RightAnswers::fromJsonObject(obj["right_answers"].toObject());
+    } else
+        throw ModelSerializationError(
+            QObject::tr("right_answers doesn't exist or isn't an object"));
+
+    // TODO: parse subclass depend on type
+
+    return page;
 }

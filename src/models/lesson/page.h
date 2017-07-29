@@ -15,9 +15,10 @@
 
 #include <exceptions/pagecreatingerror.h>
 
-enum class PAGE_TYPE {
+enum class PAGE_TYPE : int {
     TEXT,
-    HTML
+    HTML,
+    PAGE_TYPE_COUNT // this value should be in the end of enum, do not move it
 };
 
 class Page {
@@ -46,7 +47,7 @@ public:
     static std::shared_ptr<Page> fromJsonObject(const QJsonObject& obj);
 
 protected:
-    unsigned number;
+    unsigned number = 0;
     PAGE_TYPE type;
     //std::vector<std::shared_ptr<Answer>> answers;
     std::map<QChar, std::shared_ptr<Answer>> answers;

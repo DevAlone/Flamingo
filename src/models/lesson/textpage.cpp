@@ -13,3 +13,15 @@ const QString& TextPage::getContent() const
 {
     return content;
 }
+
+QJsonObject TextPage::toJsonObject() const
+{
+    // TODO: call method of Page and serialize TextPage
+    return Page::toJsonObject();
+}
+
+std::shared_ptr<TextPage> TextPage::fromJsonObject(const QJsonObject& obj)
+{
+    // TODO: jlkasfdlkafl;asdfldfsalsdafl;k
+    return std::shared_ptr<TextPage>();
+}

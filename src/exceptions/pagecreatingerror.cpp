@@ -1,11 +1,6 @@
 #include "pagecreatingerror.h"
 
 PageCreatingError::PageCreatingError(const QString& message)
-    : message(message)
+    : Exception(message)
 {
-}
-
-const QString& PageCreatingError::getMessage() const
-{
-    return message;
 }

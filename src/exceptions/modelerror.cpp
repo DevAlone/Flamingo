@@ -1,11 +1,6 @@
 #include "modelerror.h"
 
 ModelError::ModelError(const QString& message)
-    : message(message)
+    : Exception(message)
 {
-}
-
-const QString& ModelError::getMessage() const
-{
-    return message;
 }

@@ -1,15 +1,13 @@
 #ifndef ANSWERCREATINGERROR_H
 #define ANSWERCREATINGERROR_H
 
+#include "exception.h"
+
 #include <QString>
 
-class AnswerCreatingError {
+class AnswerCreatingError : public Exception {
 public:
     AnswerCreatingError(const QString& message);
-    virtual ~AnswerCreatingError() {}
-
-protected:
-    QString message;
 };
 
 #endif // ANSWERCREATINGERROR_H

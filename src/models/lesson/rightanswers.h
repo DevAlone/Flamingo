@@ -13,6 +13,9 @@ public:
     const std::set<QChar>& getAnswers() const;
     bool isAnswersRight(std::set<QChar> answers) const;
 
+    virtual QJsonObject toJsonObject() const;
+    static RightAnswers fromJsonObject(const QJsonObject& obj);
+
 private:
     enum class EXPRESSION_TYPE {
         AND,

@@ -261,9 +261,11 @@ QString Lesson::serialize()
     QJsonArray jsonPages;
 
     for (auto& page : pages) {
+        auto pageJsonObject = page.second->toJsonObject();
+
         jsonPages.push_back(QJsonObject{
             { "page_number", QString::number(page.first) },
-            { "page", page.second->toJsonObject() } });
+            { "page", pageJsonObject } });
     }
     obj["pages"] = jsonPages;
 

@@ -55,3 +55,13 @@ bool RightAnswers::isAnswersRight(std::set<QChar> answers) const
 
     return false;
 }
+
+QJsonObject RightAnswers::toJsonObject() const
+{
+    return QJsonObject();
+}
+
+RightAnswers RightAnswers::fromJsonObject(const QJsonObject& obj)
+{
+    return RightAnswers();
+}

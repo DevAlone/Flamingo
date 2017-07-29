@@ -10,6 +10,10 @@ Answer::Answer()
 {
 }
 
+Answer::~Answer()
+{
+}
+
 std::shared_ptr<Answer> Answer::createAnswer(
     QChar letter,
     std::map<QString, QString>& keyValueMap,
@@ -54,4 +58,14 @@ std::shared_ptr<Answer> Answer::createAnswer(
 ANSWER_TYPE Answer::getType() const
 {
     return type;
+}
+
+QJsonObject Answer::toJsonObject() const
+{ // TODO: complete it
+    return QJsonObject();
+}
+
+std::shared_ptr<Answer> Answer::fromJsonObject(const QJsonObject& obj)
+{ // TODO: complete it
+    return std::shared_ptr<Answer>(new Answer());
 }

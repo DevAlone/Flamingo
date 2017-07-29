@@ -12,6 +12,9 @@ public:
 
     const QString& getContent() const;
 
+    virtual QJsonObject toJsonObject() const;
+    static std::shared_ptr<TextPage> fromJsonObject(const QJsonObject& obj);
+
 protected:
     QString content;
     // QString source;

@@ -1,16 +1,13 @@
 #ifndef MODELERROR_H
 #define MODELERROR_H
 
+#include "exception.h"
+
 #include <QString>
 
-class ModelError {
+class ModelError : public Exception {
 public:
     ModelError(const QString& message);
-
-    const QString& getMessage() const;
-
-private:
-    QString message;
 };
 
 #endif // MODELERROR_H

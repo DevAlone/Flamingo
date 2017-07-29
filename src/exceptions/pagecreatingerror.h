@@ -1,19 +1,13 @@
 #ifndef PAGECREATINGERROR_H
 #define PAGECREATINGERROR_H
 
+#include "exception.h"
+
 #include <QString>
 
-//#include <exception>
-//#include <stdexcept>
-
-class PageCreatingError {
+class PageCreatingError : public Exception {
 public:
     PageCreatingError(const QString& message);
-
-    const QString& getMessage() const;
-
-protected:
-    QString message;
 };
 
 #endif // PAGECREATINGERROR_H
