@@ -21,6 +21,11 @@ enum class PAGE_TYPE : int {
     PAGE_TYPE_COUNT // this value should be in the end of enum, do not move it
 };
 
+const std::map<QString, PAGE_TYPE> pageTypesMap = {
+    { "text", PAGE_TYPE::TEXT },
+    { "html", PAGE_TYPE::HTML },
+};
+
 class Page {
 
 public:
@@ -49,7 +54,6 @@ public:
 protected:
     unsigned number = 0;
     PAGE_TYPE type;
-    //std::vector<std::shared_ptr<Answer>> answers;
     std::map<QChar, std::shared_ptr<Answer>> answers;
     //    QString rightAnswers;
     RightAnswers rightAnswers;

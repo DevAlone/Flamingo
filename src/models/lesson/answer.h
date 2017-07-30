@@ -13,14 +13,17 @@ enum class ANSWER_TYPE {
     HTML
 };
 
+const std::map<QString, ANSWER_TYPE> answerTypesMap = {
+    { "text", ANSWER_TYPE::TEXT },
+    { "html", ANSWER_TYPE::HTML },
+};
+
 class Answer {
 
 public:
     Answer();
     virtual ~Answer();
-    static std::shared_ptr<Answer> createAnswer(
-        QChar letter,
-        std::map<QString, QString>& keyValueMap,
+    static std::shared_ptr<Answer> createAnswer(std::map<QString, QString>& keyValueMap,
         std::vector<std::pair<QString, QString>>& keyValueVec);
 
     ANSWER_TYPE getType() const;
@@ -29,7 +32,6 @@ public:
     static std::shared_ptr<Answer> fromJsonObject(const QJsonObject& obj);
 
 private:
-    QChar letter;
     ANSWER_TYPE type;
 };
 

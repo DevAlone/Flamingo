@@ -42,7 +42,7 @@ std::shared_ptr<Answer> AnswersParser::parseAnswer(QString& string, QChar answer
     std::shared_ptr<Answer> answer;
 
     try {
-        answer = Answer::createAnswer(answerLetter, keyValueMap, keyValueVec);
+        answer = Answer::createAnswer(keyValueMap, keyValueVec);
         if (!answer) {
             // TODO: log this shit
             return std::shared_ptr<Answer>();

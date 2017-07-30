@@ -3,7 +3,9 @@
 #include "textanswer.h"
 
 #include <exceptions/answercreatingerror.h>
+#include <exceptions/modelserializationerror.h>
 
+#include <QJsonArray>
 #include <QObject>
 
 Answer::Answer()
@@ -15,9 +17,8 @@ Answer::~Answer()
 }
 
 std::shared_ptr<Answer> Answer::createAnswer(
-    QChar letter,
     std::map<QString, QString>& keyValueMap,
-    std::vector<std::pair<QString, QString> >& keyValueVec)
+    std::vector<std::pair<QString, QString>>& keyValueVec)
 {
     // TODO: change it
     static const std::map<QString, ANSWER_TYPE> answerTypes = {
@@ -50,7 +51,6 @@ std::shared_ptr<Answer> Answer::createAnswer(
     }
 
     answer->type = type;
-    answer->letter = letter;
 
     return answer;
 }
@@ -61,11 +61,63 @@ ANSWER_TYPE Answer::getType() const
 }
 
 QJsonObject Answer::toJsonObject() const
-{ // TODO: complete it
-    return QJsonObject();
+{
+    QJsonObject obj;
+
+    QString typeString = "";
+
+    for (auto& keyValue : answerTypesMap) {
+        if (keyValue.second == type) {
+            typeString = keyValue.first;
+            break;
+        }
+    }
+    if (typeString.isEmpty())
+        throw ModelSerializationError(
+            QObject::tr("Undefined type of answer"));
+
+    QJsonArray jsonInfoSection;
+
+    jsonInfoSection.push_back(QJsonObject{
+        { "type", typeString } });
+
+    obj["info_section"] = jsonInfoSection;
+
+    return obj;
 }
 
 std::shared_ptr<Answer> Answer::fromJsonObject(const QJsonObject& obj)
-{ // TODO: complete it
-    return std::shared_ptr<Answer>(new Answer());
+{
+    std::map<QString, QString> keyValueMap;
+    std::vector<std::pair<QString, QString>> keyValueVec;
+
+    QJsonArray jsonInfoSection;
+
+    if (obj["info_section"].isArray()) {
+        jsonInfoSection = obj["info_section"].toArray();
+    } else
+        throw ModelSerializationError(
+            QObject::tr("answer info_section doesn't exist or isn't an array"));
+
+    for (auto obj : jsonInfoSection) {
+        if (obj.isObject()) {
+            auto jsonObj = obj.toObject();
+            for (auto& key : jsonObj.keys()) {
+                if (jsonObj[key].isString()) {
+                    auto pair = std::make_pair<QString, QString>(
+                        QString(key), jsonObj[key].toString());
+
+                    keyValueMap.insert(pair);
+                    keyValueVec.push_back(pair);
+
+                } else
+                    throw ModelSerializationError(
+                        QObject::tr("answer info_section contains not string type"));
+            }
+        } else
+            throw ModelSerializationError(
+                QObject::tr("answer info_section contains not object"));
+    }
+
+    return createAnswer(keyValueMap, keyValueVec);
 }

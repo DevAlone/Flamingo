@@ -12,6 +12,8 @@ public:
 
     const QString& getContent() const;
 
+    virtual QJsonObject toJsonObject() const;
+
 protected:
     QString content;
 };

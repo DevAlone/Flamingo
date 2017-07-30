@@ -10,17 +10,13 @@ std::shared_ptr<Page> Page::createPage(
     std::map<QString, QString>& infoSection,
     std::map<QChar, std::shared_ptr<Answer>>& answers)
 {
-    static const std::map<QString, PAGE_TYPE> pageTypes = {
-        { QString("text"), PAGE_TYPE::TEXT },
-        { QString("html"), PAGE_TYPE::HTML },
-    };
 
     PAGE_TYPE type = PAGE_TYPE::TEXT;
 
     auto typeIt = infoSection.find("type");
     if (typeIt != infoSection.end()) {
-        auto enumIt = pageTypes.find(typeIt->second);
-        if (enumIt != pageTypes.end())
+        auto enumIt = pageTypesMap.find(typeIt->second);
+        if (enumIt != pageTypesMap.end())
             type = enumIt->second;
         else
             throw PageCreatingError(
@@ -94,7 +90,23 @@ QJsonObject Page::toJsonObject() const
     QJsonObject obj;
 
     obj["number"] = QJsonValue(QString::number(number));
-    obj["type"] = QString::number(int(type));
+
+    QString typeString = "";
+
+    for (auto& keyValue : pageTypesMap) {
+        if (keyValue.second == type) {
+            typeString = keyValue.first;
+            break;
+        }
+    }
+    if (typeString.isEmpty())
+        throw ModelSerializationError(
+            QObject::tr("Undefined type"));
+
+    QJsonArray jsonInfoSection;
+
+    jsonInfoSection.push_back(QJsonObject{
+        { "type", typeString } });
 
     QJsonArray jsonAnswers;
 
@@ -103,49 +115,63 @@ QJsonObject Page::toJsonObject() const
             { "answer_letter", QString(answer.first) },
             { "answer", answer.second->toJsonObject() } });
     }
+
     obj["answers"] = jsonAnswers;
 
-    obj["right_answers"] = rightAnswers.toJsonObject();
+    jsonInfoSection.push_back(QJsonObject{
+        { "right_answers", rightAnswers.toString() } });
+
+    obj["info_section"] = jsonInfoSection;
 
     return obj;
 }
 
 std::shared_ptr<Page> Page::fromJsonObject(const QJsonObject& obj)
 {
-    // TODO: use fabric method?
 
-    std::shared_ptr<Page> page = std::make_shared<Page>();
+    unsigned pageNumber;
 
     if (obj["number"].isString()) {
-        unsigned number;
         bool isOk;
-        number = obj["number"].toString().toUInt(&isOk);
+        pageNumber = obj["number"].toString().toUInt(&isOk);
         if (!isOk)
             throw ModelSerializationError(
                 QObject::tr("page number is not a number"));
-        page->number = number;
     } else
         throw ModelSerializationError(
             QObject::tr("page number is not exist or is not a json string"));
 
-    if (obj["type"].isString()) {
-        int type;
-        bool isOk;
-        type = obj["type"].toString().toInt(&isOk);
-        if (!isOk)
-            throw ModelSerializationError(
-                QObject::tr("page type is not a number"));
+    std::map<QString, QString> infoSectionMap;
+    std::vector<std::pair<QString, QString>> infoSectionVec;
 
-        PAGE_TYPE pageType = static_cast<PAGE_TYPE>(type);
+    QJsonArray jsonInfoSection;
 
-        if (pageType < PAGE_TYPE::TEXT || pageType >= PAGE_TYPE::PAGE_TYPE_COUNT)
-            throw ModelSerializationError(
-                QObject::tr("page type is not valid type"));
-
-        page->type = pageType;
+    if (obj["info_section"].isArray()) {
+        jsonInfoSection = obj["info_section"].toArray();
     } else
         throw ModelSerializationError(
-            QObject::tr("page type is not exist or is not a json string"));
+            QObject::tr("page info_section dosn't exist or isn't an array"));
+
+    for (auto obj : jsonInfoSection) {
+        if (obj.isObject()) {
+            auto jsonObj = obj.toObject();
+            for (auto& key : jsonObj.keys()) {
+                if (jsonObj[key].isString()) {
+                    auto pair = std::make_pair<QString, QString>(
+                        QString(key), jsonObj[key].toString());
+
+                    infoSectionMap.insert(pair);
+                    infoSectionVec.push_back(pair);
+                } else
+                    throw ModelSerializationError(
+                        QObject::tr("page info_section object contain not string type"));
+            }
+        } else
+            throw ModelSerializationError(
+                QObject::tr("page info_section contains not object"));
+    }
+
+    std::map<QChar, std::shared_ptr<Answer>> answers;
 
     QJsonArray jsonAnswers;
 
@@ -182,20 +208,15 @@ std::shared_ptr<Page> Page::fromJsonObject(const QJsonObject& obj)
             throw ModelSerializationError(
                 QObject::tr("answer doesn't exist or isn't an json object"));
 
-        if (page->answers.find(answerPair.first) != page->answers.end())
+        if (answers.find(answerPair.first) != answers.end())
             throw ModelSerializationError(
                 QObject::tr("attempting to add more than one answer with same nubmer"));
 
-        page->answers.insert(answerPair);
+        answers.insert(answerPair);
     }
 
-    if (obj["right_answers"].isObject()) {
-        page->rightAnswers = RightAnswers::fromJsonObject(obj["right_answers"].toObject());
-    } else
-        throw ModelSerializationError(
-            QObject::tr("right_answers doesn't exist or isn't an object"));
-
-    // TODO: parse subclass depend on type
+    // TODO: передать infoSectionVec в функцию
+    std::shared_ptr<Page> page = createPage(pageNumber, infoSectionMap, answers);
 
     return page;
 }

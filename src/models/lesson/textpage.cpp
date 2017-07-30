@@ -1,5 +1,7 @@
 #include "textpage.h"
 
+#include <exceptions/modelserializationerror.h>
+
 TextPage::TextPage(std::map<QString, QString>& infoSection)
 {
     auto contentIt = infoSection.find("content");
@@ -16,12 +18,20 @@ const QString& TextPage::getContent() const
 
 QJsonObject TextPage::toJsonObject() const
 {
-    // TODO: call method of Page and serialize TextPage
-    return Page::toJsonObject();
-}
+    QJsonObject obj = Page::toJsonObject();
 
-std::shared_ptr<TextPage> TextPage::fromJsonObject(const QJsonObject& obj)
-{
-    // TODO: jlkasfdlkafl;asdfldfsalsdafl;k
-    return std::shared_ptr<TextPage>();
+    QJsonArray jsonInfoSection;
+    if (obj["info_section"].isArray()) {
+        jsonInfoSection = obj["info_section"].toArray();
+    } else
+        throw ModelSerializationError(
+            QObject::tr("error during serialization TextPage:"
+                        "info_section wasn't found"));
+
+    jsonInfoSection.push_back(QJsonObject{
+        { "content", content } });
+
+    obj["info_section"] = jsonInfoSection;
+
+    return obj;
 }

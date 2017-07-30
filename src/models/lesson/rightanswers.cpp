@@ -56,12 +56,16 @@ bool RightAnswers::isAnswersRight(std::set<QChar> answers) const
     return false;
 }
 
-QJsonObject RightAnswers::toJsonObject() const
+QString RightAnswers::toString() const
 {
-    return QJsonObject();
-}
-
-RightAnswers RightAnswers::fromJsonObject(const QJsonObject& obj)
-{
-    return RightAnswers();
+    QString result = "";
+    bool isFirst = true;
+    for (auto& value : answers) {
+        if (isFirst)
+            isFirst = false;
+        if (!isFirst)
+            result += type == EXPRESSION_TYPE::AND ? "&" : "|";
+        result += value;
+    }
+    return result;
 }
