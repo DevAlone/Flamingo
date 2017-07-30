@@ -5,16 +5,16 @@
 #include <exceptions/modelserializationerror.h>
 #include <exceptions/pagecreatingerror.h>
 
-std::shared_ptr<Page> Page::createPage(
-    unsigned pageNumber,
-    std::map<QString, QString>& infoSection,
+std::shared_ptr<Page> Page::createPage(unsigned pageNumber,
+    std::map<QString, QString>& infoSectionMap,
+    std::vector<std::pair<QString, QString>>& infoSectionVec,
     std::map<QChar, std::shared_ptr<Answer>>& answers)
 {
 
     PAGE_TYPE type = PAGE_TYPE::TEXT;
 
-    auto typeIt = infoSection.find("type");
-    if (typeIt != infoSection.end()) {
+    auto typeIt = infoSectionMap.find("type");
+    if (typeIt != infoSectionMap.end()) {
         auto enumIt = pageTypesMap.find(typeIt->second);
         if (enumIt != pageTypesMap.end())
             type = enumIt->second;
@@ -28,18 +28,18 @@ std::shared_ptr<Page> Page::createPage(
 
     switch (type) {
     case PAGE_TYPE::TEXT:
-        page = std::make_shared<TextPage>(infoSection);
+        page = std::make_shared<TextPage>(infoSectionMap);
         break;
     case PAGE_TYPE::HTML:
-        page = std::make_shared<HtmlPage>(infoSection);
+        page = std::make_shared<HtmlPage>(infoSectionMap);
         break;
     }
 
     page->type = type;
     page->number = pageNumber;
 
-    auto rightAnswersIt = infoSection.find("right answers");
-    if (rightAnswersIt != infoSection.end()) {
+    auto rightAnswersIt = infoSectionMap.find("right answers");
+    if (rightAnswersIt != infoSectionMap.end()) {
         page->rightAnswers = RightAnswers::fromString(rightAnswersIt->second);
         const auto& answers = page->rightAnswers.getAnswers();
         if (answers.size() < 1)
@@ -216,7 +216,11 @@ std::shared_ptr<Page> Page::fromJsonObject(const QJsonObject& obj)
     }
 
     // TODO: передать infoSectionVec в функцию
-    std::shared_ptr<Page> page = createPage(pageNumber, infoSectionMap, answers);
+    std::shared_ptr<Page> page = createPage(
+        pageNumber,
+        infoSectionMap,
+        infoSectionVec,
+        answers);
 
     return page;
 }

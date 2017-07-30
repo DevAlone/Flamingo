@@ -1,5 +1,6 @@
 #include "pagesparser.h"
 #include "answersparser.h"
+#include "infosectionparser.h"
 #include "logger/pagesparserlogentry.h"
 
 #include "models/include.h"
@@ -27,6 +28,8 @@ std::shared_ptr<Page> PagesParser::parsePage(QString& string,
     lineNumber = 0;
 
     std::map<QString, QString> infoSectionMap;
+    std::vector<std::pair<QString, QString>> infoSectionVec;
+
     std::map<QChar, std::shared_ptr<Answer>> answersMap;
 
     for (; !stream.atEnd(); lineNumber++) {
@@ -40,7 +43,7 @@ std::shared_ptr<Page> PagesParser::parsePage(QString& string,
         // TODO: do it
         switch (section) {
         case SECTION::INFO:
-            parseInfoSection(infoSectionMap, line, stream);
+            parseInfoSection(infoSectionMap, infoSectionVec, line, stream);
             break;
         case SECTION::ANSWERS:
             parseAnswersSection(answersMap, line, stream);
@@ -54,7 +57,7 @@ std::shared_ptr<Page> PagesParser::parsePage(QString& string,
     // TODO: use fabric method
 
     try {
-        page = Page::createPage(pageNumber, infoSectionMap, answersMap);
+        page = Page::createPage(pageNumber, infoSectionMap, infoSectionVec, answersMap);
         if (!page) {
             // TODO: do something
             return std::shared_ptr<Page>();
@@ -107,7 +110,11 @@ bool PagesParser::tryToChangeSection(const QString& line)
     return true;
 }
 
-void PagesParser::parseInfoSection(std::map<QString, QString>& infoSectionValues, QString& line, QTextStream& stream)
+void PagesParser::parseInfoSection(
+    std::map<QString, QString>& infoSectionMap,
+    std::vector<std::pair<QString, QString>>& infoSectionVec,
+    QString& line,
+    QTextStream& stream)
 {
     logEntry<PagesParserLogEntry>(
         LOG_ENTRY_TYPE::DEBUG,
@@ -116,13 +123,10 @@ void PagesParser::parseInfoSection(std::map<QString, QString>& infoSectionValues
         baseLineNumber + lineNumber,
         line);
 
+    QString buffer = "";
+
     bool isFirstLine = true;
-
-    std::pair<QString, QString> infoSectionBuffer = std::make_pair("", "");
-
-    std::pair<QString, QString> keyValue;
-    // TODO: add check for empty stream but non empty line
-    for (; !stream.atEnd(); lineNumber++) {
+    for (; !stream.atEnd() || isFirstLine; lineNumber++) {
         if (isFirstLine)
             isFirstLine = false;
         else
@@ -133,48 +137,29 @@ void PagesParser::parseInfoSection(std::map<QString, QString>& infoSectionValues
         if (tryToChangeSection(trimmedLine))
             break;
 
-        bool isOk;
-        keyValue = getKeyValueFromString(trimmedLine, &isOk, ':');
-        auto& key = keyValue.first;
-        // auto& value = keyValue.second;
+        buffer += line + "\n";
+    }
 
-        if (isOk) {
-            if (!infoSectionBuffer.first.isEmpty()) {
-                auto it = infoSectionValues.find(key);
-                if (it != infoSectionValues.end()) {
-                    logEntry<PagesParserLogEntry>(
-                        LOG_ENTRY_TYPE::ERROR,
-                        QObject::tr("Adding more than one value with same key"),
-                        path,
-                        baseLineNumber + lineNumber,
-                        line);
-                    it->second = infoSectionBuffer.second;
-                } else {
-                    infoSectionValues.insert(infoSectionBuffer);
-                }
-            }
-            infoSectionBuffer = keyValue;
-        } else {
-            infoSectionBuffer.second += " " + trimmedLine;
-        }
-    }
-    // check buffer
-    if (infoSectionBuffer.first != "") {
-        auto& key = keyValue.first;
-        auto it = infoSectionValues.find(key);
-        if (it != infoSectionValues.end()) {
+    InfoSectionParser infoSectionParser;
+    infoSectionParser.setLogger(logger);
+
+    std::vector<std::pair<QString, QString>> tmpInfoSectionVec;
+    auto tmpInfoSectionMap
+        = infoSectionParser.parseInfoSection(buffer, path, &tmpInfoSectionVec);
+
+    for (auto& keyValue : tmpInfoSectionMap) {
+        if (infoSectionMap.find(keyValue.first) != infoSectionMap.end()) {
             logEntry<PagesParserLogEntry>(
-                LOG_ENTRY_TYPE::ERROR,
-                QObject::tr("Adding more than one value with same key"),
-                path,
-                baseLineNumber + lineNumber,
-                line);
-            it->second = infoSectionBuffer.second;
-        } else {
-            infoSectionValues.insert(infoSectionBuffer);
-        }
+                LOG_ENTRY_TYPE::WARNING,
+                QObject::tr("Attempting to add more than one value with the same key"),
+                path);
+        } else
+            infoSectionMap.insert(keyValue);
     }
-    infoSectionBuffer = std::make_pair<QString, QString>("", "");
+
+    for (auto& keyValue : tmpInfoSectionVec) {
+        infoSectionVec.push_back(keyValue);
+    }
 }
 
 void PagesParser::addAnswerToMap(std::map<QChar, std::shared_ptr<Answer>>& answersMap,

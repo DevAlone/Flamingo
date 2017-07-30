@@ -1,6 +1,7 @@
 #include "exception.h"
 
 Exception::Exception(const QString& message)
+    : message(message)
 {
 }
 

@@ -18,7 +18,6 @@
 enum class PAGE_TYPE : int {
     TEXT,
     HTML,
-    PAGE_TYPE_COUNT // this value should be in the end of enum, do not move it
 };
 
 const std::map<QString, PAGE_TYPE> pageTypesMap = {
@@ -39,7 +38,8 @@ public:
     // method can throw exception
     static std::shared_ptr<Page> createPage(
         unsigned pageNumber,
-        std::map<QString, QString>& infoSection,
+        std::map<QString, QString>& infoSectionMap,
+        std::vector<std::pair<QString, QString>>& infoSectionVec,
         std::map<QChar, std::shared_ptr<Answer>>& answers);
 
     unsigned getNumber() const;

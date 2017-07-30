@@ -10,6 +10,7 @@
 #include <models/lesson/lesson.h>
 
 #include <views/lesson/pagesingleview.h>
+#include <views/lesson/pagesinglewidget.h>
 
 class LessonPageWidgetUi;
 
@@ -35,22 +36,23 @@ public:
     LessonPageWidgetUi(LessonPageWidget* parent)
     {
         mainLayout = new QVBoxLayout;
-        pageView = new PageSingleView(parent);
+        pageWidget = new PageSingleWidget(parent);
         pagination = new LessonPaginationWidget(parent);
 
-        mainLayout->addWidget(pageView);
+        mainLayout->addWidget(pageWidget);
         mainLayout->addWidget(pagination);
 
         parent->setLayout(mainLayout);
 
         QObject::connect(
             pagination, &LessonPaginationWidget::goToPage,
-            pageView, &PageSingleView::setPage);
+            pageWidget, &PageSingleWidget::setPage);
     }
 
 private:
     QVBoxLayout* mainLayout;
-    PageSingleView* pageView;
+
+    PageSingleWidget* pageWidget;
     LessonPaginationWidget* pagination;
 };
 

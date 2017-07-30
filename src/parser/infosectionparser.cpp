@@ -34,7 +34,10 @@ std::map<QString, QString> InfoSectionParser::parseInfoFile(const QString& path)
     }
     return result;
 }
-std::map<QString, QString> InfoSectionParser::parseInfoSection(QString& data, const QString& path)
+std::map<QString, QString> InfoSectionParser::parseInfoSection(
+    QString& data,
+    const QString& path,
+    std::vector<std::pair<QString, QString>>* keyValueVector)
 {
     std::map<QString, QString> result;
 
@@ -59,13 +62,15 @@ std::map<QString, QString> InfoSectionParser::parseInfoSection(QString& data, co
         if (!key.isEmpty()) {
             if (result.find(key) != result.end()) {
                 logEntry<InfoSectionParserLogEntry>(
-                    LOG_ENTRY_TYPE::ERROR,
+                    LOG_ENTRY_TYPE::WARNING,
                     QObject::tr("Attempting to add more than one value with the same key"),
                     path,
                     lineNumber);
             } else {
                 result.insert(buffer);
             }
+            if (keyValueVector)
+                keyValueVector->push_back(buffer);
             buffer.first = buffer.second = "";
         }
 
@@ -75,13 +80,15 @@ std::map<QString, QString> InfoSectionParser::parseInfoSection(QString& data, co
     if (!buffer.first.isEmpty()) {
         if (result.find(buffer.first) != result.end()) {
             logEntry<InfoSectionParserLogEntry>(
-                LOG_ENTRY_TYPE::ERROR,
+                LOG_ENTRY_TYPE::WARNING,
                 QObject::tr("Attempting to add more than one value with the same key"),
                 path,
                 lineNumber);
         } else {
             result.insert(buffer);
         }
+        if (keyValueVector)
+            keyValueVector->push_back(buffer);
         buffer.first = buffer.second = "";
     }
 

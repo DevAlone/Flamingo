@@ -2,6 +2,8 @@
 
 #include <exceptions/modelserializationerror.h>
 
+#include <QDebug>
+
 TextPage::TextPage(std::map<QString, QString>& infoSection)
 {
     auto contentIt = infoSection.find("content");

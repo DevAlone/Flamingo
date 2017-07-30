@@ -32,7 +32,7 @@ private:
     bool tryToChangeSection(const QString& line);
 
     // TODO: add vector
-    void parseInfoSection(std::map<QString, QString>& infoSectionValues, QString& line, QTextStream& stream);
+    void parseInfoSection(std::map<QString, QString>& infoSectionMap, std::vector<std::pair<QString, QString> > &infoSectionVec, QString& line, QTextStream& stream);
 
     void addAnswerToMap(std::map<QChar, std::shared_ptr<Answer>>& answersMap,
         QChar answerLetter,
