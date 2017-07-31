@@ -6,6 +6,8 @@
 
 #include <models/lesson/htmlpage.h>
 
+#include "helper.h"
+
 PageSingleWidget::PageSingleWidget(QWidget* parent)
     : QScrollArea(parent)
 {
@@ -16,8 +18,16 @@ void PageSingleWidget::setPage(std::shared_ptr<Page> page)
 {
     if (!page)
         return;
+    this->page = page;
+    updateItems();
+}
 
-    delete ui->pageView;
+void PageSingleWidget::updateItems()
+{
+    if (!page)
+        return;
+
+    clearLayout(ui->mainLayout);
 
     switch (page->getType()) {
     case PAGE_TYPE::TEXT: {
@@ -40,9 +50,17 @@ void PageSingleWidget::setPage(std::shared_ptr<Page> page)
         pageView->setHtmlPage(htmlPage);
         ui->pageView = pageView;
     } break;
-        //    default:
-        //        throw Exception(QObject::tr("Unknown page type"));
+    default:
+        throw Exception(QObject::tr("Unknown page type"));
+        break;
     }
 
+    ui->answers = new AnswersWidget;
+
+    ui->answers->setAnswers(page->getAnswers());
+
     ui->mainLayout->addWidget(ui->pageView);
+    ui->mainLayout->addWidget(ui->answers);
+
+    ui->mainLayout->addStretch();
 }

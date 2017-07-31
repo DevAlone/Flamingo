@@ -19,15 +19,18 @@ using namespace parser;
 #include <QDebug>
 #include <QtCore>
 
+// TODO: доделать сериализацию ответов
+
 // TODO: It's just for debug. Remove it later
 void tick()
 {
     QFile styleFile("style.css");
     if (styleFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QString style = styleFile.readAll();
+
         qApp->setStyleSheet(style);
     }
-    QTimer::singleShot(100, tick);
+    QTimer::singleShot(2000, tick);
 }
 
 int main(int argc, char* argv[])
@@ -44,7 +47,7 @@ int main(int argc, char* argv[])
         QString style = styleFile.readAll();
         a.setStyleSheet(style);
     }
-    //    QTimer::singleShot(100, tick);
+    QTimer::singleShot(100, tick);
 
     QSettings::setDefaultFormat(QSettings::IniFormat);
     QApplication::setOrganizationName("DevAlone");

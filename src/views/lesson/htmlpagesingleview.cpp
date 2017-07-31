@@ -3,7 +3,6 @@
 HtmlPageSingleView::HtmlPageSingleView(QWidget* parent)
     : TextPageSingleView(parent)
 {
-    ui->content->setTextFormat(Qt::TextFormat::RichText);
 }
 
 void HtmlPageSingleView::setHtmlPage(std::shared_ptr<HtmlPage> htmlPage)
@@ -13,5 +12,10 @@ void HtmlPageSingleView::setHtmlPage(std::shared_ptr<HtmlPage> htmlPage)
 
     this->htmlPage = htmlPage;
 
-    setContent(htmlPage->getContent());
+    setHtml(htmlPage->getContent());
+}
+
+void HtmlPageSingleView::setHtml(const QString& html)
+{
+    ui->content->setHtml(html);
 }

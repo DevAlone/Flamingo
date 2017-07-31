@@ -7,14 +7,15 @@
 
 #include <models/lesson/htmlpage.h>
 
-class HtmlPageSingleView : public TextPageSingleView
-{
+class HtmlPageSingleView : public TextPageSingleView {
     Q_OBJECT
 public:
-    explicit HtmlPageSingleView(QWidget *parent = nullptr);
+    explicit HtmlPageSingleView(QWidget* parent = nullptr);
 
     void setTextPage(std::shared_ptr<TextPage> textPage) = delete;
     void setHtmlPage(std::shared_ptr<HtmlPage> htmlPage);
+
+    void setHtml(const QString& html);
 
 signals:
 

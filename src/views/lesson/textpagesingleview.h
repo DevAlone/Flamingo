@@ -2,6 +2,7 @@
 #define TEXTPAGESINGLEVIEW_H
 
 #include "pagesingleview.h"
+#include "textbrowserwidget.h"
 
 #include <QtWidgets>
 
@@ -20,7 +21,7 @@ signals:
 
 public slots:
     void setTextPage(std::shared_ptr<TextPage> textPage);
-    void setContent(const QString& data);
+    void setText(const QString& text);
 
 protected:
     std::unique_ptr<TextPageSingleViewUi> ui;
@@ -34,7 +35,11 @@ public:
     TextPageSingleViewUi(TextPageSingleView* parent)
     {
         mainLayout = new QVBoxLayout;
-        content = new QLabel(parent);
+        content = new TextBrowserWidget(parent);
+
+        //        content->setSizePolicy(
+        //            QSizePolicy::Maximum,
+        //            QSizePolicy::Maximum);
 
         mainLayout->addWidget(content);
 
@@ -42,7 +47,7 @@ public:
     }
 
     QVBoxLayout* mainLayout;
-    QLabel* content;
+    TextBrowserWidget* content;
 };
 
 #endif // TEXTPAGESINGLEVIEW_H

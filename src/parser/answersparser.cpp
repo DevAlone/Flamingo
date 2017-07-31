@@ -21,7 +21,7 @@ std::shared_ptr<Answer> AnswersParser::parseAnswer(QString& string, QChar answer
     std::vector<std::pair<QString, QString>> keyValueVec;
 
     std::pair<QString, QString> buffer = std::make_pair("content", "");
-
+    // TODO: переделать
     for (; !stream.atEnd(); lineNumber++) {
         line = stream.readLine();
         QString trimmedLine = line.trimmed();
@@ -32,7 +32,8 @@ std::shared_ptr<Answer> AnswersParser::parseAnswer(QString& string, QChar answer
         auto& value = keyValue.second;
 
         if (isOk) {
-            insertKeyValue(keyValueMap, keyValueVec, buffer);
+            if (!buffer.second.isEmpty())
+                insertKeyValue(keyValueMap, keyValueVec, buffer);
             buffer = keyValue;
         } else
             buffer.second += " " + trimmedLine + "\n";

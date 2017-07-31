@@ -38,3 +38,6 @@ ModuleItemSingleView QPushButton {
 BreadcrumbWidget QPushButton {
     
 }
+PageSingleView {
+    background: rgb(255, 255, 255);
+}

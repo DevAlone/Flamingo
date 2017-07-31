@@ -1,6 +1,7 @@
 #ifndef PAGESINGLEWIDGET_H
 #define PAGESINGLEWIDGET_H
 
+#include "answerswidget.h"
 #include "pagesingleview.h"
 
 #include <models/lesson/page.h>
@@ -20,26 +21,33 @@ signals:
 
 public slots:
     void setPage(std::shared_ptr<Page> page);
+    void updateItems();
 
 private:
     std::unique_ptr<PageSingleWidgetUi> ui;
+    std::shared_ptr<Page> page;
 };
 
 class PageSingleWidgetUi {
     friend class PageSingleWidget;
 
 public:
-    PageSingleWidgetUi(PageSingleWidget* parent)
+    PageSingleWidgetUi(QScrollArea* parent)
     {
         baseWidget = new QWidget;
         mainLayout = new QVBoxLayout;
-        pageView = new PageSingleView(parent);
+        pageView = new PageSingleView;
+        answers = new AnswersWidget;
 
         mainLayout->addWidget(pageView);
+        mainLayout->addWidget(answers);
+
+        mainLayout->addStretch();
 
         baseWidget->setLayout(mainLayout);
 
         parent->setWidget(baseWidget);
+        parent->setWidgetResizable(true);
     }
 
 private:
@@ -48,6 +56,7 @@ private:
     QVBoxLayout* mainLayout;
 
     PageSingleView* pageView;
+    AnswersWidget* answers;
 };
 
 #endif // PAGESINGLEWIDGET_H

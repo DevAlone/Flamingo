@@ -13,4 +13,7 @@ void LessonPageWidget::activate(std::shared_ptr<Lesson> lesson)
 
     this->lesson = lesson;
     ui->pagination->setLesson(lesson);
+    if (!lesson->getPages().empty())
+
+        ui->pageWidget->setPage(lesson->getPages().begin()->second);
 }

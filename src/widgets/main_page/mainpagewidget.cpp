@@ -51,7 +51,7 @@ void MainPageWidget::goToCoursesPage()
     BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("courses", "courses");
 
     if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
-        delete currentItem;
+        currentItem->deleteLater();
         return;
     }
 
@@ -66,7 +66,7 @@ void MainPageWidget::goToModulesPage(std::shared_ptr<Course> course)
     BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("modules", "modules");
 
     if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
-        delete currentItem;
+        currentItem->deleteLater();
         return;
     }
 
@@ -81,7 +81,7 @@ void MainPageWidget::goToModuleItemsPage(std::shared_ptr<Module> module)
     BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("moduleItems", "moduleItems");
 
     if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
-        delete currentItem;
+        currentItem->deleteLater();
         return;
     }
 
@@ -96,7 +96,7 @@ void MainPageWidget::goToLessonPage(std::shared_ptr<Lesson> lesson)
     BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("lesson", "lesson");
 
     if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
-        delete currentItem;
+        currentItem->deleteLater();
         return;
     }
 

@@ -1,24 +1,22 @@
 #include "textpagesingleview.h"
 
-TextPageSingleView::TextPageSingleView(QWidget *parent)
-    : PageSingleView (parent)
+TextPageSingleView::TextPageSingleView(QWidget* parent)
+    : PageSingleView(parent)
 {
     ui = std::make_unique<TextPageSingleViewUi>(this);
-
-    ui->content->setTextFormat(Qt::TextFormat::PlainText);
 }
 
 void TextPageSingleView::setTextPage(std::shared_ptr<TextPage> textPage)
 {
-    if(!textPage)
+    if (!textPage)
         return;
 
     this->textPage = textPage;
 
-    setContent(textPage->getContent());
+    setText(textPage->getContent());
 }
 
-void TextPageSingleView::setContent(const QString &data)
+void TextPageSingleView::setText(const QString& text)
 {
-    ui->content->setText(data);
+    ui->content->setPlainText(text);
 }

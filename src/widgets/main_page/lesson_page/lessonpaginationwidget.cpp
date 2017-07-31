@@ -1,5 +1,7 @@
 #include "lessonpaginationwidget.h"
 
+#include "helper.h"
+
 LessonPaginationWidget::LessonPaginationWidget(QWidget* parent)
     : QWidget(parent)
 {
@@ -13,21 +15,6 @@ void LessonPaginationWidget::setLesson(std::shared_ptr<Lesson> lesson)
 
     this->lesson = lesson;
     updateItems();
-}
-
-void clearLayout(QLayout* layout)
-{
-    QLayoutItem* item;
-    while (item = layout->takeAt(0)) {
-        if (item->layout()) {
-            clearLayout(item->layout());
-            delete item->layout();
-        }
-
-        delete item->widget();
-
-        delete item;
-    }
 }
 
 void LessonPaginationWidget::updateItems()

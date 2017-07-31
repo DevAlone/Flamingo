@@ -77,7 +77,7 @@ bool BreadcrumbWidget::removeLastItem()
     ui->layout->removeWidget(item);
 
     // TODO: check it
-    delete item;
+    item->deleteLater();
 
     return true;
 }
