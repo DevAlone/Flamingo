@@ -2,6 +2,7 @@
 #define TEXTANSWERSINGLEVIEW_H
 
 #include "answersingleview.h"
+#include "answertextbrowserwidget.h"
 #include "textbrowserwidget.h"
 
 #include <QtWidgets>
@@ -38,7 +39,7 @@ public:
     TextAnswerSingleViewUi(TextAnswerSingleView* parent)
     {
         mainLayout = new QVBoxLayout;
-        content = new TextBrowserWidget(parent);
+        content = new AnswerTextBrowserWidget(parent);
 
         mainLayout->addWidget(content);
 
@@ -46,7 +47,7 @@ public:
     }
 
     QVBoxLayout* mainLayout;
-    TextBrowserWidget* content;
+    AnswerTextBrowserWidget* content;
 };
 
 #endif // TEXTANSWERSINGLEVIEW_H

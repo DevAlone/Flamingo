@@ -22,8 +22,7 @@ void AnswersWidget::setAnswers(
 
 void AnswersWidget::updateItems()
 {
-    // TODO: update
-    std::vector<AnswerSingleView*> answerViews;
+    answerViews.clear();
 
     // add widgets to list
     for (auto& keyValue : answers) {
@@ -60,9 +59,9 @@ void AnswersWidget::updateItems()
     }
 
     // add from list to layout
-    clearLayout(ui->mainLayout);
+    ui->mainLayout->clear();
 
     for (auto& answerView : answerViews) {
-        ui->mainLayout->addWidget(answerView);
+        ui->mainLayout->addAnswer(answerView);
     }
 }

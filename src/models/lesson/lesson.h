@@ -21,6 +21,7 @@ public:
 
     virtual void save();
     virtual bool update();
+    virtual bool remove();
 
     QString serialize();
     static std::shared_ptr<Lesson> deserialize(const QString& data, const QString& name);

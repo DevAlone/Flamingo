@@ -89,6 +89,29 @@ bool Lesson::update()
     return isChanged;
 }
 
+bool Lesson::remove()
+{
+    if (id < 0)
+        return false;
+
+    QSqlQuery deleteQuery;
+    deleteQuery.prepare(R"(
+                        DELETE FROM main.lessons
+                        WHERE id = :id;
+                        )");
+    deleteQuery.bindValue(":id", id);
+
+    if (!deleteQuery.exec()) {
+        throw ModelSqlError(
+            QObject::tr("Unable to remove Lesson from database"),
+            deleteQuery.lastError());
+    }
+
+    id = -1;
+
+    return true;
+}
+
 void Lesson::sqlInsert()
 {
     if (moduleId < 0 && submoduleId < 0)

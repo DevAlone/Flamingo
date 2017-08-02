@@ -27,7 +27,7 @@ ModuleSingleView QLabel,
 ModuleItemSingleView QLabel {
 /*    background-color: white;*/
     padding: 10px 5px;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
 }
 CourseSingleView QPushButton,
 ModuleSingleView QPushButton,
@@ -38,6 +38,24 @@ ModuleItemSingleView QPushButton {
 BreadcrumbWidget QPushButton {
     
 }
-PageSingleView {
-    background: rgb(255, 255, 255);
+
+PageSingleView QFrame {
+	/*background: rgb(0, 255, 255);*/
+/*	padding: 10px;*/
+/*	border-radius: 10px;*/
+	border: 1px solid #aaa;
+}
+
+/*AnswerSingleView QTextBrowser {
+	padding: 2px;
+}*/
+AnswerTextBrowserWidget:hover {
+/*	background: rgb(200, 200, 255);*/
+	border: 2px dashed rgb(0, 200, 0);
+}
+AnswerTextBrowserWidget[isChecked="false"] {
+	border: 2px solid rgb(100, 100, 100);
+}
+AnswerTextBrowserWidget[isChecked="true"] {
+	border: 2px solid rgb(0, 200, 0);
 }

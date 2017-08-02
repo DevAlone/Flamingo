@@ -32,5 +32,7 @@ QJsonObject TextAnswer::toJsonObject() const
     jsonInfoSection.push_back(QJsonObject{
         { "content", content } });
 
+    obj["info_section"] = jsonInfoSection;
+
     return obj;
 }

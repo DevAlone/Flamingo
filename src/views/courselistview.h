@@ -17,6 +17,8 @@ public:
 signals:
 
 public slots:
+    virtual void tryToDeleteSelectedItem();
+    virtual void showContextMenu(const QPoint& position);
 };
 
 #endif // COURSELISTVIEW_H

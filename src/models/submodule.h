@@ -19,8 +19,11 @@ public:
 
     virtual void save();
     virtual bool update();
+    virtual bool remove();
     virtual void sqlInsert();
     virtual void sqlUpdate();
+
+    std::vector<std::shared_ptr<Lesson>>& getLessons();
 
     static QSqlError createTable();
     static std::vector<std::shared_ptr<Submodule>> getAll();

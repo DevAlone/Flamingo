@@ -1,7 +1,9 @@
 #include "answersingleview.h"
 
-AnswerSingleView::AnswerSingleView(QWidget *parent)
+#include <QtCore>
+#include <QtWidgets>
+
+AnswerSingleView::AnswerSingleView(QWidget* parent)
     : QWidget(parent)
 {
-
 }

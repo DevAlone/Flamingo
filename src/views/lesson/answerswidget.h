@@ -1,6 +1,8 @@
 #ifndef ANSWERSWIDGET_H
 #define ANSWERSWIDGET_H
 
+#include "answerslayout.h"
+
 #include <QtWidgets>
 
 #include <memory>
@@ -23,6 +25,7 @@ public slots:
 private:
     std::unique_ptr<AnswersWidgetUi> ui;
     std::map<QChar, std::shared_ptr<Answer>> answers;
+    std::vector<AnswerSingleView*> answerViews;
 };
 
 class AnswersWidgetUi {
@@ -31,13 +34,13 @@ class AnswersWidgetUi {
 public:
     AnswersWidgetUi(AnswersWidget* parent)
     {
-        mainLayout = new QVBoxLayout;
+        mainLayout = new AnswersLayout;
 
         parent->setLayout(mainLayout);
     }
 
 private:
-    QVBoxLayout* mainLayout;
+    AnswersLayout* mainLayout;
 };
 
 #endif // ANSWERSWIDGET_H

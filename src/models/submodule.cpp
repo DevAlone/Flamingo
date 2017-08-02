@@ -85,6 +85,32 @@ bool Submodule::update()
     return isChanged;
 }
 
+bool Submodule::remove()
+{
+    if (id < 0)
+        return false;
+
+    QSqlQuery deleteQuery;
+    deleteQuery.prepare(R"(
+                        DELETE FROM main.submodules
+                        WHERE id = :id;
+                        )");
+    deleteQuery.bindValue(":id", id);
+
+    if (!deleteQuery.exec()) {
+        throw ModelSqlError(
+            QObject::tr("Unable to remove Submodule from database"),
+            deleteQuery.lastError());
+    }
+
+    for (auto& lesson : getLessons())
+        lesson->remove();
+
+    id = -1;
+
+    return true;
+}
+
 void Submodule::sqlInsert()
 {
     if (moduleId < 0)
@@ -122,6 +148,14 @@ void Submodule::sqlUpdate()
         throw ModelSavingError(
             "Unable to update Submodule",
             updateQuery.lastError());
+}
+
+std::vector<std::shared_ptr<Lesson>>& Submodule::getLessons()
+{
+    if (id >= 0)
+        lessons = Lesson::getBySubmoduleId(id);
+
+    return lessons;
 }
 
 QSqlError Submodule::createTable()

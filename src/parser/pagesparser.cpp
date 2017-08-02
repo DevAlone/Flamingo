@@ -206,7 +206,7 @@ void PagesParser::parseAnswersSection(std::map<QChar, std::shared_ptr<Answer>>& 
     QChar answerLetter = 'a';
     QString answerBuffer = "";
 
-    for (; !stream.atEnd(); lineNumber++) {
+    for (; !stream.atEnd() || isFirstLine; lineNumber++) {
         if (isFirstLine)
             isFirstLine = false;
         else

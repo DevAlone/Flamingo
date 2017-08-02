@@ -8,10 +8,13 @@ class TextBrowserWidget : public QTextBrowser {
 public:
     explicit TextBrowserWidget(QWidget* parent = nullptr);
 
-    virtual QSize sizeHint() const;
+    virtual QSize sizeHint();
 signals:
 
 public slots:
+
+private:
+    void updateSize();
 };
 
 #endif // TEXTBROWSERWIDGET_H

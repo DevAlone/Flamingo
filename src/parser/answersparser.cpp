@@ -73,7 +73,7 @@ void AnswersParser::insertKeyValue(std::map<QString, QString>& keyValueMap,
     if (it != keyValueMap.end()) {
         // TODO: remove this
         logEntry<AnswersParserLogEntry>(
-            LOG_ENTRY_TYPE::ERROR,
+            LOG_ENTRY_TYPE::WARNING,
             QObject::tr("Adding more than one key"),
             path,
             baseLineNumber + lineNumber,

@@ -65,5 +65,13 @@ void CoursesPageWidget::courseOpenButtonPressed()
     if (!course)
         return;
 
+    if (course->getModules().empty()) {
+        QMessageBox::warning(
+            this,
+            QObject::tr("You can't do that"),
+            QObject::tr("This course doesn't contain any modules"));
+        return;
+    }
+
     emit goToModulesPage(course);
 }

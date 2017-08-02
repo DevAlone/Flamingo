@@ -134,6 +134,32 @@ bool Course::update()
     return isChanged;
 }
 
+bool Course::remove()
+{
+    if (id < 0)
+        return false;
+
+    QSqlQuery deleteQuery;
+    deleteQuery.prepare(R"(
+                        DELETE FROM main.courses
+                        WHERE id = :id;
+                        )");
+    deleteQuery.bindValue(":id", id);
+
+    if (!deleteQuery.exec()) {
+        throw ModelSqlError(
+            QObject::tr("Unable to remove Course from database"),
+            deleteQuery.lastError());
+    }
+
+    for (auto& module : getModules())
+        module->remove();
+
+    id = -1;
+
+    return true;
+}
+
 void Course::sqlInsert()
 {
     if (userId < 0)

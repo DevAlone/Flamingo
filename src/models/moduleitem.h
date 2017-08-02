@@ -24,7 +24,7 @@ public:
 
     MODULE_ITEM_TYPE getType() const;
 
-    virtual void save() = 0;
+    // TODO:    virtual void save() = 0;
 
     int getModuleId() const;
     void setModuleId(int value);

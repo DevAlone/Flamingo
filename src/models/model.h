@@ -23,6 +23,10 @@ public:
     // and update corresponding fields on model
     // return true if model was changed
     virtual bool update() = 0;
+    // function return true if object was removed
+    // function can return false when object
+    // wasn't store in database
+    virtual bool remove() = 0;
 
     virtual operator QString() const = 0;
 

@@ -30,7 +30,7 @@ void tick()
 
         qApp->setStyleSheet(style);
     }
-    QTimer::singleShot(2000, tick);
+    QTimer::singleShot(100, tick);
 }
 
 int main(int argc, char* argv[])
@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
         QString style = styleFile.readAll();
         a.setStyleSheet(style);
     }
-    QTimer::singleShot(100, tick);
+    //    QTimer::singleShot(100, tick);
 
     QSettings::setDefaultFormat(QSettings::IniFormat);
     QApplication::setOrganizationName("DevAlone");

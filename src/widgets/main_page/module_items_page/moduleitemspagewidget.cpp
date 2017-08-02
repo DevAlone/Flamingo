@@ -37,5 +37,13 @@ void ModuleItemsPageWidget::lessonStartButtonPressed()
     if (!lesson)
         return;
 
+    if (lesson->getPages().empty()) {
+        QMessageBox::warning(
+            this,
+            QObject::tr("You can't do that"),
+            QObject::tr("This lesson doesn't contain any pages"));
+        return;
+    }
+
     emit goToLessonPage(lesson);
 }

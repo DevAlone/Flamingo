@@ -32,5 +32,13 @@ void ModulesPageWidget::moduleOpenButtonPressed()
     if (!module)
         return;
 
+    if (module->getModuleItems().empty()) {
+        QMessageBox::warning(
+            this,
+            QObject::tr("You can't do that"),
+            QObject::tr("This module doesn't contain any lessons or submodules"));
+        return;
+    }
+
     emit goToModuleItemsPage(module);
 }

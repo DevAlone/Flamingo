@@ -143,6 +143,32 @@ bool User::update()
     return isChanged;
 }
 
+bool User::remove()
+{
+    if (id < 0)
+        return false;
+
+    QSqlQuery deleteQuery;
+    deleteQuery.prepare(R"(
+                        DELETE FROM main.users
+                        WHERE id = :id;
+                        )");
+    deleteQuery.bindValue(":id", id);
+
+    if (!deleteQuery.exec()) {
+        throw ModelSqlError(
+            QObject::tr("Unable to remove User from database"),
+            deleteQuery.lastError());
+    }
+
+    for (auto& course : getCourses())
+        course->remove();
+
+    id = -1;
+
+    return true;
+}
+
 void User::sqlInsert()
 {
     // user doesn't exist

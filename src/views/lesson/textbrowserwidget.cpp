@@ -6,17 +6,28 @@ TextBrowserWidget::TextBrowserWidget(QWidget* parent)
     : QTextBrowser(parent)
 {
     setSizePolicy(
-        QSizePolicy::Preferred,
-        QSizePolicy::Minimum);
+        QSizePolicy::Minimum,
+        QSizePolicy::MinimumExpanding);
+
+    connect(
+        this, &TextBrowserWidget::textChanged,
+        this, &TextBrowserWidget::updateSize);
 
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
-QSize TextBrowserWidget::sizeHint() const
+QSize TextBrowserWidget::sizeHint()
 {
-    if (document()) {
-        auto docSize = document()->size();
-        return QSize(docSize.width(), docSize.height() + 10);
-    } else
-        return QTextBrowser::sizeHint();
+    updateSize();
+    return QTextBrowser::sizeHint();
+}
+
+void TextBrowserWidget::updateSize()
+{
+    document()->setTextWidth(viewport()->size().width());
+    auto docSize = document()->size().toSize();
+
+    setMinimumWidth(docSize.width());
+    setMinimumHeight(docSize.height() + 10);
 }

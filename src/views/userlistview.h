@@ -3,7 +3,7 @@
 
 #include "modellistview.h"
 
-#include <QWidget>
+#include <QtWidgets>
 
 #include <models/user.h>
 
@@ -17,6 +17,8 @@ public:
 signals:
 
 public slots:
+    virtual void tryToDeleteSelectedItem();
+    virtual void showContextMenu(const QPoint& position);
 };
 
 #endif // USERLISTVIEW_H

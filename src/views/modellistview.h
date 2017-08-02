@@ -23,12 +23,15 @@ signals:
     void selectionChanged();
 public slots:
     void updateItems();
+    virtual void tryToDeleteSelectedItem();
+    virtual void showContextMenu(const QPoint& position);
 
 protected:
     std::shared_ptr<ModelListDispatcher> dispatcher;
 
-private:
     std::unique_ptr<ModelListViewUi> ui;
+
+private:
     std::vector<std::shared_ptr<Model>> items;
 };
 
@@ -50,7 +53,6 @@ public:
             parent, &ModelListView::selectionChanged);
     }
 
-private:
     QVBoxLayout* layout;
     QListWidget* listWidget;
 };

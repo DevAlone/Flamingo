@@ -27,6 +27,7 @@ public:
 
     virtual void save();
     virtual bool update();
+    virtual bool remove();
     virtual void sqlInsert();
     virtual void sqlUpdate();
 
