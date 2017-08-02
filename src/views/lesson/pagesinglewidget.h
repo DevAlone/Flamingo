@@ -14,14 +14,20 @@ class PageSingleWidgetUi;
 
 class PageSingleWidget : public QScrollArea {
     Q_OBJECT
+
+    friend class PageSingleWidgetUi;
+
 public:
     explicit PageSingleWidget(QWidget* parent = nullptr);
 
 signals:
-
+    void goToNextPage();
 public slots:
     void setPage(std::shared_ptr<Page> page);
     void updateItems();
+
+private slots:
+    void checkAnswerButtonPressed();
 
 private:
     std::unique_ptr<PageSingleWidgetUi> ui;
@@ -32,17 +38,49 @@ class PageSingleWidgetUi {
     friend class PageSingleWidget;
 
 public:
-    PageSingleWidgetUi(QScrollArea* parent)
+    PageSingleWidgetUi(
+        PageSingleWidget* parent)
+        : PageSingleWidgetUi(
+              parent,
+              std::shared_ptr<Page>(),
+              std::map<QChar, std::shared_ptr<Answer>>())
+    {
+    }
+
+    PageSingleWidgetUi(
+        PageSingleWidget* parent,
+        std::shared_ptr<Page> page,
+        std::map<QChar, std::shared_ptr<Answer>> answerList)
     {
         baseWidget = new QWidget;
         mainLayout = new QVBoxLayout;
-        pageView = new PageSingleView;
-        answers = new AnswersWidget;
 
-        mainLayout->addWidget(pageView);
-        mainLayout->addWidget(answers);
+        if (page) {
+            pageView = PageSingleView::makePageView(page);
+
+            mainLayout->addWidget(pageView);
+        }
+
+        if (!answerList.empty()) {
+            answers = new AnswersWidget;
+
+            answers->setAnswers(answerList);
+
+            mainLayout->addWidget(answers);
+        }
 
         mainLayout->addStretch();
+
+        if (!answerList.empty()) {
+            nextButton = new QPushButton;
+            nextButton->setObjectName("checkAnswerButton");
+            nextButton->setText(
+                QObject::tr("Check answer"));
+            mainLayout->addWidget(nextButton);
+            QObject::connect(
+                nextButton, &QPushButton::clicked,
+                parent, &PageSingleWidget::checkAnswerButtonPressed);
+        }
 
         baseWidget->setLayout(mainLayout);
 
@@ -57,6 +95,8 @@ private:
 
     PageSingleView* pageView;
     AnswersWidget* answers;
+
+    QPushButton* nextButton;
 };
 
 #endif // PAGESINGLEWIDGET_H

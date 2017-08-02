@@ -8,6 +8,7 @@
 #include <models/lesson/lesson.h>
 
 class LessonPaginationWidgetUi;
+class PageButton;
 
 // TODO: add handling of many count of pages
 class LessonPaginationWidget : public QWidget {
@@ -15,8 +16,9 @@ class LessonPaginationWidget : public QWidget {
 public:
     explicit LessonPaginationWidget(QWidget* parent = nullptr);
 
+    void markPageAsActive(unsigned pageNumber);
 signals:
-    void goToPage(std::shared_ptr<Page> page);
+    void goToPage(unsigned pageNumber);
 
 public slots:
     void setLesson(std::shared_ptr<Lesson> lesson);
@@ -29,6 +31,8 @@ private:
     std::unique_ptr<LessonPaginationWidgetUi> ui;
     std::shared_ptr<Lesson> lesson;
     std::map<unsigned, std::shared_ptr<Page>> pages;
+    std::map<unsigned, PageButton*> pageButtons;
+    PageButton* activePageButton;
 };
 
 class LessonPaginationWidgetUi {
@@ -55,6 +59,7 @@ private:
 
 class PageButton : public QPushButton {
     Q_OBJECT
+    Q_PROPERTY(bool isActive READ isActive WRITE setActiveState)
 public:
     PageButton(unsigned pageNumber, const QString& text, QWidget* parent)
         : QPushButton(text, parent)
@@ -66,9 +71,12 @@ public:
     {
         return pageNumber;
     }
+    bool isActive() const { return _isActive; }
+    void setActiveState(bool value) { _isActive = value; }
 
 private:
     unsigned pageNumber;
+    bool _isActive = false;
 };
 
 #endif // LESSONPAGINATIONWIDGET_H

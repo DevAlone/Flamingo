@@ -8,6 +8,19 @@ LessonPaginationWidget::LessonPaginationWidget(QWidget* parent)
     ui = std::make_unique<LessonPaginationWidgetUi>(this);
 }
 
+void LessonPaginationWidget::markPageAsActive(unsigned pageNumber)
+{
+    auto it = pageButtons.find(pageNumber);
+    if (it == pageButtons.end())
+        return;
+
+    if (activePageButton)
+        activePageButton->setActiveState(false);
+
+    it->second->setActiveState(true);
+    activePageButton = it->second;
+}
+
 void LessonPaginationWidget::setLesson(std::shared_ptr<Lesson> lesson)
 {
     if (!lesson)
@@ -19,7 +32,10 @@ void LessonPaginationWidget::setLesson(std::shared_ptr<Lesson> lesson)
 
 void LessonPaginationWidget::updateItems()
 {
+    activePageButton = nullptr;
     pages.clear();
+    pageButtons.clear();
+
     clearLayout(ui->pageWidgetsLayout);
 
     for (auto& pagePair : lesson->getPages()) {
@@ -29,6 +45,12 @@ void LessonPaginationWidget::updateItems()
             pagePair.first,
             QString::number(pagePair.first),
             this);
+
+        std::pair<unsigned, PageButton*> buttonPair;
+        buttonPair.first = pagePair.first;
+        buttonPair.second = pageButton;
+
+        pageButtons.insert(buttonPair);
 
         connect(
             pageButton, &PageButton::clicked,
@@ -52,5 +74,5 @@ void LessonPaginationWidget::pageButtonClicked()
     if (it == pages.end())
         return;
 
-    emit goToPage(it->second);
+    emit goToPage(it->first);
 }

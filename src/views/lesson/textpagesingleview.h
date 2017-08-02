@@ -20,6 +20,7 @@ public:
 signals:
 
 public slots:
+    void setPage(std::shared_ptr<Page> page);
     void setTextPage(std::shared_ptr<TextPage> textPage);
     void setText(const QString& text);
 

@@ -12,14 +12,14 @@ class HtmlPageSingleView : public TextPageSingleView {
 public:
     explicit HtmlPageSingleView(QWidget* parent = nullptr);
 
-    void setTextPage(std::shared_ptr<TextPage> textPage) = delete;
-    void setHtmlPage(std::shared_ptr<HtmlPage> htmlPage);
-
     void setHtml(const QString& html);
 
 signals:
 
 public slots:
+    void setPage(std::shared_ptr<Page> page);
+
+    void setHtmlPage(std::shared_ptr<HtmlPage> htmlPage);
 
 private:
     std::shared_ptr<HtmlPage> htmlPage;

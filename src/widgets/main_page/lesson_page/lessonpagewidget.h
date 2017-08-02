@@ -16,17 +16,27 @@ class LessonPageWidgetUi;
 
 class LessonPageWidget : public QWidget {
     Q_OBJECT
+
+    friend class LessonPageWidgetUi;
+
 public:
     explicit LessonPageWidget(QWidget* parent = nullptr);
 
 signals:
-
+    void lessonFinished();
 public slots:
     void activate(std::shared_ptr<Lesson> lesson);
+    void goToNextPage();
+    void goToPage(unsigned pageNumber);
+
+private slots:
+    void nextPageButtonClicked();
 
 private:
     std::unique_ptr<LessonPageWidgetUi> ui;
     std::shared_ptr<Lesson> lesson;
+    std::map<unsigned, std::shared_ptr<Page>> pages;
+    std::pair<unsigned, std::shared_ptr<Page>> currentPage;
 };
 
 class LessonPageWidgetUi {
@@ -37,23 +47,47 @@ public:
     {
         mainLayout = new QVBoxLayout;
         pageWidget = new PageSingleWidget(parent);
+
+        bottomLayout = new QHBoxLayout;
+
         pagination = new LessonPaginationWidget(parent);
+        nextPageButton = new QPushButton(
+            QObject::tr("Next page >"));
+        nextPageButton->setObjectName("nextPageButton");
+
+        bottomLayout->addWidget(pagination);
+        bottomLayout->addWidget(nextPageButton);
 
         mainLayout->addWidget(pageWidget);
-        mainLayout->addWidget(pagination);
+        mainLayout->addLayout(bottomLayout);
 
         parent->setLayout(mainLayout);
 
+        bottomLayout->setContentsMargins(0, 0, 0, 0);
+
         QObject::connect(
             pagination, &LessonPaginationWidget::goToPage,
-            pageWidget, &PageSingleWidget::setPage);
+            parent, &LessonPageWidget::goToPage);
+
+        QObject::connect(
+            pageWidget, &PageSingleWidget::goToNextPage,
+            parent, &LessonPageWidget::goToNextPage);
+
+        QObject::connect(
+            nextPageButton, &QPushButton::clicked,
+            parent, &LessonPageWidget::nextPageButtonClicked);
     }
 
 private:
     QVBoxLayout* mainLayout;
 
     PageSingleWidget* pageWidget;
+
+    QHBoxLayout* bottomLayout;
+
     LessonPaginationWidget* pagination;
+
+    QPushButton* nextPageButton;
 };
 
 #endif // LESSONPAGEWIDGET_H

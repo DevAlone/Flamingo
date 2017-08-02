@@ -14,8 +14,10 @@ class PageSingleView : public QWidget {
 public:
     explicit PageSingleView(QWidget* parent = nullptr);
 
+    static PageSingleView* makePageView(std::shared_ptr<Page> page);
+
     virtual void setModel(std::shared_ptr<Model>& model) = delete;
-    void setPage(std::shared_ptr<Page> pagePtr);
+    virtual void setPage(std::shared_ptr<Page> pagePtr);
 
     std::shared_ptr<Page> getPage() const;
 

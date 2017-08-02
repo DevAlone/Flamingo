@@ -39,23 +39,49 @@ BreadcrumbWidget QPushButton {
     
 }
 
-PageSingleView QFrame {
-	/*background: rgb(0, 255, 255);*/
-/*	padding: 10px;*/
-/*	border-radius: 10px;*/
-	border: 1px solid #aaa;
+PageSingleView QFrame{
+	border: 1px solid rgb(82, 132, 211);
 }
 
-/*AnswerSingleView QTextBrowser {
-	padding: 2px;
-}*/
-AnswerTextBrowserWidget:hover {
-/*	background: rgb(200, 200, 255);*/
-	border: 2px dashed rgb(0, 200, 0);
+AnswerSingleView {
+/*	border-radius: 0;*/
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
 }
-AnswerTextBrowserWidget[isChecked="false"] {
-	border: 2px solid rgb(100, 100, 100);
+AnswerSingleView {
+	border: 1px solid rgb(82, 132, 211);
 }
-AnswerTextBrowserWidget[isChecked="true"] {
-	border: 2px solid rgb(0, 200, 0);
+AnswerSingleView[isChecked="true"] {
+	border: 1px solid rgb(105, 210, 81);
+}
+AnswerHeaderWidget QCheckBox {
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	padding: 10px;
+	background: rgb(82, 132, 211);
+	color: rgb(255, 255, 255);
+}
+
+AnswerSingleView[isChecked="true"] AnswerHeaderWidget QCheckBox {
+	background: rgb(105, 210, 81);
+	color: rgb(255, 0, 0);
+}
+
+AnswerHeaderWidget QCheckBox::indicator {
+}
+
+QPushButton#checkAnswerButton {
+/*	background: rgb(94, 196, 70);*/
+	padding: 10px 0;
+	font-size: 16px;
+}
+QPushButton#nextPageButton {
+	padding: 10px 15px;
+	font-size: 15px;
+
+}
+PageButton {
+}
+PageButton[isActive="true"] {
+	background: rgb(180, 180, 180);
 }
