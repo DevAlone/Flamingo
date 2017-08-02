@@ -13,11 +13,13 @@ void HtmlAnswerSingleView::setHtmlAnswer(QChar letter, std::shared_ptr<HtmlAnswe
     this->letter = letter;
 
     this->htmlAnswer = htmlAnswer;
+    setAnswer(letter, htmlAnswer);
 
     setHtml(QString(letter) + ": " + htmlAnswer->getContent());
 }
 
 void HtmlAnswerSingleView::setHtml(const QString& html)
 {
-    ui->content->setHtml(html);
+    answerWidget->content->setHtml(html);
+    setAnswerWidget(answerWidget);
 }

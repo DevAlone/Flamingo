@@ -25,25 +25,28 @@ public slots:
     void setText(const QString& text);
 
 protected:
-    std::unique_ptr<TextAnswerSingleViewUi> ui;
-    QChar letter;
+    TextAnswerSingleViewUi* answerWidget;
 
 private:
     std::shared_ptr<TextAnswer> textAnswer;
 };
 
-class TextAnswerSingleViewUi {
-    friend class TextAnswerSingleView;
+class TextAnswerSingleViewUi : public QWidget {
+    Q_OBJECT
 
 public:
-    TextAnswerSingleViewUi(TextAnswerSingleView* parent)
+    TextAnswerSingleViewUi(QWidget* parent)
+        : QWidget(parent)
     {
         mainLayout = new QVBoxLayout;
-        content = new AnswerTextBrowserWidget(parent);
+        content = new AnswerTextBrowserWidget(this);
 
         mainLayout->addWidget(content);
 
-        parent->setLayout(mainLayout);
+        mainLayout->setContentsMargins(0, 0, 0, 0);
+        mainLayout->setSpacing(0);
+
+        setLayout(mainLayout);
     }
 
     QVBoxLayout* mainLayout;

@@ -11,13 +11,14 @@ public:
     explicit ModelSingleView(QWidget* parent = nullptr);
 
     std::shared_ptr<Model> getModel() const;
-    void setModel(const std::shared_ptr<Model>& value);
+    void setModel(std::shared_ptr<Model> value);
 
     static QString returnValueOrPlaceholder(const QString& value, const QString& placeholder = "Unknown");
 
 signals:
 
 public slots:
+    virtual void updateData();
 
 protected:
     std::shared_ptr<Model> model;

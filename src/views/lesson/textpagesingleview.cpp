@@ -12,6 +12,7 @@ void TextPageSingleView::setTextPage(std::shared_ptr<TextPage> textPage)
         return;
 
     this->textPage = textPage;
+    setPage(textPage);
 
     setText(textPage->getContent());
 }

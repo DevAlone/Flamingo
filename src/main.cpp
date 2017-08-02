@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
         QString style = styleFile.readAll();
         a.setStyleSheet(style);
     }
-    //    QTimer::singleShot(100, tick);
+    QTimer::singleShot(3000, tick);
 
     QSettings::setDefaultFormat(QSettings::IniFormat);
     QApplication::setOrganizationName("DevAlone");

@@ -11,6 +11,7 @@ void HtmlPageSingleView::setHtmlPage(std::shared_ptr<HtmlPage> htmlPage)
         return;
 
     this->htmlPage = htmlPage;
+    setPage(htmlPage);
 
     setHtml(htmlPage->getContent());
 }

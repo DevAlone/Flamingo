@@ -16,7 +16,7 @@ class CourseSingleView : public ModelSingleView {
 public:
     explicit CourseSingleView(QWidget* parent = nullptr);
 
-    virtual void setModel(std::shared_ptr<Model>& model);
+    virtual void setModel(std::shared_ptr<Model>& model) = delete;
     void setCourse(std::shared_ptr<Course> coursePtr);
 
     std::shared_ptr<Course> getCourse() const;

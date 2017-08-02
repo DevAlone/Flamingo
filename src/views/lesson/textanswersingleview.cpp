@@ -3,7 +3,7 @@
 TextAnswerSingleView::TextAnswerSingleView(QWidget* parent)
     : AnswerSingleView(parent)
 {
-    ui = std::make_unique<TextAnswerSingleViewUi>(this);
+    answerWidget = new TextAnswerSingleViewUi(this);
 }
 
 void TextAnswerSingleView::setTextAnswer(QChar letter, std::shared_ptr<TextAnswer> textAnswer)
@@ -14,11 +14,13 @@ void TextAnswerSingleView::setTextAnswer(QChar letter, std::shared_ptr<TextAnswe
     this->letter = letter;
 
     this->textAnswer = textAnswer;
+    setAnswer(letter, textAnswer);
 
     setText(QString(letter) + ": " + textAnswer->getContent());
 }
 
 void TextAnswerSingleView::setText(const QString& text)
 {
-    ui->content->setPlainText(text);
+    answerWidget->content->setPlainText(text);
+    setAnswerWidget(answerWidget);
 }

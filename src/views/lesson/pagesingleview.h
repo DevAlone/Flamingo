@@ -7,14 +7,24 @@
 
 #include <models/lesson/page.h>
 
+#include <views/modelsingleview.h>
+
 class PageSingleView : public QWidget {
     Q_OBJECT
 public:
     explicit PageSingleView(QWidget* parent = nullptr);
 
+    virtual void setModel(std::shared_ptr<Model>& model) = delete;
+    void setPage(std::shared_ptr<Page> pagePtr);
+
+    std::shared_ptr<Page> getPage() const;
+
 signals:
 
 public slots:
+
+protected:
+    std::shared_ptr<Page> page;
 
 private:
 };
