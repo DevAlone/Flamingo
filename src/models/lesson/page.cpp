@@ -2,6 +2,7 @@
 #include "htmlpage.h"
 #include "textpage.h"
 
+#include <exceptions/modelerror.h>
 #include <exceptions/modelserializationerror.h>
 #include <exceptions/pagecreatingerror.h>
 
@@ -118,10 +119,13 @@ QJsonObject Page::toJsonObject() const
 
     obj["answers"] = jsonAnswers;
 
-    jsonInfoSection.push_back(QJsonObject{
-        { "right_answers", rightAnswers.toString() } });
+    if (rightAnswers.getAnswers().size() > 0)
+        jsonInfoSection.push_back(QJsonObject{
+            { "right answers", rightAnswers.toString() } });
 
     obj["info_section"] = jsonInfoSection;
+
+    obj["completeness"] = QJsonValue(QString::number(getCompleteness()));
 
     return obj;
 }
@@ -206,7 +210,7 @@ std::shared_ptr<Page> Page::fromJsonObject(const QJsonObject& obj)
             answerPair.second = Answer::fromJsonObject(jsonAnswerPair["answer"].toObject());
         } else
             throw ModelSerializationError(
-                QObject::tr("answer doesn't exist or isn't an json object"));
+                QObject::tr("answer doesn't exist or isn't a json object"));
 
         if (answers.find(answerPair.first) != answers.end())
             throw ModelSerializationError(
@@ -215,12 +219,40 @@ std::shared_ptr<Page> Page::fromJsonObject(const QJsonObject& obj)
         answers.insert(answerPair);
     }
 
-    // TODO: передать infoSectionVec в функцию
     std::shared_ptr<Page> page = createPage(
         pageNumber,
         infoSectionMap,
         infoSectionVec,
         answers);
 
+    if (obj["completeness"].isString()) {
+        bool isOk;
+        int value = obj["completeness"].toString().toInt(&isOk);
+        if (!isOk || value < 0)
+            throw QObject::tr("completeness isn't a positive number");
+        page->setCompleteness(value);
+    } else
+        throw ModelSerializationError(
+            QObject::tr("completeness doesn't exist or isn't a json string"));
+
     return page;
+}
+
+const RightAnswers& Page::getRightAnswers() const
+{
+    return rightAnswers;
+}
+
+unsigned char Page::getCompleteness() const
+{
+    return completeness;
+}
+
+void Page::setCompleteness(unsigned char value)
+{
+    if (value > 100)
+        throw ModelError(
+            QObject::tr("completeness can't be bigger than 100"));
+
+    completeness = value;
 }

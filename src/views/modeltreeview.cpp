@@ -55,5 +55,7 @@ void ModelTreeView::updateItems()
             processModelChildren(treeWidgetRootItem, &child);
     }
 
-    // TODO :ui->treeWidget->setCurrentItem();
+    if (ui->treeWidget->topLevelItemCount() > 0) {
+        ui->treeWidget->setCurrentItem(ui->treeWidget->topLevelItem(0));
+    }
 }

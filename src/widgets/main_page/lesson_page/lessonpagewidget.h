@@ -10,7 +10,7 @@
 #include <models/lesson/lesson.h>
 
 #include <views/lesson/pagesingleview.h>
-#include <views/lesson/pagesinglewidget.h>
+#include <widgets/main_page/lesson_page/pagesinglewidget.h>
 
 class LessonPageWidgetUi;
 
@@ -24,10 +24,15 @@ public:
 
 signals:
     void lessonFinished();
+    void userAnswered(bool isAnswerRight);
+
 public slots:
     void activate(std::shared_ptr<Lesson> lesson);
+
     void goToNextPage();
     void goToPage(unsigned pageNumber);
+
+    void checkAnswer(std::set<QChar> answers);
 
 private slots:
     void nextPageButtonClicked();
@@ -76,6 +81,14 @@ public:
         QObject::connect(
             nextPageButton, &QPushButton::clicked,
             parent, &LessonPageWidget::nextPageButtonClicked);
+
+        QObject::connect(
+            pageWidget, &PageSingleWidget::checkAnswers,
+            parent, &LessonPageWidget::checkAnswer);
+
+        QObject::connect(
+            parent, &LessonPageWidget::userAnswered,
+            pageWidget, &PageSingleWidget::handleUserAnswer);
     }
 
 private:

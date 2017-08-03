@@ -1,16 +1,29 @@
 #include "answerswidget.h"
-#include "answersingleview.h"
-#include "htmlanswersingleview.h"
-#include "textanswersingleview.h"
 
 #include <exceptions/exception.h>
 
 #include "helper.h"
 
+#include <models/lesson/htmlanswer.h>
+#include <models/lesson/textanswer.h>
+
+#include <views/lesson/htmlanswersingleview.h>
+#include <views/lesson/textanswersingleview.h>
+
 AnswersWidget::AnswersWidget(QWidget* parent)
     : QWidget(parent)
 {
     ui = std::make_unique<AnswersWidgetUi>(this);
+}
+
+std::set<QChar> AnswersWidget::getSelectedAnswers()
+{
+    std::set<QChar> result;
+    for (AnswerSingleView* answerView : answerViews) {
+        if (answerView->isChecked())
+            result.insert(answerView->getLetter());
+    }
+    return result;
 }
 
 void AnswersWidget::setAnswers(
@@ -29,6 +42,7 @@ void AnswersWidget::updateItems()
         const QChar& letter = keyValue.first;
         std::shared_ptr<Answer>& answer = keyValue.second;
 
+        // TODO: change to fabric
         switch (answer->getType()) {
         case ANSWER_TYPE::TEXT: {
             auto textAnswer

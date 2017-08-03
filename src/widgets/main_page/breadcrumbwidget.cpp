@@ -13,6 +13,8 @@ BreadcrumbWidget::BreadcrumbWidget(QWidget* parent)
 
 void BreadcrumbWidget::addItem(BreadcrumbWidgetItem* item)
 {
+    getLastItem()->setCurrentState(false);
+
     item->setParent(this);
 
     if (item->getPathItem().contains('/'))
@@ -26,6 +28,8 @@ void BreadcrumbWidget::addItem(BreadcrumbWidgetItem* item)
 
     updateFullPath();
     emit fullPathChanged(fullPath);
+
+    getLastItem()->setCurrentState(true);
 }
 
 const QString& BreadcrumbWidget::getFullPath()
@@ -33,7 +37,7 @@ const QString& BreadcrumbWidget::getFullPath()
     return fullPath;
 }
 
-const BreadcrumbWidgetItem* BreadcrumbWidget::getLastItem() const
+BreadcrumbWidgetItem* BreadcrumbWidget::getLastItem() const
 {
     if (items.empty())
         return rootItem;
@@ -92,6 +96,8 @@ void BreadcrumbWidget::updateFullPath()
 
 void BreadcrumbWidget::goToItem(BreadcrumbWidgetItem* item)
 {
+    getLastItem()->setCurrentState(false);
+
     QString prevPath = fullPath;
 
     for (auto revIt = items.rbegin(); revIt != items.rend(); revIt++) {
@@ -103,4 +109,6 @@ void BreadcrumbWidget::goToItem(BreadcrumbWidgetItem* item)
     updateFullPath();
     if (prevPath != fullPath)
         emit fullPathChanged(fullPath);
+
+    getLastItem()->setCurrentState(true);
 }

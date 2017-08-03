@@ -1,9 +1,9 @@
 #ifndef ANSWERSLAYOUT_H
 #define ANSWERSLAYOUT_H
 
-#include "answersingleview.h"
-
 #include <QtWidgets>
+
+#include <views/lesson/answersingleview.h>
 
 class AnswersLayout : public QVBoxLayout {
     Q_OBJECT

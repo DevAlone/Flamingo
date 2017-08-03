@@ -30,6 +30,28 @@ void LessonPaginationWidget::setLesson(std::shared_ptr<Lesson> lesson)
     updateItems();
 }
 
+void LessonPaginationWidget::addPage(std::pair<unsigned, std::shared_ptr<Page> > pagePair)
+{
+    pages.insert(pagePair);
+
+    PageButton* pageButton = new PageButton(
+        pagePair,
+        QString::number(pagePair.first),
+        this);
+
+    std::pair<unsigned, PageButton*> buttonPair;
+    buttonPair.first = pagePair.first;
+    buttonPair.second = pageButton;
+
+    pageButtons.insert(buttonPair);
+
+    connect(
+        pageButton, &PageButton::clicked,
+        this, &LessonPaginationWidget::pageButtonClicked);
+
+    ui->pageWidgetsLayout->addWidget(pageButton);
+}
+
 void LessonPaginationWidget::updateItems()
 {
     activePageButton = nullptr;
@@ -39,24 +61,7 @@ void LessonPaginationWidget::updateItems()
     clearLayout(ui->pageWidgetsLayout);
 
     for (auto& pagePair : lesson->getPages()) {
-        pages.insert(pagePair);
-
-        PageButton* pageButton = new PageButton(
-            pagePair.first,
-            QString::number(pagePair.first),
-            this);
-
-        std::pair<unsigned, PageButton*> buttonPair;
-        buttonPair.first = pagePair.first;
-        buttonPair.second = pageButton;
-
-        pageButtons.insert(buttonPair);
-
-        connect(
-            pageButton, &PageButton::clicked,
-            this, &LessonPaginationWidget::pageButtonClicked);
-
-        ui->pageWidgetsLayout->addWidget(pageButton);
+        addPage(pagePair);
     }
 }
 

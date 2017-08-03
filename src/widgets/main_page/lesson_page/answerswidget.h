@@ -9,6 +9,8 @@
 
 #include <models/lesson/answer.h>
 
+#include <set>
+
 class AnswersWidgetUi;
 
 class AnswersWidget : public QWidget {
@@ -16,6 +18,7 @@ class AnswersWidget : public QWidget {
 public:
     explicit AnswersWidget(QWidget* parent = nullptr);
 
+    std::set<QChar> getSelectedAnswers();
 signals:
 
 public slots:
@@ -35,6 +38,8 @@ public:
     AnswersWidgetUi(AnswersWidget* parent)
     {
         mainLayout = new AnswersLayout;
+
+        mainLayout->setContentsMargins(0, 0, 0, 0);
 
         parent->setLayout(mainLayout);
     }

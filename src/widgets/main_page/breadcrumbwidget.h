@@ -17,7 +17,7 @@ public:
     void addItem(BreadcrumbWidgetItem* item);
 
     const QString& getFullPath();
-    const BreadcrumbWidgetItem* getLastItem() const;
+    BreadcrumbWidgetItem* getLastItem() const;
 
     bool cdUp();
 
@@ -47,6 +47,8 @@ public:
     BreadcrumbWidgetUi(BreadcrumbWidget* parent)
     {
         layout = new QHBoxLayout(parent);
+
+        layout->setContentsMargins(0, 0, 0, 0);
 
         parent->setLayout(layout);
     }

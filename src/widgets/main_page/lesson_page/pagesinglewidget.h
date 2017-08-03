@@ -2,13 +2,15 @@
 #define PAGESINGLEWIDGET_H
 
 #include "answerswidget.h"
-#include "pagesingleview.h"
+#include "checkanswerlabel.h"
 
 #include <models/lesson/page.h>
 
 #include <QtWidgets>
 
 #include <memory>
+
+#include <views/lesson/pagesingleview.h>
 
 class PageSingleWidgetUi;
 
@@ -22,9 +24,11 @@ public:
 
 signals:
     void goToNextPage();
+    void checkAnswers(std::set<QChar> answers);
 public slots:
     void setPage(std::shared_ptr<Page> page);
     void updateItems();
+    void handleUserAnswer(bool isAnswerRight);
 
 private slots:
     void checkAnswerButtonPressed();
@@ -54,6 +58,7 @@ public:
     {
         baseWidget = new QWidget;
         mainLayout = new QVBoxLayout;
+        checkAnswerLabel = new CheckAnswerLabel(0, "", parent);
 
         if (page) {
             pageView = PageSingleView::makePageView(page);
@@ -72,15 +77,18 @@ public:
         mainLayout->addStretch();
 
         if (!answerList.empty()) {
-            nextButton = new QPushButton;
-            nextButton->setObjectName("checkAnswerButton");
-            nextButton->setText(
+            checkButton = new QPushButton;
+            checkButton->setObjectName("checkAnswerButton");
+            checkButton->setText(
                 QObject::tr("Check answer"));
-            mainLayout->addWidget(nextButton);
+            mainLayout->addWidget(checkButton);
             QObject::connect(
-                nextButton, &QPushButton::clicked,
+                checkButton, &QPushButton::clicked,
                 parent, &PageSingleWidget::checkAnswerButtonPressed);
         }
+
+        checkAnswerLabel->hide();
+        mainLayout->addWidget(checkAnswerLabel);
 
         baseWidget->setLayout(mainLayout);
 
@@ -96,7 +104,9 @@ private:
     PageSingleView* pageView;
     AnswersWidget* answers;
 
-    QPushButton* nextButton;
+    QPushButton* checkButton;
+
+    CheckAnswerLabel* checkAnswerLabel;
 };
 
 #endif // PAGESINGLEWIDGET_H

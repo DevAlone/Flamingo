@@ -22,3 +22,13 @@ QString BreadcrumbWidgetItem::getPathItem() const
 {
     return pathItem;
 }
+
+bool BreadcrumbWidgetItem::isCurrent() const
+{
+    return _isCurrent;
+}
+
+void BreadcrumbWidgetItem::setCurrentState(bool isCurrent)
+{
+    _isCurrent = isCurrent;
+}

@@ -51,12 +51,19 @@ public:
     virtual QJsonObject toJsonObject() const;
     static std::shared_ptr<Page> fromJsonObject(const QJsonObject& obj);
 
+    const RightAnswers& getRightAnswers() const;
+
+    unsigned char getCompleteness() const;
+    void setCompleteness(unsigned char value);
+
 protected:
     unsigned number = 0;
     PAGE_TYPE type;
     std::map<QChar, std::shared_ptr<Answer>> answers;
     //    QString rightAnswers;
     RightAnswers rightAnswers;
+    // value from 0 to 100
+    unsigned char completeness = 0;
 };
 
 #endif // PAGE_H

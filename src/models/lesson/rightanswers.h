@@ -8,12 +8,13 @@
 class RightAnswers {
 
 public:
-    static RightAnswers fromString(const QString& expression);
+    static RightAnswers fromString(const QString& _expression);
 
     const std::set<QChar>& getAnswers() const;
-    bool isAnswersRight(std::set<QChar> answers) const;
+    bool isAnswersRight(std::set<QChar> userAnswers) const;
 
     QString toString() const;
+    QString toHumanString() const;
 
 private:
     enum class EXPRESSION_TYPE {

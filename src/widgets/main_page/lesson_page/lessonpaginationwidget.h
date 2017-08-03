@@ -22,6 +22,8 @@ signals:
 
 public slots:
     void setLesson(std::shared_ptr<Lesson> lesson);
+    void addPage(std::pair<unsigned, std::shared_ptr<Page>> pagePair);
+
     void updateItems();
 
 private slots:
@@ -60,22 +62,30 @@ private:
 class PageButton : public QPushButton {
     Q_OBJECT
     Q_PROPERTY(bool isActive READ isActive WRITE setActiveState)
+    Q_PROPERTY(int completeness READ getCompleteness)
+
 public:
-    PageButton(unsigned pageNumber, const QString& text, QWidget* parent)
+    PageButton(
+        std::pair<unsigned, std::shared_ptr<Page>> page,
+        const QString& text,
+        QWidget* parent)
         : QPushButton(text, parent)
-        , pageNumber(pageNumber)
+        , page(page)
 
     {
     }
     unsigned getPageNumber() const
     {
-        return pageNumber;
+        return page.first;
     }
     bool isActive() const { return _isActive; }
     void setActiveState(bool value) { _isActive = value; }
 
+    int getCompleteness() const { return page.second->getCompleteness(); }
+
 private:
-    unsigned pageNumber;
+    //    unsigned pageNumber;
+    std::pair<unsigned, std::shared_ptr<Page>> page;
     bool _isActive = false;
 };
 

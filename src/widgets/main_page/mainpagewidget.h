@@ -111,6 +111,10 @@ public:
         QObject::connect(
             moduleItemsPage, &ModuleItemsPageWidget::goToLessonPage,
             parent, &MainPageWidget::goToLessonPage);
+
+        QObject::connect(
+            lessonPage, &LessonPageWidget::lessonFinished,
+            parent, &MainPageWidget::backButtonClicked);
     }
 
 private:

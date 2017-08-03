@@ -23,6 +23,16 @@ void LessonPageWidget::goToNextPage()
 {
     auto nextIt = pages.upper_bound(currentPage.first);
     if (nextIt == pages.end()) {
+        if (currentPage.second && currentPage.second->getAnswers().empty()) {
+            currentPage.second->setCompleteness(100);
+            lesson->save();
+        }
+
+        QMessageBox::warning(
+            this,
+            tr("Congratulation!"),
+            tr("You've just finished this lesson. "));
+
         emit lessonFinished();
         return;
     }
@@ -42,9 +52,24 @@ void LessonPageWidget::goToPage(unsigned pageNumber)
         return;
     // TODO: some checks
 
+    if (currentPage.second && currentPage.second->getAnswers().empty()) {
+        currentPage.second->setCompleteness(100);
+        lesson->save();
+    }
+
     ui->pageWidget->setPage(page);
     currentPage = pair;
     ui->pagination->markPageAsActive(pageNumber);
+}
+
+void LessonPageWidget::checkAnswer(std::set<QChar> answers)
+{
+    bool isAnswerRight = currentPage.second->getRightAnswers().isAnswersRight(answers);
+
+    currentPage.second->setCompleteness(isAnswerRight ? 100 : 50);
+    lesson->save();
+
+    emit userAnswered(isAnswerRight);
 }
 
 void LessonPageWidget::nextPageButtonClicked()
