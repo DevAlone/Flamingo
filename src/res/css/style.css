@@ -83,5 +83,39 @@ QPushButton#nextPageButton {
 PageButton {
 }
 PageButton[isActive="true"] {
-	background: rgb(180, 180, 180);
+	font-weight: bold;
+}
+PageButton[completeness="50"] {
+	background: rgb(237, 220, 128);
+}
+PageButton[completeness="100"] {
+	background: rgb(106, 216, 99);
+}
+CheckAnswerLabel {
+	border: 3px solid rgb(216, 99, 99);
+	padding: 10px;
+}
+CheckAnswerLabel[completeness="100"] {
+	border: 3px solid rgb(106, 216, 99);
+}
+
+TopPanelWidget BreadcrumbWidgetItem,
+TopPanelWidget #backButton {
+/*	padding: 15px 10px;*/
+	/*height: 25px;*/
+	padding: 10px 20px;
+}
+TopPanelWidget BreadcrumbWidgetItem[isCurrent="true"] {
+	font-weight: bold;
+}
+TopPanelWidget {
+/*	background: #fff;*/
+/*	padding: 0 0px;*/
+/*	margin: 100px;*/
+/*	border: 1px solid #aeaeae;*/
+}
+TopPanelWidget #userNameWidget {
+	/*padding: 10px;
+	background: #fff;
+	border: 1px solid #aaa;*/
 }

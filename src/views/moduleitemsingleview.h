@@ -96,6 +96,8 @@ private:
     QLabel* lessonNameValue;
     QLabel* lessonPagesCount;
     QLabel* lessonPagesCountValue;
+    QLabel* lessonCompleteness;
+    QLabel* lessonCompletenessValue;
 
     QPushButton* lessonStartButton;
 
@@ -113,10 +115,17 @@ private:
         lessonKeyValueLayout = new QFormLayout;
 
         lessonNameValue = new QLabel(parent);
-        lessonPagesCount = new QLabel(parent);
+        lessonPagesCount = new QLabel(
+            QObject::tr("pages"), parent);
         lessonPagesCountValue = new QLabel(parent);
+        lessonCompleteness = new QLabel(
+            QObject::tr("Completeness"), parent);
+        lessonCompletenessValue = new QLabel(parent);
 
-        lessonKeyValueLayout->addRow(lessonPagesCount, lessonPagesCountValue);
+        lessonKeyValueLayout->addRow(
+            lessonCompleteness, lessonCompletenessValue);
+        lessonKeyValueLayout->addRow(
+            lessonPagesCount, lessonPagesCountValue);
 
         lessonStartButton = new QPushButton(
             QObject::tr("Start training"), parent);

@@ -29,22 +29,22 @@ class MainWindowUi {
 public:
     MainWindowUi(MainWindow* parent)
     {
-        mainMenuBar = new QMenuBar(parent);
-        parent->setMenuBar(mainMenuBar);
+        //        mainMenuBar = new QMenuBar(parent);
+        //        parent->setMenuBar(mainMenuBar);
 
-        menuTestAction = new QAction("test fucking action", parent);
+        //        menuTestAction = new QAction("test fucking action", parent);
 
-        mainMenu = new QMenu("Flamingo fucking menu", parent);
-        mainMenu->addAction(menuTestAction);
-        parent->menuBar()->addMenu(mainMenu);
+        //        mainMenu = new QMenu("Flamingo fucking menu", parent);
+        //        mainMenu->addAction(menuTestAction);
+        //        parent->menuBar()->addMenu(mainMenu);
 
         mainWidget = new MainWidget(parent);
         parent->setCentralWidget(mainWidget);
     }
 
-    QMenuBar* mainMenuBar;
-    QAction* menuTestAction;
-    QMenu* mainMenu;
+    //    QMenuBar* mainMenuBar;
+    //    QAction* menuTestAction;
+    //    QMenu* mainMenu;
 
     MainWidget* mainWidget;
 };

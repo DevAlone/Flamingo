@@ -18,6 +18,7 @@ public:
     bool addPage(std::shared_ptr<Page>& page);
 
     std::map<unsigned, std::shared_ptr<Page>>& getPages();
+    std::pair<size_t, size_t> getCompleteness();
 
     virtual void save();
     virtual bool update();

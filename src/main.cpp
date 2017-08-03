@@ -14,14 +14,10 @@
 
 #include <db/databasemanager.h>
 
-using namespace parser;
-
 #include <QDebug>
 #include <QtCore>
 
-// TODO: доделать сериализацию ответов
-
-// TODO: It's just for debug. Remove it later
+// It's just for debug. Remove it later
 void tick()
 {
     QFile styleFile("style.css");
@@ -33,37 +29,30 @@ void tick()
     QTimer::singleShot(100, tick);
 }
 
+void initSettings();
+void initCss();
+
 int main(int argc, char* argv[])
 {
-    qDebug() << QStyleFactory::keys().join(" ");
-
     QApplication a(argc, argv);
-
-    QFile styleFile(":/css/style.css");
-
-    if (!styleFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Error during opening style file";
-    } else {
-        QString style = styleFile.readAll();
-        a.setStyleSheet(style);
-    }
-    QTimer::singleShot(3000, tick);
-
-    QSettings::setDefaultFormat(QSettings::IniFormat);
-    QApplication::setOrganizationName("DevAlone");
-    QApplication::setApplicationName("Flamingo");
-
-    QSettings s;
-    s.setValue("courseParser/courseDirectory", "courses");
 
     QPixmap pixmap(":/images/flamingo1.png");
     FlamingoSplashScreen splash(pixmap);
 
     splash.show();
 
+    splash.showMessage(QObject::tr("Initializing settings and styles..."));
+
+    initSettings();
+    initCss();
+    // TODO: remove it later
+    QTimer::singleShot(3000, tick);
+
     splash.showMessage(QObject::tr("Initializing database..."));
 
     DatabaseManager* dbManager = DatabaseManager::getInstance();
+
+    dbManager->init();
 
     MainWindow w;
 
@@ -72,4 +61,36 @@ int main(int argc, char* argv[])
     splash.finish(&w);
 
     return a.exec();
+}
+
+void initSettings()
+{
+    QSettings::setDefaultFormat(QSettings::IniFormat);
+    QApplication::setOrganizationName("DevAlone");
+    QApplication::setApplicationName("Flamingo");
+    QSettings s;
+    s.setValue("courseParser/courseDirectory", "courses");
+    s.setValue("interface/lesson/pageAutoSwitchTime", 500);
+}
+
+void initCss()
+{
+    QString style = "";
+    QFile resStyleFile(":/css/style.css");
+
+    if (!resStyleFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "Error during opening resource style file";
+    } else {
+        style += resStyleFile.readAll();
+    }
+
+    QFile styleFile("css/style.css");
+
+    if (!styleFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "Error during opening style file";
+    } else {
+        style += styleFile.readAll();
+    }
+
+    qApp->setStyleSheet(style);
 }

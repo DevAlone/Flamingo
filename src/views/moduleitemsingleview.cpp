@@ -56,5 +56,9 @@ void ModuleItemSingleView::updateData()
             returnValueOrPlaceholder(lesson->getName()));
         ui->lessonPagesCountValue->setText(
             QString::number(lesson->getPages().size()));
+        auto completeness = lesson->getCompleteness();
+        double percents = double(completeness.first) / completeness.second * 100;
+        ui->lessonCompletenessValue->setText(
+            QString::number(percents) + QObject::tr("%"));
     }
 }

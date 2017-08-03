@@ -8,8 +8,14 @@ ModuleItemsPageWidget::ModuleItemsPageWidget(QWidget* parent)
 
 void ModuleItemsPageWidget::activate(std::shared_ptr<Module> module)
 {
-    if (!module)
+    if (!module) {
+        if (this->module) {
+            // TODO: change to update method
+            ui->moduleItemsTree->updateItems();
+            selectedModuleItemChanged();
+        }
         return;
+    }
 
     auto dispatcherPtr = ui->moduleItemsTree->getModuleItemTreeDispatcher();
     if (dispatcherPtr) {

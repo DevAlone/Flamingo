@@ -8,8 +8,14 @@ ModulesPageWidget::ModulesPageWidget(QWidget* parent)
 
 void ModulesPageWidget::activate(std::shared_ptr<Course> course)
 {
-    if (!course)
+    if (!course) {
+        if (this->course) {
+            // TODO: change to update method
+            ui->moduleList->updateItems();
+            selectedModuleChanged();
+        }
         return;
+    }
 
     // update modules
     auto dispatcherWeakPtr = ui->moduleList->getModuleListDispatcher();

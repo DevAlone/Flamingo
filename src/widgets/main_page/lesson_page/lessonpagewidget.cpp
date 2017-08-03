@@ -70,6 +70,18 @@ void LessonPageWidget::checkAnswer(std::set<QChar> answers)
     lesson->save();
 
     emit userAnswered(isAnswerRight);
+
+    if (isAnswerRight) {
+        unsigned savedPageNumber = currentPage.first;
+        QSettings s;
+        int interval = s.value("interface/lesson/pageAutoSwitchTime", 1000).toInt();
+        if (interval < 0)
+            return;
+        QTimer::singleShot(interval, [=] {
+            if (savedPageNumber == currentPage.first)
+                goToNextPage();
+        });
+    }
 }
 
 void LessonPageWidget::nextPageButtonClicked()

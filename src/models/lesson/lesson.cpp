@@ -31,6 +31,19 @@ std::map<unsigned, std::shared_ptr<Page>>& Lesson::getPages()
     return pages;
 }
 
+std::pair<size_t, size_t> Lesson::getCompleteness()
+{
+    // TODO: optimize:
+    std::pair<size_t, size_t> result;
+    result.first = result.second = 0;
+
+    for (auto& pagePair : pages) {
+        result.first += pagePair.second->getCompleteness(); // 0-100
+        result.second += 100;
+    }
+    return result;
+}
+
 void Lesson::save()
 {
     Model::save();

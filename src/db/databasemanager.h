@@ -6,12 +6,12 @@
 class DatabaseManager {
 public:
     static DatabaseManager* getInstance();
-
-    QSqlDatabase getDb() const;
+    void init();
 
 private:
     DatabaseManager();
-    void init();
+    DatabaseManager(const DatabaseManager& obj) = delete;
+    DatabaseManager(const DatabaseManager&& obj) = delete;
     QSqlDatabase db;
 };
 
