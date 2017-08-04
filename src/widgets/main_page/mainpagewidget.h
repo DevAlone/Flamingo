@@ -17,6 +17,8 @@
 
 #include <models/lesson/lesson.h>
 
+#include <widgets/main_page/settings_page/settingspagewidget.h>
+
 class MainPageWidgetUi;
 
 class MainPageWidget : public QWidget {
@@ -40,6 +42,8 @@ public slots:
     void goToModulesPage(std::shared_ptr<Course> course = std::shared_ptr<Course>());
     void goToModuleItemsPage(std::shared_ptr<Module> module = std::shared_ptr<Module>());
     void goToLessonPage(std::shared_ptr<Lesson> lesson = std::shared_ptr<Lesson>());
+
+    void goToSettingsPage();
 
 private:
     std::unique_ptr<MainPageWidgetUi> ui;
@@ -65,6 +69,7 @@ public:
         modulesPage = new ModulesPageWidget(parent);
         moduleItemsPage = new ModuleItemsPageWidget(parent);
         lessonPage = new LessonPageWidget(parent);
+        settingsPage = new SettingsPageWidget(parent);
 
         verticalLayout->addWidget(topPanel);
 
@@ -73,6 +78,7 @@ public:
         pages->addWidget(modulesPage);
         pages->addWidget(moduleItemsPage);
         pages->addWidget(lessonPage);
+        pages->addWidget(settingsPage);
 
         backButton->setText(QObject::tr("< Back"));
 
@@ -115,6 +121,10 @@ public:
         QObject::connect(
             lessonPage, &LessonPageWidget::lessonFinished,
             parent, &MainPageWidget::backButtonClicked);
+
+        QObject::connect(
+            topPanel, &TopPanelWidget::openSettings,
+            parent, &MainPageWidget::goToSettingsPage);
     }
 
 private:
@@ -132,6 +142,8 @@ private:
     ModulesPageWidget* modulesPage;
     ModuleItemsPageWidget* moduleItemsPage;
     LessonPageWidget* lessonPage;
+
+    SettingsPageWidget* settingsPage;
 };
 
 #endif // MAINPAGEWIDGET_H

@@ -7,3 +7,10 @@ TopPanelWidget::TopPanelWidget(QWidget* parent)
     // TODO: check it
     setFrameShape(QFrame::StyledPanel);
 }
+
+void TopPanelWidget::menuButtonClicked()
+{
+    ui->menu->exec(
+        ui->menuButton->mapToGlobal(
+            QPoint(0, ui->menuButton->height())));
+}

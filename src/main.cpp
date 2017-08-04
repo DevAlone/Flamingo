@@ -84,7 +84,7 @@ void initCss()
         style += resStyleFile.readAll();
     }
 
-    QFile styleFile("css/style.css");
+    QFile styleFile("style.css");
 
     if (!styleFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Error during opening style file";

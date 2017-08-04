@@ -48,7 +48,7 @@ void MainPageWidget::goToCoursesPage()
     ui->pages->setCurrentWidget(ui->coursesPage);
     ui->coursesPage->activate();
 
-    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("courses", "courses");
+    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("courses", tr("courses"));
 
     if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
         currentItem->deleteLater();
@@ -63,7 +63,7 @@ void MainPageWidget::goToModulesPage(std::shared_ptr<Course> course)
     ui->pages->setCurrentWidget(ui->modulesPage);
     ui->modulesPage->activate(course);
 
-    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("modules", "modules");
+    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("modules", tr("modules"));
 
     if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
         currentItem->deleteLater();
@@ -78,7 +78,7 @@ void MainPageWidget::goToModuleItemsPage(std::shared_ptr<Module> module)
     ui->pages->setCurrentWidget(ui->moduleItemsPage);
     ui->moduleItemsPage->activate(module);
 
-    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("moduleItems", "moduleItems");
+    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("moduleItems", tr("lessons and submodules"));
 
     if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
         currentItem->deleteLater();
@@ -93,7 +93,22 @@ void MainPageWidget::goToLessonPage(std::shared_ptr<Lesson> lesson)
     ui->pages->setCurrentWidget(ui->lessonPage);
     ui->lessonPage->activate(lesson);
 
-    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("lesson", "lesson");
+    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("lesson", tr("lesson"));
+
+    if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
+        currentItem->deleteLater();
+        return;
+    }
+
+    ui->breadcrumb->addItem(currentItem);
+}
+
+void MainPageWidget::goToSettingsPage()
+{
+    ui->pages->setCurrentWidget(ui->settingsPage);
+    ui->settingsPage->activate();
+
+    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("settings", tr("settings"));
 
     if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
         currentItem->deleteLater();
