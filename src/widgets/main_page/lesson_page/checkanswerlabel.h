@@ -15,6 +15,7 @@ public:
 signals:
 
 public slots:
+    void updateStyle();
 
 private:
     int completeness = 0;

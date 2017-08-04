@@ -26,7 +26,7 @@ void tick()
 
         qApp->setStyleSheet(style);
     }
-    QTimer::singleShot(100, tick);
+    QTimer::singleShot(3000, tick);
 }
 
 void initSettings();
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
     initSettings();
     initCss();
     // TODO: remove it later
-    QTimer::singleShot(3000, tick);
+    //    QTimer::singleShot(3000, tick);
 
     splash.showMessage(QObject::tr("Initializing database..."));
 
@@ -69,8 +69,11 @@ void initSettings()
     QApplication::setOrganizationName("DevAlone");
     QApplication::setApplicationName("Flamingo");
     QSettings s;
-    s.setValue("courseParser/courseDirectory", "courses");
-    s.setValue("interface/lesson/pageAutoSwitchTime", 500);
+
+    if (s.value("courseParser/courseDirectory").isNull())
+        s.setValue("courseParser/courseDirectory", "courses");
+    if (s.value("interface/lesson/pageAutoSwitchTime").isNull())
+        s.setValue("interface/lesson/pageAutoSwitchTime", 500);
 }
 
 void initCss()

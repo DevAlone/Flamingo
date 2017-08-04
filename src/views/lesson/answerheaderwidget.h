@@ -18,6 +18,10 @@ public:
 signals:
     void stateChanged(bool state);
 public slots:
+    void updateStyle();
+
+private slots:
+    void checkBoxStateChanged();
 
 private:
     QString text;
@@ -46,7 +50,11 @@ public:
 
         QObject::connect(
             checkBox, &QCheckBox::stateChanged,
-            parent, &AnswerHeaderWidget::stateChanged);
+            parent, &AnswerHeaderWidget::checkBoxStateChanged);
+
+        //        QObject::connect(
+        //            checkBox, &QCheckBox::stateChanged,
+        //            parent, &AnswerHeaderWidget::stateChanged);
     }
 
 private:

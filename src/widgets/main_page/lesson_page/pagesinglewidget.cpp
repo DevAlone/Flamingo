@@ -47,6 +47,7 @@ void PageSingleWidget::handleUserAnswer(bool isAnswerRight)
         text += "\n" + tr("Right answer is: ") + page->getRightAnswers().toHumanString();
     }
 
+    ui->checkAnswerLabel->updateStyle();
     ui->checkAnswerLabel->setText(text);
     ui->checkAnswerLabel->setCompleteness(page->getCompleteness());
     ui->checkAnswerLabel->show();

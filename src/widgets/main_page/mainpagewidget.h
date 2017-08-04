@@ -125,6 +125,10 @@ public:
         QObject::connect(
             topPanel, &TopPanelWidget::openSettings,
             parent, &MainPageWidget::goToSettingsPage);
+
+        QObject::connect(
+            settingsPage, &SettingsPageWidget::goToBackPage,
+            parent, &MainPageWidget::backButtonClicked);
     }
 
 private:

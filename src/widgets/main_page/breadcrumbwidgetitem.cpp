@@ -31,4 +31,7 @@ bool BreadcrumbWidgetItem::isCurrent() const
 void BreadcrumbWidgetItem::setCurrentState(bool isCurrent)
 {
     _isCurrent = isCurrent;
+    style()->unpolish(this);
+    style()->polish(this);
+    update();
 }

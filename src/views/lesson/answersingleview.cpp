@@ -69,4 +69,11 @@ void AnswerSingleView::setChecked(bool isChecked)
 {
     // TODO: emit signal?
     _isChecked = isChecked;
+    style()->unpolish(this);
+    style()->polish(this);
+    update();
+    AnswerHeaderWidget* answerHeader = findChild<AnswerHeaderWidget*>();
+    if (answerHeader) {
+        answerHeader->updateStyle();
+    }
 }

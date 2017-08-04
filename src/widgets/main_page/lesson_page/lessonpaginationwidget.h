@@ -79,9 +79,23 @@ public:
         return page.first;
     }
     bool isActive() const { return _isActive; }
-    void setActiveState(bool value) { _isActive = value; }
+    void setActiveState(bool value)
+    {
+        _isActive = value;
+        updateStyle();
+    }
 
-    int getCompleteness() const { return page.second->getCompleteness(); }
+    int getCompleteness()
+    {
+        return page.second->getCompleteness();
+    }
+public slots:
+    void updateStyle()
+    {
+        style()->unpolish(this);
+        style()->polish(this);
+        update();
+    }
 
 private:
     //    unsigned pageNumber;
