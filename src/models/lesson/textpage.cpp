@@ -27,7 +27,7 @@ QJsonObject TextPage::toJsonObject() const
         jsonInfoSection = obj["info_section"].toArray();
     } else
         throw ModelSerializationError(
-            QObject::tr("error during serialization TextPage:"
+            QObject::tr("error during serialization TextPage: "
                         "info_section wasn't found"));
 
     jsonInfoSection.push_back(QJsonObject{

@@ -1,5 +1,6 @@
 #include "page.h"
 #include "htmlpage.h"
+#include "imagepage.h"
 #include "textpage.h"
 
 #include <exceptions/modelerror.h>
@@ -33,6 +34,9 @@ std::shared_ptr<Page> Page::createPage(unsigned pageNumber,
         break;
     case PAGE_TYPE::HTML:
         page = std::make_shared<HtmlPage>(infoSectionMap);
+        break;
+    case PAGE_TYPE::IMAGE:
+        page = std::make_shared<ImagePage>(infoSectionMap);
         break;
     }
 

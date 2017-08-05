@@ -1,5 +1,6 @@
 #include "parser/include.h"
 
+#include "flamingoapplication.h"
 #include "flamingosplashscreen.h"
 #include "mainwindow.h"
 
@@ -34,7 +35,7 @@ void initCss();
 
 int main(int argc, char* argv[])
 {
-    QApplication a(argc, argv);
+    FlamingoApplication a(argc, argv);
 
     QPixmap pixmap(":/images/flamingo1.png");
     FlamingoSplashScreen splash(pixmap);
