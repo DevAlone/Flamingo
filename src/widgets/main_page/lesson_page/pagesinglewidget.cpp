@@ -1,6 +1,4 @@
 #include "pagesinglewidget.h"
-#include "views/lesson/htmlpagesingleview.h"
-#include "views/lesson/textpagesingleview.h"
 
 #include "models/lesson/page.h"
 

@@ -10,12 +10,14 @@
 
 enum class ANSWER_TYPE {
     TEXT,
-    HTML
+    HTML,
+    IMAGE
 };
 
 const std::map<QString, ANSWER_TYPE> answerTypesMap = {
     { "text", ANSWER_TYPE::TEXT },
     { "html", ANSWER_TYPE::HTML },
+    { "image", ANSWER_TYPE::IMAGE },
 };
 
 class Answer {

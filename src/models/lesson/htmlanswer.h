@@ -5,8 +5,7 @@
 
 class HtmlAnswer : public TextAnswer {
 public:
-    HtmlAnswer(std::map<QString, QString>& keyValueMap,
-        std::vector<std::pair<QString, QString>>& keyValueVec);
+    HtmlAnswer(std::map<QString, QString>& keyValueMap);
 };
 
 #endif // HTMLANSWER_H

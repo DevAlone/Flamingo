@@ -18,6 +18,8 @@ class AnswerSingleView : public QFrame {
 public:
     explicit AnswerSingleView(QWidget* parent = nullptr);
 
+    static AnswerSingleView* makeAnswerView(QChar letter, std::shared_ptr<Answer> answer);
+
     void setAnswer(QChar letter, std::shared_ptr<Answer> answerPtr);
 
     std::shared_ptr<Answer> getAnswer() const;

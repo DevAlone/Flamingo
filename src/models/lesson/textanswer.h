@@ -7,8 +7,7 @@
 
 class TextAnswer : public Answer {
 public:
-    TextAnswer(std::map<QString, QString> keyValueMap,
-        std::vector<std::pair<QString, QString>>& keyValueVec);
+    TextAnswer(const std::map<QString, QString>& keyValueMap);
 
     const QString& getContent() const;
 

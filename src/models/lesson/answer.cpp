@@ -1,5 +1,6 @@
 #include "answer.h"
 #include "htmlanswer.h"
+#include "imageanswer.h"
 #include "textanswer.h"
 
 #include <exceptions/answercreatingerror.h>
@@ -20,18 +21,12 @@ std::shared_ptr<Answer> Answer::createAnswer(
     std::map<QString, QString>& keyValueMap,
     std::vector<std::pair<QString, QString>>& keyValueVec)
 {
-    // TODO: change it
-    static const std::map<QString, ANSWER_TYPE> answerTypes = {
-        { QString("text"), ANSWER_TYPE::TEXT },
-        { QString("html"), ANSWER_TYPE::HTML },
-    };
-
     ANSWER_TYPE type = ANSWER_TYPE::TEXT;
 
     auto typeIt = keyValueMap.find("type");
     if (typeIt != keyValueMap.end()) {
-        auto enumIt = answerTypes.find(typeIt->second);
-        if (enumIt != answerTypes.end())
+        auto enumIt = answerTypesMap.find(typeIt->second);
+        if (enumIt != answerTypesMap.end())
             type = enumIt->second;
         else
             throw AnswerCreatingError(
@@ -43,10 +38,13 @@ std::shared_ptr<Answer> Answer::createAnswer(
 
     switch (type) {
     case ANSWER_TYPE::TEXT:
-        answer = std::make_shared<TextAnswer>(keyValueMap, keyValueVec);
+        answer = std::make_shared<TextAnswer>(keyValueMap);
         break;
     case ANSWER_TYPE::HTML:
-        answer = std::make_shared<HtmlAnswer>(keyValueMap, keyValueVec);
+        answer = std::make_shared<HtmlAnswer>(keyValueMap);
+        break;
+    case ANSWER_TYPE::IMAGE:
+        answer = std::make_shared<ImageAnswer>(keyValueMap);
         break;
     }
 

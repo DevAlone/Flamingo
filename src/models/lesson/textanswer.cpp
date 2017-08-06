@@ -5,8 +5,7 @@
 #include <QJsonArray>
 #include <QObject>
 
-TextAnswer::TextAnswer(std::map<QString, QString> keyValueMap,
-    std::vector<std::pair<QString, QString> >& keyValueVec)
+TextAnswer::TextAnswer(const std::map<QString, QString>& keyValueMap)
 {
     auto contentIt = keyValueMap.find("content");
     if (contentIt != keyValueMap.end())
