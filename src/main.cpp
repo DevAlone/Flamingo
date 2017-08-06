@@ -18,6 +18,8 @@
 #include <QDebug>
 #include <QtCore>
 
+#include <views/lesson/content_view/mediaplayerwidget.h>
+
 // It's just for debug. Remove it later
 void tick()
 {
@@ -37,29 +39,38 @@ int main(int argc, char* argv[])
 {
     FlamingoApplication a(argc, argv);
 
-    QPixmap pixmap(":/images/flamingo1.png");
-    FlamingoSplashScreen splash(pixmap);
+    MediaPlayerWidget player;
 
-    splash.show();
+    //    player.setSource(
+    //        "/mnt/data/music/Music/Цой&Кино/05 - Кукушка.mp3");
 
-    splash.showMessage(QObject::tr("Initializing settings and styles..."));
+    player.setSource(
+        "/mnt/usbdata/movies/mythbusters/Season 01 (2003)/02 Cell Phone Destruction, Silicone Breasts, CD-ROM Shattering.avi");
+    player.show();
 
-    initSettings();
-    initCss();
-    // TODO: remove it later
-    QTimer::singleShot(3000, tick);
+    //    QPixmap pixmap(":/images/flamingo1.png");
+    //    FlamingoSplashScreen splash(pixmap);
 
-    splash.showMessage(QObject::tr("Initializing database..."));
+    //    splash.show();
 
-    DatabaseManager* dbManager = DatabaseManager::getInstance();
+    //    splash.showMessage(QObject::tr("Initializing settings and styles..."));
 
-    dbManager->init();
+    //    initSettings();
+    //    initCss();
+    //    // TODO: remove it later
+    //    QTimer::singleShot(3000, tick);
 
-    MainWindow w;
+    //    splash.showMessage(QObject::tr("Initializing database..."));
 
-    w.show();
+    //    DatabaseManager* dbManager = DatabaseManager::getInstance();
 
-    splash.finish(&w);
+    //    dbManager->init();
+
+    //    MainWindow w;
+
+    //    w.show();
+
+    //    splash.finish(&w);
 
     return a.exec();
 }
