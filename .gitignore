@@ -2,3 +2,4 @@ build*
 Flamingo.pro.user
 CMakeLists.txt.user
 wiki
+*~
