@@ -1,9 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>images/flamingo1.png</file>
-        <file>css/style.css</file>
-        <file>icons/previous.png</file>
-        <file>icons/settings.png</file>
-        <file>icons/menu.png</file>
-    </qresource>
-</RCC>
