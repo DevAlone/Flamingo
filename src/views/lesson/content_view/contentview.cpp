@@ -1,8 +1,10 @@
 #include "contentview.h"
 
+#include "audioplayerwidget.h"
 #include "helper.h"
 #include "imagewidget.h"
 #include "textbrowserwidget.h"
+#include "videoplayerwidget.h"
 
 ContentView::ContentView(QWidget* parent)
     : QWidget(parent)
@@ -62,4 +64,36 @@ void ContentView::setImageFile(const QString& _path)
             + path + QObject::tr("\" doesn't exist</h3>"));
     else
         setImage(pixmap);
+}
+
+void ContentView::setAudioFile(const QString& _path)
+{
+    clearLayout(ui->mainLayout);
+    // TODO: вынести в отдельный класс
+    QSettings s;
+    QDir coursesDir(s.value("courseParser/courseDirectory", "/").toString());
+    QString path = coursesDir.absoluteFilePath(_path);
+
+    // TODO: maybe add checks for existent
+    auto widget = new AudioPlayerWidget;
+
+    widget->setSource(path);
+
+    ui->mainLayout->addWidget(widget);
+}
+
+void ContentView::setVideoFile(const QString& _path)
+{
+    clearLayout(ui->mainLayout);
+    // TODO: вынести в отдельный класс
+    QSettings s;
+    QDir coursesDir(s.value("courseParser/courseDirectory", "/").toString());
+    QString path = coursesDir.absoluteFilePath(_path);
+
+    // TODO: maybe add checks for existent
+    auto widget = new VideoPlayerWidget;
+
+    widget->setSource(path);
+
+    ui->mainLayout->addWidget(widget);
 }

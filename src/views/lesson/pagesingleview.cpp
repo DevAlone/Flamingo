@@ -4,9 +4,11 @@
 
 #include "content_view/contentview.h"
 
+#include <models/lesson/audiopage.h>
 #include <models/lesson/htmlpage.h>
 #include <models/lesson/imagepage.h>
 #include <models/lesson/textpage.h>
+#include <models/lesson/videopage.h>
 
 PageSingleView::PageSingleView(QWidget* parent)
     : QFrame(parent)
@@ -56,6 +58,22 @@ void PageSingleView::setPage(std::shared_ptr<Page> pagePtr)
 
         contentView->setImageFile(imagePage->getSource());
 
+    } break;
+    case PAGE_TYPE::AUDIO: {
+        auto audioPage = std::dynamic_pointer_cast<AudioPage>(page);
+        if (!audioPage)
+            throw Exception(
+                QObject::tr("Unable to cast Page to AudioPage"));
+
+        contentView->setAudioFile(audioPage->getSource());
+    } break;
+    case PAGE_TYPE::VIDEO: {
+        auto videoPage = std::dynamic_pointer_cast<VideoPage>(page);
+        if (!videoPage)
+            throw Exception(
+                QObject::tr("Unable to cast Page to VideoPage"));
+
+        contentView->setVideoFile(videoPage->getSource());
     } break;
     default:
         throw Exception(QObject::tr("Unknown page type"));

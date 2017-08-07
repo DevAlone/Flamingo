@@ -1,22 +1,28 @@
 #include "lessonpagewidget.h"
 
 LessonPageWidget::LessonPageWidget(QWidget* parent)
-    : QWidget(parent)
+    : AbstractPageWidget(parent)
 {
     ui = std::make_unique<LessonPageWidgetUi>(this);
 }
 
 void LessonPageWidget::activate(std::shared_ptr<Lesson> lesson)
 {
-    if (!lesson)
-        return;
+}
 
+void LessonPageWidget::setLesson(std::shared_ptr<Lesson> lesson)
+{
     this->lesson = lesson;
     this->pages = lesson->getPages();
 
     ui->pagination->setLesson(lesson);
     if (!lesson->getPages().empty())
         goToPage(lesson->getPages().begin()->first);
+}
+
+void LessonPageWidget::deactivate()
+{
+    ui->pageWidget->deactivate();
 }
 
 void LessonPageWidget::goToNextPage()
@@ -27,6 +33,8 @@ void LessonPageWidget::goToNextPage()
             currentPage.second->setCompleteness(100);
             lesson->save();
         }
+
+        //        ui->pageWidget->deactivate();
 
         QMessageBox::warning(
             this,

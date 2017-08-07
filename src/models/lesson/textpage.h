@@ -7,7 +7,7 @@
 
 class TextPage : public Page {
 public:
-    TextPage(std::map<QString, QString>& infoSection);
+    TextPage(const std::map<QString, QString>& infoSection);
 
     const QString& getContent() const;
 

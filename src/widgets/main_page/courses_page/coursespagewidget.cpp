@@ -4,7 +4,7 @@
 #include <parser/include.h>
 
 CoursesPageWidget::CoursesPageWidget(QWidget* parent)
-    : QWidget(parent)
+    : AbstractPageWidget(parent)
 {
     ui = std::make_unique<CoursesPageWidgetUi>(this);
 }

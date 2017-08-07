@@ -1,7 +1,7 @@
 #include "loginpagewidget.h"
 
 LoginPageWidget::LoginPageWidget(QWidget* parent)
-    : QWidget(parent)
+    : AbstractPageWidget(parent)
 {
     ui = std::make_unique<LoginPageWidgetUi>(this);
 }

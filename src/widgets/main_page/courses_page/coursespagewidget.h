@@ -12,9 +12,11 @@
 
 #include <widgets/main_page/twocolumnswidget.h>
 
+#include <widgets/abstractpagewidget.h>
+
 class CoursesPageWidgetUi;
 
-class CoursesPageWidget : public QWidget {
+class CoursesPageWidget : public AbstractPageWidget {
     Q_OBJECT
 
     friend class CoursesPageWidgetUi;

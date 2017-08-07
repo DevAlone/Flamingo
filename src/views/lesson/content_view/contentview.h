@@ -16,6 +16,8 @@ public:
     void setHtml(const QString& html);
     void setImage(const QPixmap& pixmap);
     void setImageFile(const QString& _path);
+    void setAudioFile(const QString& _path);
+    void setVideoFile(const QString& _path);
 
 signals:
 

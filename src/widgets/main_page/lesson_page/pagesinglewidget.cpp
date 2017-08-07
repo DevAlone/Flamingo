@@ -56,3 +56,10 @@ void PageSingleWidget::handleUserAnswer(bool isAnswerRight)
         verticalScrollBar()->setValue(verticalScrollBar()->maximum());
     });
 }
+
+void PageSingleWidget::deactivate()
+{
+    // Острожно, костыли!
+    ui.reset();
+    ui = std::make_unique<PageSingleWidgetUi>(this);
+}

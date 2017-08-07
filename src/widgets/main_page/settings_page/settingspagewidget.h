@@ -5,9 +5,11 @@
 
 #include <memory>
 
+#include <widgets/abstractpagewidget.h>
+
 class SettingsPageWidgetUi;
 
-class SettingsPageWidget : public QWidget {
+class SettingsPageWidget : public AbstractPageWidget {
     Q_OBJECT
 
     friend class SettingsPageWidgetUi;

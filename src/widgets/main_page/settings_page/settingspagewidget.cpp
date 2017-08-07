@@ -1,7 +1,7 @@
 #include "settingspagewidget.h"
 
 SettingsPageWidget::SettingsPageWidget(QWidget* parent)
-    : QWidget(parent)
+    : AbstractPageWidget(parent)
 {
     ui = std::make_unique<SettingsPageWidgetUi>(this);
 }

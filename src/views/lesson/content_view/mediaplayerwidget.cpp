@@ -1,7 +1,7 @@
 #include "mediaplayerwidget.h"
 
 MediaPlayerWidget::MediaPlayerWidget(QWidget* parent)
-    : QWidget(parent)
+    : QFrame(parent)
 {
     ui = new MediaPlayerWidgetUi(this);
 
@@ -31,6 +31,11 @@ MediaPlayerWidget::MediaPlayerWidget(QWidget* parent)
     ui->slider->setMaximum(100);
 
     ui->volumeSlider->setRange(0, 100);
+}
+
+MediaPlayerWidget::~MediaPlayerWidget()
+{
+    mediaPlayer->stop();
 }
 
 void MediaPlayerWidget::setSource(const QString& path)

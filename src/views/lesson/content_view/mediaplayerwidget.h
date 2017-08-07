@@ -11,13 +11,16 @@
 
 class MediaPlayerWidgetUi;
 
-class MediaPlayerWidget : public QWidget {
+// TODO: add checks for file existent
+// TODO: add interface to play, stop and pause media
+class MediaPlayerWidget : public QFrame {
     Q_OBJECT
 
     friend class MediaPlayerWidgetUi;
 
 public:
     explicit MediaPlayerWidget(QWidget* parent = nullptr);
+    ~MediaPlayerWidget();
 
 signals:
 
@@ -36,13 +39,12 @@ private slots:
     void mediaPlayerVolumeChanged(int volume);
     void volumeSliderPositionChanged(int position);
 
-private:
+protected:
     MediaPlayerWidgetUi* ui;
 };
 
 class MediaPlayerWidgetUi : public QObject {
     Q_OBJECT
-    friend class MediaPlayerWidget;
 
 public:
     MediaPlayerWidgetUi(MediaPlayerWidget* parent)
@@ -86,7 +88,6 @@ public:
             parent, &MediaPlayerWidget::volumeSliderPositionChanged);
     }
 
-private:
     QVBoxLayout* mainLayout;
     QVideoWidget* videoWidget;
 

@@ -30,6 +30,8 @@ public slots:
     void updateItems();
     void handleUserAnswer(bool isAnswerRight);
 
+    void deactivate();
+
 private slots:
     void checkAnswerButtonPressed();
 

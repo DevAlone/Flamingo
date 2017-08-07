@@ -1,29 +1,28 @@
 #include "moduleitemspagewidget.h"
 
 ModuleItemsPageWidget::ModuleItemsPageWidget(QWidget* parent)
-    : QWidget(parent)
+    : AbstractPageWidget(parent)
 {
     ui = std::make_unique<ModuleItemsPageWidgetUi>(this);
 }
 
-void ModuleItemsPageWidget::activate(std::shared_ptr<Module> module)
+void ModuleItemsPageWidget::activate()
 {
-    if (!module) {
-        if (this->module) {
-            // TODO: change to update method
-            ui->moduleItemsTree->updateItems();
-            selectedModuleItemChanged();
-        }
-        return;
+    if (this->module) {
+        ui->moduleItemsTree->updateItems();
+        selectedModuleItemChanged();
     }
+}
+
+void ModuleItemsPageWidget::setModule(std::shared_ptr<Module> module)
+{
+    this->module = module;
 
     auto dispatcherPtr = ui->moduleItemsTree->getModuleItemTreeDispatcher();
     if (dispatcherPtr) {
         dispatcherPtr->setModuleIdFilter(module->getId());
         ui->moduleItemsTree->updateItems();
     }
-
-    this->module = module;
 }
 
 void ModuleItemsPageWidget::selectedModuleItemChanged()

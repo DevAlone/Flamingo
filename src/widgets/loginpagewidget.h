@@ -1,6 +1,7 @@
 #ifndef LOGINPAGEWIDGET_H
 #define LOGINPAGEWIDGET_H
 
+#include "abstractpagewidget.h"
 #include "createuserwidget.h"
 
 #include <QtWidgets>
@@ -13,7 +14,7 @@
 
 class LoginPageWidgetUi;
 
-class LoginPageWidget : public QWidget {
+class LoginPageWidget : public AbstractPageWidget {
     Q_OBJECT
 public:
     explicit LoginPageWidget(QWidget* parent = nullptr);

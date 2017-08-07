@@ -12,9 +12,11 @@
 
 #include <widgets/main_page/twocolumnswidget.h>
 
+#include <widgets/abstractpagewidget.h>
+
 class ModulesPageWidgetUi;
 
-class ModulesPageWidget : public QWidget {
+class ModulesPageWidget : public AbstractPageWidget {
     Q_OBJECT
 
     friend class ModulesPageWidgetUi;
@@ -25,7 +27,8 @@ public:
 signals:
     void goToModuleItemsPage(std::shared_ptr<Module> module);
 public slots:
-    void activate(std::shared_ptr<Course> course);
+    void activate();
+    void setCourse(std::shared_ptr<Course> course);
 
 private slots:
     void selectedModuleChanged();

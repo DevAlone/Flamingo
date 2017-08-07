@@ -1,7 +1,7 @@
 #include "mainpagewidget.h"
 
 MainPageWidget::MainPageWidget(QWidget* parent)
-    : QWidget(parent)
+    : AbstractPageWidget(parent)
 {
     ui = std::make_unique<MainPageWidgetUi>(this);
 }
@@ -27,7 +27,6 @@ void MainPageWidget::activate()
 
 void MainPageWidget::breadcrubFullPathChanged(const QString& fullPath)
 {
-    // TODO: do something
     const BreadcrumbWidgetItem* lastItem = ui->breadcrumb->getLastItem();
 
     QString pathItem = lastItem->getPathItem();
@@ -45,70 +44,64 @@ void MainPageWidget::breadcrubFullPathChanged(const QString& fullPath)
 void MainPageWidget::goToCoursesPage()
 {
     // BUG: проверить, почему метод срабатывает дважды
-    ui->pages->setCurrentWidget(ui->coursesPage);
-    ui->coursesPage->activate();
+    setPage(ui->coursesPage);
 
-    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("courses", tr("courses"));
-
-    if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
-        currentItem->deleteLater();
-        return;
-    }
-
-    ui->breadcrumb->addItem(currentItem); //TODO: add
+    setLastBreadcrumbItem("courses", tr("courses"));
 }
 
 void MainPageWidget::goToModulesPage(std::shared_ptr<Course> course)
-{ // TODO: do it
-    ui->pages->setCurrentWidget(ui->modulesPage);
-    ui->modulesPage->activate(course);
+{
+    setPage(ui->modulesPage);
+    if (course)
+        ui->modulesPage->setCourse(course);
 
-    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("modules", tr("modules"));
-
-    if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
-        currentItem->deleteLater();
-        return;
-    }
-
-    ui->breadcrumb->addItem(currentItem);
+    setLastBreadcrumbItem("modules", tr("modules"));
 }
 
 void MainPageWidget::goToModuleItemsPage(std::shared_ptr<Module> module)
 {
-    ui->pages->setCurrentWidget(ui->moduleItemsPage);
-    ui->moduleItemsPage->activate(module);
+    setPage(ui->moduleItemsPage);
+    if (module)
+        ui->moduleItemsPage->setModule(module);
 
-    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("moduleItems", tr("lessons and submodules"));
-
-    if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
-        currentItem->deleteLater();
-        return;
-    }
-
-    ui->breadcrumb->addItem(currentItem);
+    setLastBreadcrumbItem("moduleItems", tr("lessons and submodules"));
 }
 
 void MainPageWidget::goToLessonPage(std::shared_ptr<Lesson> lesson)
 {
-    ui->pages->setCurrentWidget(ui->lessonPage);
-    ui->lessonPage->activate(lesson);
+    setPage(ui->lessonPage);
+    if (lesson)
+        ui->lessonPage->setLesson(lesson);
 
-    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("lesson", tr("lesson"));
-
-    if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
-        currentItem->deleteLater();
-        return;
-    }
-
-    ui->breadcrumb->addItem(currentItem);
+    setLastBreadcrumbItem("lesson", tr("lesson"));
 }
 
 void MainPageWidget::goToSettingsPage()
 {
-    ui->pages->setCurrentWidget(ui->settingsPage);
-    ui->settingsPage->activate();
+    setPage(ui->settingsPage);
 
-    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem("settings", tr("settings"));
+    setLastBreadcrumbItem("settings", tr("settings"));
+}
+
+void MainPageWidget::setPage(AbstractPageWidget* page)
+{
+    auto currentWidget = ui->pages->currentWidget();
+    if (currentWidget) {
+        auto currentPage = qobject_cast<AbstractPageWidget*>(currentWidget);
+        if (currentPage) {
+            currentPage->deactivate();
+        }
+    }
+    ui->pages->setCurrentWidget(page);
+    page->activate();
+}
+
+void MainPageWidget::setLastBreadcrumbItem(const QString& path, const QString& name)
+{
+    // Острожно, костыли!
+    QSignalBlocker blocker(ui->breadcrumb);
+
+    BreadcrumbWidgetItem* currentItem = new BreadcrumbWidgetItem(path, name);
 
     if (ui->breadcrumb->getLastItem()->getPathItem() == currentItem->getPathItem()) {
         currentItem->deleteLater();

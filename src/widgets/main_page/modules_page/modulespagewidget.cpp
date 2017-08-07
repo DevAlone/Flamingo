@@ -1,21 +1,22 @@
 #include "modulespagewidget.h"
 
 ModulesPageWidget::ModulesPageWidget(QWidget* parent)
-    : QWidget(parent)
+    : AbstractPageWidget(parent)
 {
     ui = std::make_unique<ModulesPageWidgetUi>(this);
 }
 
-void ModulesPageWidget::activate(std::shared_ptr<Course> course)
+void ModulesPageWidget::activate()
 {
-    if (!course) {
-        if (this->course) {
-            // TODO: change to update method
-            ui->moduleList->updateItems();
-            selectedModuleChanged();
-        }
-        return;
+    if (course) {
+        ui->moduleList->updateItems();
+        selectedModuleChanged();
     }
+}
+
+void ModulesPageWidget::setCourse(std::shared_ptr<Course> course)
+{
+    this->course = course;
 
     // update modules
     auto dispatcherWeakPtr = ui->moduleList->getModuleListDispatcher();
@@ -23,7 +24,6 @@ void ModulesPageWidget::activate(std::shared_ptr<Course> course)
         dispatcher->setCourseIdFilter(course->getId());
         ui->moduleList->updateItems();
     }
-    this->course = course;
 }
 
 void ModulesPageWidget::selectedModuleChanged()

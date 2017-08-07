@@ -2,7 +2,7 @@
 
 #include <exceptions/modelserializationerror.h>
 
-MediaPage::MediaPage(std::map<QString, QString>& infoSection)
+MediaPage::MediaPage(const std::map<QString, QString> &infoSection)
 {
     {
         auto it = infoSection.find("source");

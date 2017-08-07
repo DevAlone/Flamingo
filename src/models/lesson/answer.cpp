@@ -1,7 +1,9 @@
 #include "answer.h"
+#include "audioanswer.h"
 #include "htmlanswer.h"
 #include "imageanswer.h"
 #include "textanswer.h"
+#include "videoanswer.h"
 
 #include <exceptions/answercreatingerror.h>
 #include <exceptions/modelserializationerror.h>
@@ -45,6 +47,12 @@ std::shared_ptr<Answer> Answer::createAnswer(
         break;
     case ANSWER_TYPE::IMAGE:
         answer = std::make_shared<ImageAnswer>(keyValueMap);
+        break;
+    case ANSWER_TYPE::AUDIO:
+        answer = std::make_shared<AudioAnswer>(keyValueMap);
+        break;
+    case ANSWER_TYPE::VIDEO:
+        answer = std::make_shared<VideoAnswer>(keyValueMap);
         break;
     }
 

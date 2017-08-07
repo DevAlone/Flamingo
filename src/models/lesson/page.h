@@ -18,13 +18,17 @@
 enum class PAGE_TYPE : int {
     TEXT,
     HTML,
-    IMAGE
+    IMAGE,
+    AUDIO,
+    VIDEO
 };
 
 const std::map<QString, PAGE_TYPE> pageTypesMap = {
     { "text", PAGE_TYPE::TEXT },
     { "html", PAGE_TYPE::HTML },
     { "image", PAGE_TYPE::IMAGE },
+    { "audio", PAGE_TYPE::AUDIO },
+    { "video", PAGE_TYPE::VIDEO },
 };
 
 class Page {

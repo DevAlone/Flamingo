@@ -21,7 +21,7 @@
 
 class MainPageWidgetUi;
 
-class MainPageWidget : public QWidget {
+class MainPageWidget : public AbstractPageWidget {
     Q_OBJECT
 public:
     explicit MainPageWidget(QWidget* parent = nullptr);
@@ -47,6 +47,9 @@ public slots:
 
 private:
     std::unique_ptr<MainPageWidgetUi> ui;
+
+    void setPage(AbstractPageWidget* page);
+    void setLastBreadcrumbItem(const QString& path, const QString& name);
 
 private slots:
 };

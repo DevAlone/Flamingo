@@ -13,9 +13,11 @@
 
 #include <models/lesson/lesson.h>
 
+#include <widgets/abstractpagewidget.h>
+
 class ModuleItemsPageWidgetUi;
 
-class ModuleItemsPageWidget : public QWidget {
+class ModuleItemsPageWidget : public AbstractPageWidget {
     Q_OBJECT
 
     friend class ModuleItemsPageWidgetUi;
@@ -26,7 +28,8 @@ public:
 signals:
     void goToLessonPage(std::shared_ptr<Lesson> lesson);
 public slots:
-    void activate(std::shared_ptr<Module> module);
+    void activate();
+    void setModule(std::shared_ptr<Module> module);
 
 private slots:
     void selectedModuleItemChanged();

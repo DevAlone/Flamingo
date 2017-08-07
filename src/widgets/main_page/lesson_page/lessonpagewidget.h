@@ -10,11 +10,12 @@
 #include <models/lesson/lesson.h>
 
 #include <views/lesson/pagesingleview.h>
+#include <widgets/abstractpagewidget.h>
 #include <widgets/main_page/lesson_page/pagesinglewidget.h>
 
 class LessonPageWidgetUi;
 
-class LessonPageWidget : public QWidget {
+class LessonPageWidget : public AbstractPageWidget {
     Q_OBJECT
 
     friend class LessonPageWidgetUi;
@@ -28,6 +29,8 @@ signals:
 
 public slots:
     void activate(std::shared_ptr<Lesson> lesson);
+    void setLesson(std::shared_ptr<Lesson> lesson);
+    void deactivate();
 
     void goToNextPage();
     void goToPage(unsigned pageNumber);

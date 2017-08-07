@@ -4,7 +4,7 @@
 
 #include <QDebug>
 
-TextPage::TextPage(std::map<QString, QString>& infoSection)
+TextPage::TextPage(const std::map<QString, QString>& infoSection)
 {
     auto contentIt = infoSection.find("content");
     if (contentIt != infoSection.end()) {

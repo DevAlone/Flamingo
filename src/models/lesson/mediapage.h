@@ -4,11 +4,9 @@
 #include "page.h"
 
 class MediaPage : public Page {
-    friend class Page;
-    friend class ImagePage;
-    MediaPage(std::map<QString, QString>& infoSection);
 
 public:
+    MediaPage(const std::map<QString, QString>& infoSection);
     virtual QJsonObject toJsonObject() const;
 
     QString getSource() const;
