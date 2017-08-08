@@ -5,5 +5,6 @@
         <file>icons/previous.png</file>
         <file>icons/settings.png</file>
         <file>icons/menu.png</file>
+        <file>images/flamingo.jpg</file>
     </qresource>
 </RCC>

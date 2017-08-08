@@ -1,9 +1,10 @@
 #ifndef ABSTRACTPAGEWIDGET_H
 #define ABSTRACTPAGEWIDGET_H
 
+#include <QFrame>
 #include <QWidget>
 
-class AbstractPageWidget : public QWidget {
+class AbstractPageWidget : public QFrame {
     Q_OBJECT
 public:
     explicit AbstractPageWidget(QWidget* parent = nullptr);

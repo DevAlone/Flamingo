@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
     initSettings();
     initCss();
     // TODO: remove it later
-    QTimer::singleShot(3000, tick);
+    //    QTimer::singleShot(3000, tick);
 
     splash.showMessage(QObject::tr("Initializing database..."));
 

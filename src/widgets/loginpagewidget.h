@@ -41,8 +41,13 @@ class LoginPageWidgetUi {
 public:
     LoginPageWidgetUi(LoginPageWidget* parent)
     {
+        wrapper = new QFrame(parent);
+        wrapper->setObjectName("loginForm");
+        loginLayout = new QVBoxLayout;
         headerLabel = new QLabel(
             QObject::tr("Choose username"), parent);
+        headerLabel->setObjectName("headerLabel");
+        headerLabel->setAlignment(Qt::AlignHCenter);
 
         horizontalLayout = new QHBoxLayout();
         verticalLayout = new QVBoxLayout();
@@ -59,10 +64,12 @@ public:
         horizontalLayout->addStretch();
 
         verticalLayout->addStretch();
-        verticalLayout->addWidget(headerLabel);
-        verticalLayout->addWidget(userListView);
-        verticalLayout->addWidget(createUserWidget);
-        verticalLayout->addWidget(loginButton);
+        verticalLayout->addWidget(wrapper);
+        wrapper->setLayout(loginLayout);
+        loginLayout->addWidget(headerLabel);
+        loginLayout->addWidget(userListView);
+        loginLayout->addWidget(createUserWidget);
+        loginLayout->addWidget(loginButton);
         verticalLayout->addStretch();
 
         parent->setLayout(horizontalLayout);
@@ -72,6 +79,9 @@ public:
 
         verticalLayout->setContentsMargins(0, 0, 0, 0);
         verticalLayout->setSpacing(0);
+
+        loginLayout->setContentsMargins(0, 0, 0, 0);
+        loginLayout->setSpacing(10);
 
         QObject::connect(
             createUserWidget, &CreateUserWidget::userCreated,
@@ -85,6 +95,9 @@ public:
 private:
     QHBoxLayout* horizontalLayout;
     QVBoxLayout* verticalLayout;
+
+    QFrame* wrapper;
+    QVBoxLayout* loginLayout;
     QLabel* headerLabel;
     //    QScrollArea* userListScrollArea;
     //    UserListWidget* userList;

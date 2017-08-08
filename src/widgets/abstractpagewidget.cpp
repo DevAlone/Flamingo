@@ -1,7 +1,7 @@
 #include "abstractpagewidget.h"
 
 AbstractPageWidget::AbstractPageWidget(QWidget* parent)
-    : QWidget(parent)
+    : QFrame(parent)
 {
 }
 

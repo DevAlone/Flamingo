@@ -119,3 +119,19 @@ TopPanelWidget #userNameWidget {
 	background: #fff;
 	border: 1px solid #aaa;*/
 }
+
+LoginPageWidget
+{
+	background: #fff url(":/images/flamingo.jpg") right bottom no-repeat;
+}
+
+LoginPageWidget #loginForm {
+/*	background: #fff;*/
+/*	border: 1px solid #aaa;*/
+	padding: 00px;
+}
+LoginPageWidget #headerLabel {
+	font-size: 16px;
+/*	margin: 0 0 5px 170px;*/
+
+}

@@ -9,6 +9,9 @@ class CreateUserWidgetUi;
 
 class CreateUserWidget : public QWidget {
     Q_OBJECT
+
+    friend class CreateUserWidgetUi;
+
 public:
     explicit CreateUserWidget(QWidget* parent = nullptr);
     virtual ~CreateUserWidget();
@@ -26,6 +29,8 @@ private:
 };
 
 class CreateUserWidgetUi {
+    friend class CreateUserWidget;
+
 public:
     CreateUserWidgetUi(CreateUserWidget* parent)
     {
@@ -41,8 +46,15 @@ public:
 
         parent->setLayout(layout);
 
-        QObject::connect(createButton, SIGNAL(clicked(bool)),
-            parent, SLOT(createButtonClicked()));
+        layout->setContentsMargins(0, 0, 0, 0);
+
+        QObject::connect(
+            createButton, &QPushButton::clicked,
+            parent, &CreateUserWidget::createButtonClicked);
+
+        QObject::connect(
+            userNameLineEdit, &QLineEdit::returnPressed,
+            createButton, &QPushButton::click);
     }
 
     QHBoxLayout* layout;
