@@ -2,6 +2,7 @@
 #include "audiopage.h"
 #include "htmlpage.h"
 #include "imagepage.h"
+#include "mixedpage.h"
 #include "textpage.h"
 #include "videopage.h"
 
@@ -45,6 +46,9 @@ std::shared_ptr<Page> Page::createPage(unsigned pageNumber,
         break;
     case PAGE_TYPE::VIDEO:
         page = std::make_shared<VideoPage>(infoSectionMap);
+        break;
+    case PAGE_TYPE::MIXED:
+        page = std::make_shared<MixedPage>(infoSectionMap, infoSectionVec);
         break;
     }
 

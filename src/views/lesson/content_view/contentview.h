@@ -5,6 +5,8 @@
 
 #include <memory>
 
+#include <models/lesson/content/content.h>
+
 class ContentViewUi;
 
 class ContentView : public QWidget {
@@ -12,12 +14,25 @@ class ContentView : public QWidget {
 public:
     explicit ContentView(QWidget* parent = nullptr);
 
+    void clearContents();
+    void addContents(const std::vector<std::shared_ptr<Content>>& contents);
+    void setContents(const std::vector<std::shared_ptr<Content>>& contents);
+
     void setText(const QString& text);
     void setHtml(const QString& html);
     void setImage(const QPixmap& pixmap);
     void setImageFile(const QString& _path);
     void setAudioFile(const QString& _path);
     void setVideoFile(const QString& _path);
+
+    void addText(const QString& text);
+    void addHtml(const QString& html);
+    void addImage(const QPixmap& pixmap);
+    void addImageFile(const QString& _path);
+    void addAudioFile(const QString& _path);
+    void addVideoFile(const QString& _path);
+
+    static ContentView* fromContent(std::shared_ptr<Content> content);
 
 signals:
 

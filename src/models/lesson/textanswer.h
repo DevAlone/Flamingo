@@ -5,6 +5,8 @@
 
 #include <vector>
 
+#include <models/lesson/content/textcontent.h>
+
 class TextAnswer : public Answer {
 public:
     TextAnswer(const std::map<QString, QString>& keyValueMap);
@@ -14,7 +16,7 @@ public:
     virtual QJsonObject toJsonObject() const;
 
 protected:
-    QString content;
+    TextContent content;
 };
 
 #endif // TEXTANSWER_H

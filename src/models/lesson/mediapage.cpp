@@ -2,12 +2,12 @@
 
 #include <exceptions/modelserializationerror.h>
 
-MediaPage::MediaPage(const std::map<QString, QString> &infoSection)
+MediaPage::MediaPage(const std::map<QString, QString>& infoSection)
 {
     {
-        auto it = infoSection.find("source");
+        auto it = infoSection.find("media source");
         if (it != infoSection.end())
-            source = it->second;
+            content.setSource(it->second);
     }
 }
 
@@ -23,8 +23,7 @@ QJsonObject MediaPage::toJsonObject() const
             QObject::tr("error during serialization of MediaPage: "
                         "info_section wasn't found"));
 
-    jsonInfoSection.push_back(QJsonObject{
-        { "source", source } });
+    jsonInfoSection.push_back(content.toJsonObject());
 
     obj["info_section"] = jsonInfoSection;
 
@@ -33,10 +32,10 @@ QJsonObject MediaPage::toJsonObject() const
 
 QString MediaPage::getSource() const
 {
-    return source;
+    return content.getSource();
 }
 
 void MediaPage::setSource(const QString& value)
 {
-    source = value;
+    content.setSource(value);
 }

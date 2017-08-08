@@ -5,6 +5,8 @@
 
 #include <QString>
 
+#include <models/lesson/content/textcontent.h>
+
 class TextPage : public Page {
 public:
     TextPage(const std::map<QString, QString>& infoSection);
@@ -14,8 +16,7 @@ public:
     virtual QJsonObject toJsonObject() const;
 
 protected:
-    QString content;
-    // QString source;
+    TextContent content;
 };
 
 #endif // TEXTPAGE_H

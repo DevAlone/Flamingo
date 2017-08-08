@@ -3,6 +3,8 @@
 
 #include "page.h"
 
+#include <models/lesson/content/mediacontent.h>
+
 class MediaPage : public Page {
 
 public:
@@ -13,7 +15,7 @@ public:
     void setSource(const QString& value);
 
 protected:
-    QString source = "";
+    MediaContent content;
 };
 
 #endif // MEDIAPAGE_H

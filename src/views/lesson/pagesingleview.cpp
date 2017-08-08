@@ -7,6 +7,7 @@
 #include <models/lesson/audiopage.h>
 #include <models/lesson/htmlpage.h>
 #include <models/lesson/imagepage.h>
+#include <models/lesson/mixedpage.h>
 #include <models/lesson/textpage.h>
 #include <models/lesson/videopage.h>
 
@@ -35,45 +36,35 @@ void PageSingleView::setPage(std::shared_ptr<Page> pagePtr)
 
     switch (page->getType()) {
     case PAGE_TYPE::TEXT: {
-        auto textPage = std::dynamic_pointer_cast<TextPage>(page);
-        if (!textPage)
-            throw Exception(
-                QObject::tr("Unable to cast Page to TextPage"));
+        auto textPage = std::static_pointer_cast<TextPage>(page);
 
         contentView->setText(textPage->getContent());
     } break;
     case PAGE_TYPE::HTML: {
-        auto htmlPage = std::dynamic_pointer_cast<HtmlPage>(page);
-        if (!htmlPage)
-            throw Exception(
-                QObject::tr("Unable to cast Page to HtmlPage"));
+        auto htmlPage = std::static_pointer_cast<HtmlPage>(page);
 
         contentView->setHtml(htmlPage->getContent());
     } break;
     case PAGE_TYPE::IMAGE: {
-        auto imagePage = std::dynamic_pointer_cast<ImagePage>(page);
-        if (!imagePage)
-            throw Exception(
-                QObject::tr("Unable to cast Page to ImagePage"));
+        auto imagePage = std::static_pointer_cast<ImagePage>(page);
 
         contentView->setImageFile(imagePage->getSource());
 
     } break;
     case PAGE_TYPE::AUDIO: {
-        auto audioPage = std::dynamic_pointer_cast<AudioPage>(page);
-        if (!audioPage)
-            throw Exception(
-                QObject::tr("Unable to cast Page to AudioPage"));
+        auto audioPage = std::static_pointer_cast<AudioPage>(page);
 
         contentView->setAudioFile(audioPage->getSource());
     } break;
     case PAGE_TYPE::VIDEO: {
-        auto videoPage = std::dynamic_pointer_cast<VideoPage>(page);
-        if (!videoPage)
-            throw Exception(
-                QObject::tr("Unable to cast Page to VideoPage"));
+        auto videoPage = std::static_pointer_cast<VideoPage>(page);
 
         contentView->setVideoFile(videoPage->getSource());
+    } break;
+    case PAGE_TYPE::MIXED: {
+        auto mixedPage = std::static_pointer_cast<MixedPage>(page);
+
+        contentView->setContents(mixedPage->getContents());
     } break;
     default:
         throw Exception(QObject::tr("Unknown page type"));
