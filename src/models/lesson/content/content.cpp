@@ -5,11 +5,20 @@
 #include "textcontent.h"
 #include "videocontent.h"
 
+#include <exceptions/exception.h>
+
 Content::Content()
 {
 }
 
-std::shared_ptr<Content> Content::fromKeyValue(const QString& key, const QString& value)
+CONTENT_TYPE Content::getType() const
+{
+    return type;
+}
+
+std::shared_ptr<Content> Content::fromKeyValue(
+    const QString& key,
+    const QString& value)
 {
     std::shared_ptr<Content> result;
 
@@ -27,7 +36,7 @@ std::shared_ptr<Content> Content::fromKeyValue(const QString& key, const QString
     return result;
 }
 
-CONTENT_TYPE Content::getType() const
+QJsonObject Content::toJsonObject() const
 {
-    return type;
+    throw Exception("Not implemented");
 }

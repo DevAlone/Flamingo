@@ -8,7 +8,7 @@
 MediaAnswer::MediaAnswer(const std::map<QString, QString>& keyValueMap)
 {
     {
-        auto it = keyValueMap.find("media source");
+        auto it = keyValueMap.find("source");
         if (it != keyValueMap.end())
             content.setSource(it->second);
     }
@@ -25,7 +25,8 @@ QJsonObject MediaAnswer::toJsonObject() const
         throw ModelSerializationError(
             QObject::tr("error during serialization MediaAnswer: "
                         "info_section wasn't found"));
-    jsonInfoSection.push_back(content.toJsonObject());
+    jsonInfoSection.push_back(QJsonObject{
+        { "source", content.getSource() } });
 
     obj["info_section"] = jsonInfoSection;
 

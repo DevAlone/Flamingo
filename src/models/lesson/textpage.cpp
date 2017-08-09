@@ -6,7 +6,7 @@
 
 TextPage::TextPage(const std::map<QString, QString>& infoSection)
 {
-    auto contentIt = infoSection.find("text content");
+    auto contentIt = infoSection.find("content");
     if (contentIt != infoSection.end()) {
 
         content.setText(contentIt->second);
@@ -30,7 +30,8 @@ QJsonObject TextPage::toJsonObject() const
             QObject::tr("error during serialization TextPage: "
                         "info_section wasn't found"));
 
-    jsonInfoSection.push_back(content.toJsonObject());
+    jsonInfoSection.push_back(QJsonObject{
+        { "content", content.getText() } });
 
     obj["info_section"] = jsonInfoSection;
 

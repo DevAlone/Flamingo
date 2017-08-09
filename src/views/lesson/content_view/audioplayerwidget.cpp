@@ -1,7 +1,8 @@
 #include "audioplayerwidget.h"
 
-AudioPlayerWidget::AudioPlayerWidget(QWidget *parent)
+AudioPlayerWidget::AudioPlayerWidget(QWidget* parent)
     : MediaPlayerWidget(parent)
 {
     ui->videoWidget->hide();
+    ui->fullScreenButton->hide();
 }

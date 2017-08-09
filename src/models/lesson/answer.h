@@ -13,7 +13,8 @@ enum class ANSWER_TYPE {
     HTML,
     IMAGE,
     AUDIO,
-    VIDEO
+    VIDEO,
+    MIXED
 };
 
 const std::map<QString, ANSWER_TYPE> answerTypesMap = {
@@ -22,6 +23,7 @@ const std::map<QString, ANSWER_TYPE> answerTypesMap = {
     { "image", ANSWER_TYPE::IMAGE },
     { "audio", ANSWER_TYPE::AUDIO },
     { "video", ANSWER_TYPE::VIDEO },
+    { "mixed", ANSWER_TYPE::MIXED },
 };
 
 class Answer {

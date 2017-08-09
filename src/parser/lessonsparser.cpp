@@ -139,6 +139,9 @@ void LessonsParser::parsePagesSection(std::shared_ptr<Lesson>& lesson, QString& 
 
         QString trimmedLine = line.trimmed();
 
+        if (trimmedLine.isEmpty())
+            continue;
+
         if (isSection(line)) {
             if (tryToChangeSection(trimmedLine))
                 break;

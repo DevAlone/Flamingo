@@ -6,9 +6,10 @@
 class HtmlContent : public TextContent {
 public:
     HtmlContent(const QString& html = "");
-    virtual QJsonObject toJsonObject() const;
 
     const QString& getHtml();
+
+    virtual QJsonObject toJsonObject() const;
 };
 
 #endif // HTMLCONTENT_H

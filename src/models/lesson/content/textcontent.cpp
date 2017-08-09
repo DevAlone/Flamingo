@@ -6,15 +6,7 @@ TextContent::TextContent(const QString& text)
     type = CONTENT_TYPE::TEXT;
 }
 
-QJsonObject TextContent::toJsonObject() const
-{
-    QJsonObject obj{
-        { "text content", text }
-    };
-    return obj;
-}
-
-QString TextContent::getText() const
+const QString& TextContent::getText() const
 {
     return text;
 }
@@ -22,4 +14,11 @@ QString TextContent::getText() const
 void TextContent::setText(const QString& value)
 {
     text = value;
+}
+
+QJsonObject TextContent::toJsonObject() const
+{
+    return QJsonObject{
+        { "text content", text }
+    };
 }

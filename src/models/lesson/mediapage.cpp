@@ -5,7 +5,7 @@
 MediaPage::MediaPage(const std::map<QString, QString>& infoSection)
 {
     {
-        auto it = infoSection.find("media source");
+        auto it = infoSection.find("source");
         if (it != infoSection.end())
             content.setSource(it->second);
     }
@@ -23,7 +23,8 @@ QJsonObject MediaPage::toJsonObject() const
             QObject::tr("error during serialization of MediaPage: "
                         "info_section wasn't found"));
 
-    jsonInfoSection.push_back(content.toJsonObject());
+    jsonInfoSection.push_back(QJsonObject{
+        { "source", content.getSource() } });
 
     obj["info_section"] = jsonInfoSection;
 

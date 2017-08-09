@@ -2,6 +2,7 @@
 #include "audioanswer.h"
 #include "htmlanswer.h"
 #include "imageanswer.h"
+#include "mixedanswer.h"
 #include "textanswer.h"
 #include "videoanswer.h"
 
@@ -53,6 +54,9 @@ std::shared_ptr<Answer> Answer::createAnswer(
         break;
     case ANSWER_TYPE::VIDEO:
         answer = std::make_shared<VideoAnswer>(keyValueMap);
+        break;
+    case ANSWER_TYPE::MIXED:
+        answer = std::make_shared<MixedAnswer>(keyValueMap, keyValueVec);
         break;
     }
 

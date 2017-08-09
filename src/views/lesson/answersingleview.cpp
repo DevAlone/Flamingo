@@ -9,6 +9,7 @@
 #include <models/lesson/audioanswer.h>
 #include <models/lesson/htmlanswer.h>
 #include <models/lesson/imageanswer.h>
+#include <models/lesson/mixedanswer.h>
 #include <models/lesson/textanswer.h>
 #include <models/lesson/videoanswer.h>
 
@@ -41,46 +42,36 @@ void AnswerSingleView::setAnswer(QChar letter, std::shared_ptr<Answer> answerPtr
     auto contentView = new ContentView;
     switch (answer->getType()) {
     case ANSWER_TYPE::TEXT: {
-        auto textAnswer = std::dynamic_pointer_cast<TextAnswer>(answer);
-        if (!textAnswer)
-            throw Exception(
-                QObject::tr("Unable to cast Answer to TextAnswer"));
+        auto textAnswer = std::static_pointer_cast<TextAnswer>(answer);
 
         contentView->setText(textAnswer->getContent());
     } break;
     case ANSWER_TYPE::HTML: {
-        auto htmlAnswer = std::dynamic_pointer_cast<HtmlAnswer>(answer);
-        if (!htmlAnswer)
-            throw Exception(
-                QObject::tr("Unable to cast Answer to HtmlAnswer"));
+        auto htmlAnswer = std::static_pointer_cast<HtmlAnswer>(answer);
 
         contentView->setHtml(htmlAnswer->getContent());
 
     } break;
     case ANSWER_TYPE::IMAGE: {
-        auto imageAnswer = std::dynamic_pointer_cast<ImageAnswer>(answer);
-        if (!imageAnswer)
-            throw Exception(
-                QObject::tr("Unable to cast Answer to ImageAnswer"));
+        auto imageAnswer = std::static_pointer_cast<ImageAnswer>(answer);
 
         contentView->setImageFile(imageAnswer->getSource());
 
     } break;
     case ANSWER_TYPE::AUDIO: {
-        auto audioAnswer = std::dynamic_pointer_cast<AudioAnswer>(answer);
-        if (!audioAnswer)
-            throw Exception(
-                QObject::tr("Unable to cast Answer to AudioAnswer"));
+        auto audioAnswer = std::static_pointer_cast<AudioAnswer>(answer);
 
         contentView->setAudioFile(audioAnswer->getSource());
     } break;
     case ANSWER_TYPE::VIDEO: {
-        auto videoAnswer = std::dynamic_pointer_cast<VideoAnswer>(answer);
-        if (!videoAnswer)
-            throw Exception(
-                QObject::tr("Unable to cast Answer to VideoAnswer"));
+        auto videoAnswer = std::static_pointer_cast<VideoAnswer>(answer);
 
         contentView->setVideoFile(videoAnswer->getSource());
+    } break;
+    case ANSWER_TYPE::MIXED: {
+        auto mixedAnswer = std::static_pointer_cast<MixedAnswer>(answer);
+
+        contentView->setContents(mixedAnswer->getContents());
     } break;
     default:
         throw Exception(QObject::tr("Unknown answer type"));
@@ -117,9 +108,12 @@ void AnswerSingleView::updateData()
         this, &AnswerSingleView::setChecked);
 
     if (answerWidget) {
+        answerWidget->setObjectName("answerWidget");
         ui->mainLayout->addWidget(answerWidget);
         ui->mainLayout->setAlignment(answerWidget, Qt::AlignHCenter);
     }
+
+    ui->mainLayout->addStretch();
 }
 
 void AnswerSingleView::setAnswerWidget(QWidget* answerWidget)

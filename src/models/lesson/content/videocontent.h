@@ -7,7 +7,7 @@ class VideoContent : public MediaContent {
 public:
     VideoContent(const QString& source = "");
 
-    virtual QJsonObject toJsonObject() const;
+    QJsonObject toJsonObject() const;
 };
 
 #endif // VIDEOCONTENT_H

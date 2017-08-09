@@ -1,6 +1,7 @@
 #ifndef MEDIAPLAYERWIDGET_H
 #define MEDIAPLAYERWIDGET_H
 
+#include "mediaplayervideowidget.h"
 #include "mediaslider.h"
 
 #include <QtWidgets>
@@ -39,6 +40,8 @@ private slots:
     void mediaPlayerVolumeChanged(int volume);
     void volumeSliderPositionChanged(int position);
 
+    void fullScreenButtonClicked();
+
 protected:
     MediaPlayerWidgetUi* ui;
 };
@@ -51,7 +54,7 @@ public:
         : QObject(parent)
     {
         mainLayout = new QVBoxLayout;
-        videoWidget = new QVideoWidget(parent);
+        videoWidget = new MediaPlayerVideoWidget(parent);
 
         horizontalLayout = new QHBoxLayout;
         playPauseButton = new QPushButton(
@@ -63,10 +66,14 @@ public:
         volumeSlider = new MediaSlider(parent);
         volumeSlider->setOrientation(Qt::Horizontal);
 
+        fullScreenButton = new QPushButton(
+            QObject::tr("fullscreen"), parent);
+
         horizontalLayout->addWidget(playPauseButton);
         horizontalLayout->addWidget(slider);
         horizontalLayout->addWidget(volumeLabel);
         horizontalLayout->addWidget(volumeSlider);
+        horizontalLayout->addWidget(fullScreenButton);
 
         mainLayout->addWidget(videoWidget);
         mainLayout->addLayout(horizontalLayout);
@@ -86,16 +93,22 @@ public:
         QObject::connect(
             volumeSlider, &QSlider::sliderMoved,
             parent, &MediaPlayerWidget::volumeSliderPositionChanged);
+
+        QObject::connect(
+            fullScreenButton, &QPushButton::clicked,
+            parent, &MediaPlayerWidget::fullScreenButtonClicked);
     }
 
     QVBoxLayout* mainLayout;
-    QVideoWidget* videoWidget;
+    MediaPlayerVideoWidget* videoWidget;
 
     QHBoxLayout* horizontalLayout;
     QPushButton* playPauseButton;
     MediaSlider* slider;
     QLabel* volumeLabel;
     MediaSlider* volumeSlider;
+
+    QPushButton* fullScreenButton;
 };
 
 #endif // MEDIAPLAYERWIDGET_H

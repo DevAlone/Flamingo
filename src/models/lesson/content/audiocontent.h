@@ -3,10 +3,7 @@
 
 #include "mediacontent.h"
 
-
-
-class AudioContent : public MediaContent
-{
+class AudioContent : public MediaContent {
 public:
     AudioContent(const QString& source = "");
 

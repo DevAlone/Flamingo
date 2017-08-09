@@ -6,10 +6,11 @@
 class TextContent : public Content {
 public:
     TextContent(const QString& text = "");
-    virtual QJsonObject toJsonObject() const;
 
-    QString getText() const;
+    const QString& getText() const;
     void setText(const QString& value);
+
+    QJsonObject toJsonObject() const;
 
 protected:
     QString text = "";

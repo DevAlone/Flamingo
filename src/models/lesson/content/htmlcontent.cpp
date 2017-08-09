@@ -6,14 +6,14 @@ HtmlContent::HtmlContent(const QString& html)
     type = CONTENT_TYPE::HTML;
 }
 
-QJsonObject HtmlContent::toJsonObject() const
-{
-    return {
-        { "html content", text }
-    };
-}
-
 const QString& HtmlContent::getHtml()
 {
     return text;
+}
+
+QJsonObject HtmlContent::toJsonObject() const
+{
+    return QJsonObject{
+        { "html content", text }
+    };
 }

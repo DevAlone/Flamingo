@@ -7,7 +7,7 @@
 
 TextAnswer::TextAnswer(const std::map<QString, QString>& keyValueMap)
 {
-    auto contentIt = keyValueMap.find("text content");
+    auto contentIt = keyValueMap.find("content");
     if (contentIt != keyValueMap.end())
         content.setText(contentIt->second);
 }
@@ -28,7 +28,8 @@ QJsonObject TextAnswer::toJsonObject() const
         throw ModelSerializationError(
             QObject::tr("error during serialization TextAnswer:"
                         "info_section wasn't found"));
-    jsonInfoSection.push_back(content.toJsonObject());
+    jsonInfoSection.push_back(QJsonObject{
+        { "content", content.getText() } });
 
     obj["info_section"] = jsonInfoSection;
 

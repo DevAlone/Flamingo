@@ -107,9 +107,10 @@ void ContentView::setVideoFile(const QString& _path)
 
 void ContentView::addText(const QString& text)
 {
-    auto widget = new TextBrowserWidget;
+    auto widget = new QLabel; //new TextBrowserWidget;
 
-    widget->setPlainText(text);
+    //    widget->setPlainText(text);
+    widget->setText(text);
 
     ui->mainLayout->addWidget(widget);
 }

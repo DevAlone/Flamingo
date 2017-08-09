@@ -6,13 +6,6 @@ MediaContent::MediaContent(const QString& source)
     type = CONTENT_TYPE::MEDIA;
 }
 
-QJsonObject MediaContent::toJsonObject() const
-{
-    return {
-        { "media source", source }
-    };
-}
-
 QString MediaContent::getSource() const
 {
     return source;

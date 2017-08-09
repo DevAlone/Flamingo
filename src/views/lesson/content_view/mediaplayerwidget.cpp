@@ -87,3 +87,8 @@ void MediaPlayerWidget::volumeSliderPositionChanged(int position)
 {
     mediaPlayer->setVolume(position);
 }
+
+void MediaPlayerWidget::fullScreenButtonClicked()
+{
+    ui->videoWidget->setFullScreen(!ui->videoWidget->isFullScreen());
+}

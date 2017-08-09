@@ -19,11 +19,11 @@ class Content {
 public:
     Content();
 
-    virtual QJsonObject toJsonObject() const = 0;
-
     static std::shared_ptr<Content> fromKeyValue(
         const QString& key,
         const QString& value);
+
+    virtual QJsonObject toJsonObject() const;
 
     CONTENT_TYPE getType() const;
 

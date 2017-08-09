@@ -2,7 +2,6 @@
 
 VideoContent::VideoContent(const QString& source)
     : MediaContent(source)
-//    , type(CONTENT_TYPE::VIDEO)
 {
     type = CONTENT_TYPE::VIDEO;
 }

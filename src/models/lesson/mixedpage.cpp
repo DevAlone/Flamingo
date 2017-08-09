@@ -2,10 +2,15 @@
 
 #include <exceptions/modelserializationerror.h>
 
+#include <models/lesson/content/audiocontent.h>
+#include <models/lesson/content/htmlcontent.h>
+#include <models/lesson/content/imagecontent.h>
 #include <models/lesson/content/mediacontent.h>
 #include <models/lesson/content/textcontent.h>
+#include <models/lesson/content/videocontent.h>
 
-MixedPage::MixedPage(const std::map<QString, QString>& infoSectionMap,
+MixedPage::MixedPage(
+    const std::map<QString, QString>& infoSectionMap,
     const std::vector<std::pair<QString, QString> >& infoSectionVec)
 {
     for (auto& pair : infoSectionVec) {
