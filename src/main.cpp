@@ -18,6 +18,8 @@
 #include <QDebug>
 #include <QtCore>
 
+#include <iostream>
+
 // It's just for debug. Remove it later
 void tick()
 {
@@ -35,33 +37,38 @@ void initCss();
 
 int main(int argc, char* argv[])
 {
-    FlamingoApplication a(argc, argv);
+    try {
+        FlamingoApplication a(argc, argv);
 
-    QPixmap pixmap(":/images/flamingo1.png");
-    FlamingoSplashScreen splash(pixmap);
+        QPixmap pixmap(":/images/flamingo1.png");
+        FlamingoSplashScreen splash(pixmap);
 
-    splash.show();
+        splash.show();
 
-    splash.showMessage(QObject::tr("Initializing settings and styles..."));
+        splash.showMessage(QObject::tr("Initializing settings and styles..."));
 
-    initSettings();
-    initCss();
-    // TODO: remove it later
-    QTimer::singleShot(3000, tick);
+        initSettings();
+        initCss();
+        // TODO: remove it later
+        //    QTimer::singleShot(3000, tick);
 
-    splash.showMessage(QObject::tr("Initializing database..."));
+        splash.showMessage(QObject::tr("Initializing database..."));
 
-    DatabaseManager* dbManager = DatabaseManager::getInstance();
+        DatabaseManager* dbManager = DatabaseManager::getInstance();
 
-    dbManager->init();
+        dbManager->init();
 
-    MainWindow w;
+        MainWindow w;
 
-    w.show();
+        w.show();
 
-    splash.finish(&w);
+        splash.finish(&w);
 
-    return a.exec();
+        return a.exec();
+    } catch (const Exception& ex) {
+        std::cerr << "Exception: " << ex.getMessage().toStdString() << std::endl;
+    }
+    return -1;
 }
 
 void initSettings()
@@ -71,8 +78,15 @@ void initSettings()
     QApplication::setApplicationName("Flamingo");
     QSettings s;
 
-    if (s.value("courseParser/courseDirectory").isNull())
-        s.setValue("courseParser/courseDirectory", "courses");
+    if (s.value("courseParser/courseDirectory").isNull()) {
+        QDir homeDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+        QDir coursesDir(homeDir.absoluteFilePath("flamingo_courses"));
+        if (!coursesDir.exists())
+            QDir().mkpath(coursesDir.absolutePath());
+
+        s.setValue("courseParser/courseDirectory", coursesDir.absolutePath());
+    }
+
     if (s.value("interface/lesson/pageAutoSwitchTime").isNull())
         s.setValue("interface/lesson/pageAutoSwitchTime", 500);
 }

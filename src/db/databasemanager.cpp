@@ -37,10 +37,22 @@ void DatabaseManager::init()
             QObject::tr("There isn't sqlite driver :("));
 
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("main.db");
+    QDir programDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    if (!programDir.exists())
+        QDir().mkpath(programDir.absolutePath());
+
+    QString dbFilePath(programDir.absoluteFilePath("main.db"));
+
+    if (!QFileInfo(dbFilePath).exists()) {
+        QFile dbFile(dbFilePath);
+        dbFile.open(QIODevice::ReadWrite);
+    }
+
+    db.setDatabaseName(dbFilePath);
+
     if (!db.open())
         throw DatabaseInitializationError(
-            QObject::tr("Database file \"main.db\" can't be opened"));
+            QObject::tr("Database file \"main.db\" can't be opened: ") + dbFilePath);
 
     // TODO: create tables
     QSqlError error = User::createTable();

@@ -8,6 +8,8 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 
 find_package(Qt5Widgets)
 find_package(Qt5Sql)
