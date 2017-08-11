@@ -22,6 +22,8 @@
 
 #include <memory>
 
+#include <array>
+
 #include <parser/logger/parserlogger.h>
 
 enum class LOG_ENTRIES_FILTER : size_t {
