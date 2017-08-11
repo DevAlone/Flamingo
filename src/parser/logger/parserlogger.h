@@ -31,7 +31,7 @@ public:
     ParserLogger();
 
     std::vector<std::shared_ptr<LogEntry>>& getEntries();
-    std::vector<std::shared_ptr<LogEntry>>& getEntries(LOG_ENTRY_TYPE type);
+    std::vector<std::shared_ptr<LogEntry>> getEntries(LOG_ENTRY_TYPE type);
 
     void addEntry(std::shared_ptr<LogEntry>&& entry);
 

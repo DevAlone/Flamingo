@@ -27,7 +27,7 @@ std::vector<std::shared_ptr<LogEntry>>& ParserLogger::getEntries()
     return entries;
 }
 
-std::vector<std::shared_ptr<LogEntry>>& ParserLogger::getEntries(LOG_ENTRY_TYPE type)
+std::vector<std::shared_ptr<LogEntry>> ParserLogger::getEntries(LOG_ENTRY_TYPE type)
 {
     std::vector<std::shared_ptr<LogEntry>> result;
 
