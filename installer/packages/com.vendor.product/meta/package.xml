@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+	<DisplayName>Flamingo</DisplayName>
+	<Description>Flamingo is an opensource cross-platform program for learning foreign languages</DisplayName>
+	<Version>0.1</Version>
+	<ReleaseDate>2017-08-11</ReleaseDate>
+	<Licenses>
+		<License name="GNU GPLv3" file="COPYING" />
+	</Licenses>
+	<Default>script</Default>
+	<Script>installscript.qs</Script>
+	<UserInterfaces>
+		<UserInterface>page.ui</UserInterface>
+	</UserInterfaces>
+</Package>
