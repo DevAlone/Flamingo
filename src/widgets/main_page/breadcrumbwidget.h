@@ -22,6 +22,8 @@
 
 #include <QtWidgets>
 
+#include <vector>
+
 #include <memory>
 
 class BreadcrumbWidgetUi;
@@ -48,7 +50,7 @@ private:
     std::unique_ptr<BreadcrumbWidgetUi> ui;
     QString fullPath;
     BreadcrumbWidgetItem* rootItem;
-    QVector<BreadcrumbWidgetItem*> items;
+    std::vector<BreadcrumbWidgetItem*> items;
 
 private slots:
     void itemClicked();
