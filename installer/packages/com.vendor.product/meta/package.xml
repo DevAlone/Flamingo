@@ -7,9 +7,5 @@
 	<Licenses>
 		<License name="GNU GPLv3" file="COPYING" />
 	</Licenses>
-	<Default>script</Default>
-	<Script>installscript.qs</Script>
-	<UserInterfaces>
-		<UserInterface>page.ui</UserInterface>
-	</UserInterfaces>
+	<Default>true</Default>
 </Package>
