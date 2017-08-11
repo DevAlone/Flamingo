@@ -23,6 +23,8 @@
 
 namespace parser {
 
+// it's needed to prevent compiling errors on windows
+#undef ERROR
 enum class LOG_ENTRY_TYPE {
     DEBUG,
     INFO,
