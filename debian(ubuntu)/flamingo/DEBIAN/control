@@ -2,9 +2,9 @@ Package: flamingo
 Priority: optional
 Section: base
 Maintainer: Sergey Zakharov <dev@d3d.info>
-Architecture: any 
+Architecture: all
 Version: 0.1
-Depends: qt5-default, libqt5webkit5-dev, libsqlite3-dev, qtmultimedia5-dev, libqt5widgets5
+Depends: qt5-default, qtmultimedia5-dev, libqt5sql5, libqt5sql5-sqlite, libqt5multimediawidgets5, libqt5widgets5, libqt5multimedia5, libqt5gui5, libqt5core5a
 Description: Flamingo is a cross platform application for learning foreign languages
  Features: 
   * multimedia, flamingo supports html, audio and video formats in lesson
