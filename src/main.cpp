@@ -56,6 +56,8 @@ int main(int argc, char* argv[])
     try {
         FlamingoApplication a(argc, argv);
 
+        a.setWindowIcon(QIcon(":/icons/icon.ico"));
+
         QPixmap pixmap(":/images/flamingo1.png");
         FlamingoSplashScreen splash(pixmap);
 
