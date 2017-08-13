@@ -14,11 +14,11 @@ Component.prototype.createOperations = function()
 	
 	if(systemInfo.currentCpuArchitecture.search("64") < 0) {
 		// x86 
-		component.addOperation("Execute", "@TargetDir@/vcredist_x86.exe", "/quiet", "/norestart");
+		component.addOperation("Execute", "@TargetDir@/vc_redist.x86.exe", "/quiet", "/norestart");
 		
 	} else {
 		// x64
-		component.addOperation("Execute", "@TargetDir@/vcredist_x64.exe", "/quiet", "/norestart");
+		component.addOperation("Execute", "@TargetDir@/vc_redist.x64.exe", "/quiet", "/norestart");
 	}
     }
 }
