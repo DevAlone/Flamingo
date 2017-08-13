@@ -12,8 +12,17 @@ Licence URI: http://www.os-templates.com/template-terms
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link href="layout/styles/layout.css" rel="stylesheet" type="text/css" media="all">
+
+<link rel="stylesheet" type="text/css" media="all" href="./css/jgallery.min.css" />
+
+<style>
+.jgallery .nav-bottom {
+  display: none;
+}
+</style>
 </head>
 <body id="top">
+
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript" >
     (function (d, w, c) {
@@ -126,41 +135,28 @@ Licence URI: http://www.os-templates.com/template-terms
 <!-- ################################################################################################ -->
 <!-- ################################################################################################ -->
 <div class="wrapper row3">
-  <main class="hoc container clear"> 
+  <!-- <main class="hoc container clear">  -->
     <!-- main body -->
     <!-- ################################################################################################ -->
-    <div class="two_third first">
-      <h6 class="heading">Hi, I am flamingo and I want to help you in learning foreign languages</h6>
-      <!--<p class="heading font-x3"></p>-->
-      <p class="btmspace-50">When I was young I knew only one language, which was used by nobody in flamingo world, except my small community. I tried to learn, but it was so hard and boring, every flamingo advised me to cram grammar rules, use boring textbooks, but I don't like it! <br>
-      I believe that learning must be interesting and interactive and I am here to tell it you.</p>
-      <ul class="nospace group">
-        <li class="one_third first">
-          <article><img src="images/github_logo.png" style="height: 60px; margin: 10px 0;">
-            <h6 class="heading font-x1 highlight_blue">Free & opensource</h6>
-            <p>I will not take a penny from you. Also my source code is open, visit my <a href="https://github.com/DevAlone/Flamingo" target="_blank">github</a></p>
-          </article>
-        </li>
-        <li class="one_third">
-          <article><img src="images/crossplatform.png" style="height: 60px; margin: 10px 0;">
-            <h6 class="heading font-x1 highlight_blue">Crossplatform</h6>
-            <p>I use nice Qt framework, which helps to write code once for multiple platforms</p>
-          </article>
-        </li>
-        <li class="one_third">
-          <article><img src="images/extensible2.svg" style="height: 60px; margin: 10px 0;">
-            <h6 class="heading font-x1 highlight_blue">Extensible</h6>
-            <p>You can create courses by yourself. It's such easy, <br><a href="https://github.com/DevAlone/Flamingo/wiki/How-to-create-courses%3F">let me help you</a></p>
-          </article>
-        </li>
-      </ul>
+    
+  <!-- <div style="padding: 40px 0; width: 960px; margin: 0 auto; height: auto;"> -->
+    <div id="gallery">
+      <a href="images/gallery/1.png"><img src="images/gallery/1.png" /></a>
+      <a href="images/gallery/3.png"><img src="images/gallery/3.png" /></a>
+      <a href="images/gallery/4.png"><img src="images/gallery/4.png" /></a>
+      <a href="images/gallery/5.png"><img src="images/gallery/5.png" /></a>
+      <a href="images/gallery/6.png"><img src="images/gallery/6.png" /></a>
+      <a href="images/gallery/7.png"><img src="images/gallery/7.png" /></a>
     </div>
-    <div class="one_third"><a href="#"><img src="images/flamingo.jpg" alt=""></a></div>
+  <!-- </div> -->
+    
+
     <!-- ################################################################################################ -->
     <!-- / main body -->
-    <div class="clear"></div>
-  </main>
+  <div class="clear"></div>
+  <!-- </main> -->
 </div>
+
 <!-- ################################################################################################ -->
 <!-- ################################################################################################ -->
 <!-- ################################################################################################ -->
@@ -192,10 +188,32 @@ Licence URI: http://www.os-templates.com/template-terms
 <!-- ################################################################################################ -->
 <!-- ################################################################################################ -->
 <a id="backtotop" href="#top"><i class="fa fa-chevron-up"></i></a>
+
+
 <!-- JAVASCRIPTS -->
-<script src="layout/scripts/jquery.min.js"></script>
+<script type="text/javascript" src="./js/jquery-2.0.3.min.js"></script>
+
+<!-- <script src="layout/scripts/jquery.min.js"></script> -->
 <script src="layout/scripts/jquery.backtotop.js"></script>
 <script src="layout/scripts/jquery.mobilemenu.js"></script>
 <script src="layout/scripts/jquery.flexslider-min.js"></script>
+
+<script type="text/javascript" src="./js/tinycolor-0.9.16.min.js"></script>
+<script type="text/javascript" src="./js/jgallery.min.js"></script>
+
+<script type="text/javascript">
+  $(function() {
+      $('#gallery').jGallery({
+          "thumbType":"number",
+          "backgroundColor":"000000",
+          "textColor":"FFFFFF",
+          "mode":"standard",
+          // canChangeMode: false,
+          slideshow: false,
+          canMinimalizeThumbnails: false
+      });
+  });
+</script>
+
 </body>
 </html>
