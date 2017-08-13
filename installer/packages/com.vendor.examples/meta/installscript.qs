@@ -5,5 +5,5 @@ function Component()
 
 Component.prototype.createOperationsForArchive = function(archive)
 {
-	component.addElevatedOperation("Extract", archive, "@TargetDir@/subdir/");
+	component.addOperation("Extract", archive, "@TargetDir@/subdir/");
 }
