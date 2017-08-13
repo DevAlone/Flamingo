@@ -3,8 +3,7 @@ function Component()
     // default constructor
 }
 
-Component.prototype.createOperationsForPath = function(path)
+Component.prototype.create.OperationsForArchive = function(archive)
 {
-	component.addOperation("Copy", path, "@HomeDir@/flamingo_courses/");
+	component.addOperation("Extract", archive, "@TargetDir@/subdir/");
 }
-

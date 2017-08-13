@@ -1,7 +1,0 @@
-[pages]
-{1}
-	content: Choose synonym of beautiful
-	right answers: a
-	/answers/
-	{a} nice
-	{b} ugly
