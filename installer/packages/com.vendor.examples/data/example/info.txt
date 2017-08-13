@@ -1,0 +1,5 @@
+Name: example
+Description: just example for demonstrate capabilities of program 
+Level: 1
+Author: DevAlone
+Language: eng

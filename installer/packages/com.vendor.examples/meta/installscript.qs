@@ -8,6 +8,6 @@ Component.prototype.createOperations = function()
     component.createOperations();
 
     if (systemInfo.productType === "windows") {
-        component.addOperation("Extract", "example.zip", "@HomeDir@/flamingo_courses/");
+        component.addOperation("Copy", "example", "@HomeDir@/flamingo_courses/");
     }
 }
