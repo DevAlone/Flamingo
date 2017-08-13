@@ -3,11 +3,7 @@ function Component()
     // default constructor
 }
 
-Component.prototype.createOperations = function()
+Component.prototype.createOperationsForArchive = function(archive)
 {
-    component.createOperations();
-
-    if (systemInfo.productType === "windows") {
-        component.addOperation("Copy", "example", "@HomeDir@/flamingo_courses/");
-    }
+	component.addOperation("Extract", archive, "@HomeDir@/flamingo_courses/");
 }
