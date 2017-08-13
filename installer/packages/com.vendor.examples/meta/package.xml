@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+	<DisplayName>Example of courses</DisplayName>
+	<Description>Examples for demonstrating capabilities of program</Description>
+	<Default>true</Default>
+	<Script>installscript.qs</Script>
+</Package>
