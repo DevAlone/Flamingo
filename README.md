@@ -2,6 +2,9 @@
 
 Flamingo is an open-source cross-platform program for learning foreign languages.
 
+![](https://devalone.github.io/Flamingo/images/gallery/6.png)
+![](https://devalone.github.io/Flamingo/images/gallery/4.png)
+
 ### Features:
 
 * Multimedia. Lessons supports text, html, image, audio and video formats. Good design and usage of OOP helps to add new formats easy
