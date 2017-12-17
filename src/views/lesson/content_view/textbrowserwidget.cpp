@@ -34,7 +34,7 @@ TextBrowserWidget::TextBrowserWidget(QWidget* parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
-QSize TextBrowserWidget::sizeHint()
+QSize TextBrowserWidget::sizeHint() const
 {
     updateSize();
     return QTextBrowser::sizeHint();
